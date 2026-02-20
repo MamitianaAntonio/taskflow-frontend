@@ -1,31 +1,36 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --bg-primary: #f8fafc;
+  --bg-primary: #f6f6f8;
   --bg-secondary: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
-  --accent-color: #3b82f6;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --text-white: #ffffff;
+  --border-color: #e4e4e7;
+  --shadow: rgba(236, 72, 153, 0.07);
+  --accent-color: #e879a0;
+  --gradient-from: #f472b6;
+  --gradient-to: #db2777;
   --color-success: #10b981;
-  --color-highlight: #e081c1;
+  --color-highlight: #fbcfe8;
   --color-warning: #f59e0b;
-  --shadow: rgba(15, 23, 42, 0.08);
 }
 
 [data-theme="dark"] {
-  /* Dark Mode */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --accent-color: #60a5fa;
+  --bg-primary: #18181b;
+  --bg-secondary: #27272a;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-white: #ffffff;
+  --border-color: #3f3f46;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --accent-color: #f472b6;
+  --gradient-from: #ec4899;
+  --gradient-to: #be185d;
   --color-success: #34d399;
-  --color-highlight: #f0abdb;
+  --color-highlight: #f9a8d4;
   --color-warning: #fbbf24;
-  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 body {
@@ -33,5 +38,5 @@ body {
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
