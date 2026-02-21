@@ -1,7 +1,7 @@
 <h1 align="center">Taskflow</h1>
 <p align="center">A Tool to Manage Your Time</p>
 <p align="center">
-  <img src="./src/assets/Logo.png" alt="Taskflow Logo" width="140"/>
+  <img src="/public/Logo.png" alt="Taskflow Logo" width="140"/>
 </p>
 
 Taskflow is a modern To-do List application build with react (typescript) and tailwinds css.
