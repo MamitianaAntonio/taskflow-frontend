@@ -1,4 +1,5 @@
 import Button from "../components/ui/Button";
+import { DarkModeToggle } from "../components/ui/DarkModeToogle";
 
 function Home() {
   return (
@@ -23,7 +24,11 @@ function Home() {
           <h3 className="font-quicksand text-dark text-[1.7vh] max-sm:text-base">
             "Organize your task, keep your flow"
           </h3>
-          <Button text="Get Started" variant="primary" onClick={() => alert("Get Started clicked")} />
+          <Button
+            text="Get Started"
+            variant="primary"
+            onClick={() => alert("Get Started clicked")}
+          />
         </div>
 
         <h3 className="font-quicksand text-dark font-light mb-4">
