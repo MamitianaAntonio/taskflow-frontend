@@ -1,7 +1,10 @@
 import Button from "../components/ui/Button";
 import { DarkModeToggle } from "../components/ui/DarkModeToogle";
+import { useTheme } from "../contexts/ThemeContext";
 
 function Home() {
+  const {isDarkMode, setIsDarkMode } = useTheme();
+
   return (
     <>
       <div className="relative flex flex-col items-center justify-between overflow-hidden w-full h-full min-h-screen">
@@ -10,6 +13,11 @@ function Home() {
           alt="Logo image"
           className="w-12 top-4 left-4 absolute"
         />
+
+        {/** dark mode toggle */}
+        <div className="absolute top-4 right-4">
+          <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
+        </div>
 
         {/** centered section */}
         <div className="flex flex-col items-center justify-center grow space-y-6 text-center px-4">
