@@ -1,0 +1,14 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0);
+  }
+}
+
+.toggle-icon {
+  animation: fadeIn 0.3s ease;
+}
