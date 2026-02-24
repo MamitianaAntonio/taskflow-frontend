@@ -1,9 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 import { DarkModeToggle } from "../components/ui/DarkModeToogle";
 import { useTheme } from "../contexts/ThemeContext";
 
 function Home() {
   const {isDarkMode, setIsDarkMode } = useTheme();
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/login");
+  }
 
   return (
     <>
@@ -35,7 +40,7 @@ function Home() {
           <Button
             text="Get Started"
             variant="primary"
-            onClick={() => alert("Get Started clicked")}
+            onClick={handleClick}
           />
         </div>
 
