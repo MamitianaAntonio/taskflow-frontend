@@ -1,11 +1,6 @@
-import LoginForm from "../layouts/LoginForm";
-
-function Auth () {
-  return (
-    <>
-      <LoginForm />
-    </>
-  )
+function Auth() {
+  return <></>;
 }
 
 export default Auth;
+
