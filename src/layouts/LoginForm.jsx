@@ -1,35 +1,72 @@
+import { useState } from "react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 
-const LoginForm = () => {
+const LoginForm = ({ onSwitch }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Login data:", formData);
+  };
+
   return (
-    <form className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
-        <label className="text-md text-center font-medium text-(--text-secondary)">
-          Enter your email :
+        <label
+          htmlFor="email"
+          className="text-md font-medium text-(--text-secondary)"
+        >
+          Email
         </label>
-        <Input type="email" placeholder="you@example.com" />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={handleChange}
+        />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-md text-center font-medium text-(--text-secondary)">
-          Enter your password :
+        <label
+          htmlFor="password"
+          className="text-md font-medium text-(--text-secondary)"
+        >
+          Password
         </label>
-        <Input type="password" placeholder="••••••••" />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="••••••••"
+          value={formData.password}
+          onChange={handleChange}
+        />
       </div>
 
-      <div className="flex justify-center">
-        <Button text="Login" variant="primary" />
-      </div>
+      <Button type="submit" text="Login" variant="primary" />
 
-      <a
-        href=""
-        className="text-sm text-(--text-secondary) text-center 
+      <p
+        onClick={onSwitch}
+        className="text-sm text-center cursor-pointer
+        text-(--text-secondary)
         hover:text-(--accent-color) transition-colors duration-200"
       >
         Don't have an account?{" "}
         <span className="text-(--accent-color) font-medium">Sign up</span>
-      </a>
+      </p>
     </form>
   );
 };
