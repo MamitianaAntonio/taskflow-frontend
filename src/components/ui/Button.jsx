@@ -8,7 +8,10 @@ export default function Button({ text, variant, className, onClick }) {
   };
 
   return (
-    <button className={`${baseClasses} ${variantClasses[variant]} ${className}`} onClick={onClick}>
+    <button
+      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+      onClick={onClick}
+    >
       {text}
     </button>
   );

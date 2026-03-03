@@ -1,5 +1,5 @@
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const DarkModeToggle = ({ isDarkMode, onChange }) => {
   return (
@@ -17,5 +17,5 @@ export const DarkModeToggle = ({ isDarkMode, onChange }) => {
         className="toggle-icon text-xl"
       />
     </button>
-  ) 
-}
+  );
+};
