@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
-import { DarkModeToggle } from "../components/ui/DarkModeToogle";
+import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import { useTheme } from "../contexts/ThemeContext";
 
 function Home() {

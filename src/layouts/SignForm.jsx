@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import { signUp } from "../services/auth";
 
 const SignForm = ({ onSwitch }) => {
   const [formData, setFormData] = useState({
@@ -17,22 +18,39 @@ const SignForm = ({ onSwitch }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.username || !formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    console.log("Signup data:", formData);
+    try {
+      await signUp({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+      alert("Signup successful!");
+    } catch (error) {
+      alert("Signup failed. Please try again.");
+      throw new Error("Signup failed:", error);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="username" className="text-md font-medium text-(--text-secondary)">
+        <label
+          htmlFor="username"
+          className="text-md font-medium text-(--text-secondary)"
+        >
           Username
         </label>
         <Input
@@ -46,7 +64,10 @@ const SignForm = ({ onSwitch }) => {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="email" className="text-md font-medium text-(--text-secondary)">
+        <label
+          htmlFor="email"
+          className="text-md font-medium text-(--text-secondary)"
+        >
           Email
         </label>
         <Input
@@ -60,7 +81,10 @@ const SignForm = ({ onSwitch }) => {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="password" className="text-md font-medium text-(--text-secondary)">
+        <label
+          htmlFor="password"
+          className="text-md font-medium text-(--text-secondary)"
+        >
           Password
         </label>
         <Input
@@ -74,7 +98,10 @@ const SignForm = ({ onSwitch }) => {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="confirmPassword" className="text-md font-medium text-(--text-secondary)">
+        <label
+          htmlFor="confirmPassword"
+          className="text-md font-medium text-(--text-secondary)"
+        >
           Confirm Password
         </label>
         <Input
@@ -98,7 +125,6 @@ const SignForm = ({ onSwitch }) => {
         Already have an account?{" "}
         <span className="text-(--accent-color) font-medium">Login</span>
       </p>
-
     </form>
   );
 };
