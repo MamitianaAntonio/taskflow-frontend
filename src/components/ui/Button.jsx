@@ -1,4 +1,4 @@
-import "./Button.css";
+import "./style/Button.css";
 
 export default function Button({ text, variant, className, onClick }) {
   const baseClasses = "btn";

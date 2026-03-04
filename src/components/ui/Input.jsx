@@ -1,4 +1,4 @@
-import "./Input.css";
+import "./style/Input.css";
 
 const Input = ({ placeholder, type, value, onChange, className, ...rest }) => {
   return (

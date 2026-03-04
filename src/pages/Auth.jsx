@@ -6,7 +6,7 @@ import {
   faRightToBracket,
   faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import { DarkModeToggle } from "../components/ui/DarkModeToogle";
+import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import { useTheme } from "../contexts/ThemeContext";
 import "./style/Auth.css";
 

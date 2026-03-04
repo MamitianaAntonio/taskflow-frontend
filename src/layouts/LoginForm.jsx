@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import { login } from "../services/auth";
 
 const LoginForm = ({ onSwitch }) => {
   const [formData, setFormData] = useState({
@@ -15,9 +16,23 @@ const LoginForm = ({ onSwitch }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login data:", formData);
+
+    if (!formData.email || !formData.password) {
+      throw new Error("Please fill in all fields");
+    }
+
+    try {
+      const response = await login({ email: formData.email, password: formData.password });
+      if (response.status === 200) {
+        alert("Login successful!");
+        console.log("Login successful:", response.data);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
