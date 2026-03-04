@@ -1,6 +1,6 @@
 import "./Input.css";
 
-const Input = ({ placeholder, type, value, onChange, className }) => {
+const Input = ({ placeholder, type, value, onChange, className, ...rest }) => {
   return (
     <input
       type={type}
@@ -14,6 +14,7 @@ const Input = ({ placeholder, type, value, onChange, className }) => {
         disabled:opacity-50 disabled:cursor-not-allowed
         transition-all duration-200 
         ${className}`}
+      {...rest}
     />
   );
 };
