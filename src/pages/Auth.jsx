@@ -8,22 +8,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { DarkModeToggle } from "../components/ui/DarkModeToogle";
 import { useTheme } from "../contexts/ThemeContext";
+import "./style/Auth.css";
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const {isDarkMode, setIsDarkMode } = useTheme();
+  const [isFlipping, setIsFlipping] = useState(false);
   const FormComponent = isLogin ? LoginForm : SignForm;
 
   const toggleForm = () => {
-    setIsLogin((prev) => !prev);
+    setIsFlipping(true);
+    setTimeout(() => {
+      setIsLogin((prev) => !prev);
+      setIsFlipping(false);
+    }, 300);
   };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       {/** dark mode toggle */}
-        <div className="absolute top-4 right-4">
-          <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
-        </div>
+      <div className="absolute top-4 right-4">
+        <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
+      </div>
       {/* Left Side */}
       <div className="hidden md:flex md:w-1/2 items-center justify-center bg-(--bg-primary) p-10 relative overflow-hidden">
         {/* Gradient Glow 1 */}
@@ -86,8 +92,11 @@ function Auth() {
         <h3 className="text-xl text-(--text-secondary) font-bold mb-4">
           {isLogin ? "Login to your account" : "Create a new account"}
         </h3>
-        <div className="w-full max-w-md">
-          <FormComponent onSwitch={toggleForm} />
+        {/**3D flipping animation */}
+        <div className="w-full max-w-md flip-perspective">
+          <div className={`flip-card ${isFlipping ? "flipping" : ""}`}>
+            <FormComponent onSwitch={toggleForm} />
+          </div>
         </div>
       </div>
 
