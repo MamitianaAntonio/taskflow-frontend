@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { login } from "../services/auth";
@@ -21,17 +22,15 @@ const LoginForm = ({ onSwitch }) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      throw new Error("Please fill in all fields");
+      toast.error("Please fill in all fields");
+      return;
     }
 
     try {
-      const response = await login({ email: formData.email, password: formData.password });
-      if (response.status === 200) {
-        alert("Login successful!");
-        console.log("Login successful:", response.data);
-      }
+      await login({ email: formData.email, password: formData.password });
+      // Toasts are handled in auth.ts
     } catch (error) {
-      console.error("Login failed:", error);
+      throw new Error(error.message);
     }
   };
 

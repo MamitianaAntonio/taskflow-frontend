@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { signUp } from "../services/auth";
@@ -22,12 +23,12 @@ const SignForm = ({ onSwitch }) => {
     e.preventDefault();
 
     if (!formData.username || !formData.email || !formData.password) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -37,10 +38,9 @@ const SignForm = ({ onSwitch }) => {
         email: formData.email,
         password: formData.password,
       });
-      alert("Signup successful!");
+      // Maybe redirect or something, but for now, toast is in auth
     } catch (error) {
-      alert("Signup failed. Please try again.");
-      throw new Error("Signup failed:", error);
+      toast.error(error.message || "Sign up failed");
     }
   };
 
