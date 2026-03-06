@@ -28,6 +28,7 @@ export const signUp = async (data: SignUpData) => {
     }
   } catch (error) {
     toast.error("Signup failed. Please try again.");
+    console.log("Signup error:", error);
     throw new Error("Failed to sign up");
   }
 };
@@ -40,7 +41,9 @@ export const login = async (data: LoginData) => {
     if (response.status === 200) {
       const { token, user } = response.data;
       localStorage.setItem("token", token);
-      useUserStore.getState().setUser(user);
+      if (user) {
+        useUserStore.getState().setUser(user);
+      }
       toast.success("Login successful!");
       return {
         success: true,
