@@ -25,7 +25,7 @@ function Auth() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen justify-center overflow-hidden">
       {/** dark mode toggle */}
       <div className="absolute top-4 right-4">
         <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
@@ -101,7 +101,7 @@ function Auth() {
       </div>
 
       {/* Footer */}
-      <h3 className="absolute bottom-0 w-full text-center font-quicksand text-(--text-primary) font-light mb-4">
+      <h3 className="absolute bottom-0 w-full text-center font-quicksand text-(--text-primary) font-light mb-4 sm:text-sm text-xs">
         © Copyright 2026 TaskFlow
       </h3>
     </div>

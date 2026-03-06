@@ -3,8 +3,10 @@ import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { login } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ onSwitch }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,7 +30,7 @@ const LoginForm = ({ onSwitch }) => {
 
     try {
       await login({ email: formData.email, password: formData.password });
-      // Toasts are handled in auth.ts
+      navigate("/dashboard");
     } catch (error) {
       throw new Error(error.message);
     }

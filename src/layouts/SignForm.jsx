@@ -3,8 +3,10 @@ import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { signUp } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 
 const SignForm = ({ onSwitch }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -38,9 +40,10 @@ const SignForm = ({ onSwitch }) => {
         email: formData.email,
         password: formData.password,
       });
-      // Maybe redirect or something, but for now, toast is in auth
+      // redirect after successful signup
+      navigate("/dashboard");
     } catch (error) {
-      toast.error(error.message || "Sign up failed");
+      throw new Error(error.message);
     }
   };
 
