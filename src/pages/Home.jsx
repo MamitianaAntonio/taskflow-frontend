@@ -2,12 +2,19 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import { useTheme } from "../contexts/ThemeContext";
+import { useState } from "react";
 
 function Home() {
   const {isDarkMode, setIsDarkMode } = useTheme();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const handleClick = () => {
-    navigate("/login");
+    setLoading(true);
+    // simulate short delay before navigation
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/login");
+    }, 500);
   }
 
   return (
@@ -41,6 +48,7 @@ function Home() {
             text="Get Started"
             variant="primary"
             onClick={handleClick}
+            loading={loading}
           />
         </div>
 

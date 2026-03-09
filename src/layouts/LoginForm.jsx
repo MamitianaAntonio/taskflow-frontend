@@ -7,19 +7,20 @@ import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ onSwitch }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,11 +29,15 @@ const LoginForm = ({ onSwitch }) => {
       return;
     }
 
+    setLoading(true);
     try {
       await login({ email: formData.email, password: formData.password });
       navigate("/dashboard");
     } catch (error) {
-      throw new Error(error.message);
+      console.log(error);
+      toast.error(error.message || "Login error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,6 +57,7 @@ const LoginForm = ({ onSwitch }) => {
           placeholder="you@example.com"
           value={formData.email}
           onChange={handleChange}
+          disabled={loading}
         />
       </div>
 
@@ -69,13 +75,20 @@ const LoginForm = ({ onSwitch }) => {
           placeholder="••••••••"
           value={formData.password}
           onChange={handleChange}
+          disabled={loading}
         />
       </div>
 
-      <Button type="submit" text="Login" variant="primary" />
+      <Button 
+        type="submit" 
+        text="Login" 
+        variant="primary"
+        loading={loading}
+        disabled={loading}
+      />
 
       <p
-        onClick={onSwitch}
+        onClick={!loading ? onSwitch : null}
         className="text-sm text-center cursor-pointer
         text-(--text-secondary)
         hover:text-(--accent-color) transition-colors duration-200"
