@@ -1,0 +1,75 @@
+.navbar {
+  background: var(--bg-secondary);
+  border-bottom: 1.5px solid var(--border-color);
+  backdrop-filter: blur(12px);
+}
+
+/* Logo */
+.navbar-logo {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-logo:hover {
+  transform: rotate(5deg) scale(1.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.navbar-title {
+  color: var(--text-primary);
+}
+
+.navbar-title-accent {
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Datetime */
+.navbar-datetime {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+.navbar-datetime-icon {
+  color: var(--accent-color);
+}
+
+.navbar-datetime-date {
+  color: var(--text-secondary);
+}
+
+.navbar-datetime-time {
+  color: var(--text-primary);
+}
+
+.navbar-vdivider {
+  background: var(--border-color);
+}
+
+/* User */
+.navbar-user {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.navbar-user:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.navbar-avatar {
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+}
+
+.navbar-user-name {
+  color: var(--text-primary);
+}
+
+.navbar-user-email {
+  color: var(--text-secondary);
+}
