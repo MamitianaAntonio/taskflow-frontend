@@ -51,8 +51,7 @@ export const login = async (data: LoginData) => {
         message: response.data.message,
       };
     }
-  } catch (error) {
-    toast.error("Login failed. Please try again.");
-    throw new Error("Failed to login");
+  } catch (error : any) {
+    throw new Error(error.response?.data?.message || "Failed to log in");
   }
 }
