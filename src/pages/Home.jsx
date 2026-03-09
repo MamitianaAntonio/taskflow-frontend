@@ -5,7 +5,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useState } from "react";
 
 function Home() {
-  const {isDarkMode, setIsDarkMode } = useTheme();
+  const { isDarkMode, setIsDarkMode } = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const handleClick = () => {
@@ -15,7 +15,7 @@ function Home() {
       setLoading(false);
       navigate("/login");
     }, 500);
-  }
+  };
 
   return (
     <>
