@@ -19,6 +19,12 @@ export const signUp = async (data: SignUpData) => {
     const response = await axiosClient.post("/api/users/register", data);
 
     if (response.status === 201) {
+      // TODO : handle token and user data properly
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      if (user) {
+        useUserStore.getState().setUser(user);
+      }
       toast.success("Signup successful!");
       return {
         success: true,
@@ -28,7 +34,6 @@ export const signUp = async (data: SignUpData) => {
     }
   } catch (error) {
     toast.error("Signup failed. Please try again.");
-    console.log("Signup error:", error);
     throw new Error("Failed to sign up");
   }
 };
