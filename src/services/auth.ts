@@ -48,7 +48,8 @@ export const login = async (data: LoginData) => {
       localStorage.setItem("token", token);
       if (user) {
         useUserStore.getState().setUser(user);
-      }
+      } 
+
       toast.success("Login successful!");
       return {
         success: true,
@@ -57,6 +58,7 @@ export const login = async (data: LoginData) => {
       };
     }
   } catch (error : any) {
+    toast.error(error.response?.data?.message || "Login failed. Please try again.");
     throw new Error(error.response?.data?.message || "Failed to log in");
   }
 }

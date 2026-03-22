@@ -32,27 +32,6 @@ function Auth() {
       </div>
       {/* Left Side */}
       <div className="hidden md:flex md:w-1/2 items-center justify-center bg-(--bg-primary) p-10 relative overflow-hidden">
-        {/* Gradient Glow 1 */}
-        <div
-          className="absolute w-70 h-70 rounded-full blur-3xl opacity-20 
-          bg-linear-to-br from-(--gradient-from) to-(--gradient-to) 
-          top-10 left-10 animate-floatSlow"
-        ></div>
-
-        {/* Secondary soft highlight */}
-        <div
-          className="absolute w-64 h-64 rounded-full blur-2xl opacity-10 
-          bg-(--color-highlight) 
-          bottom-10 left-100 animate-floatSlow"
-        ></div>
-
-        {/* Gradient Glow 3 */}
-        <div
-          className="absolute w-20 h-20 rounded-full blur-xl opacity-10 
-          bg-(--color-highlight) 
-          top-50 left-200 animate-floatSlow"
-        ></div>
-
         <div
           key={isLogin}
           className="relative z-10 max-w-md text-center animate-fadeSlideUp"
