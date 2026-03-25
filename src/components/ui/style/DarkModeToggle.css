@@ -9,6 +9,40 @@
   }
 }
 
+.darkmode-toggle-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.darkmode-toggle-btn:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 10px 25px var(--shadow);
+  transform: scale(1.08);
+}
+
+.darkmode-toggle-btn:active {
+  transform: scale(0.98);
+}
+
+.darkmode-toggle-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 35%, transparent);
+}
+
 .toggle-icon {
   animation: fadeIn 0.3s ease;
+  font-size: 1rem;
 }
