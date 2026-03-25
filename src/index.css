@@ -15,6 +15,7 @@
   --color-success: #10b981;
   --color-highlight: #fbcfe8;
   --color-warning: #f59e0b;
+  --overlay: rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] {

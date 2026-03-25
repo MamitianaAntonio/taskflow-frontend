@@ -41,7 +41,7 @@ const SignForm = ({ onSwitch }) => {
 
     try {
       await signUp({
-        username: formData.username,
+        name: formData.username,
         email: formData.email,
         password: formData.password,
       });
