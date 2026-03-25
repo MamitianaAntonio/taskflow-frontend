@@ -1,11 +1,17 @@
-import Navbar from "../layouts/Navbar";
+import { Outlet } from "react-router-dom";
+import Navbar from "../layouts/Navbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 
-function Dashboard () {
+export default function Dashboard() {
   return (
-    <div className="dashboard">
+    <div className="dashboard-layout flex flex-col h-screen">
       <Navbar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-auto p-6">
+          <Outlet /> {/* Le contenu de la page courante s’affiche ici */}
+        </main>
+      </div>
     </div>
-  ) 
+  );
 }
-
-export default Dashboard;
