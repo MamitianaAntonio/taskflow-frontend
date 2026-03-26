@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import { useTheme } from "../contexts/ThemeContext";
 import useUserStore from "../stores/userStore";
@@ -16,31 +16,28 @@ const Navbar = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const initials = useMemo(() => {
-    if (!user?.name) return "?";
-    return user.name
+  const initials = (() => {
+    const name = user?.name;
+    if (!name) return "?";
+    return name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase()
       .slice(0, 2);
-  }, [user?.name]);
+  })();
 
-  const formattedDate = useMemo(() => {
-    return now.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    });
-  }, [now]);
+  const formattedDate = now.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 
-  const formattedTime = useMemo(() => {
-    return now.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  }, [now]);
+  const formattedTime = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
   return (
     <nav className="navbar sticky top-0 z-50">
@@ -59,7 +56,7 @@ const Navbar = () => {
         <div className="navbar-right">
           <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
 
-          <div className="navbar-datetime" aria-label="Date et heure">
+          <div className="navbar-datetime" aria-label="Date and time">
             <div className="navbar-datetime-group">
               <FontAwesomeIcon icon={faCalendarDay} className="navbar-datetime-icon" />
               <span className="navbar-datetime-date">{formattedDate}</span>
@@ -70,8 +67,6 @@ const Navbar = () => {
               <span className="navbar-datetime-time">{formattedTime}</span>
             </div>
           </div>
-
-          <div className="navbar-vdivider navbar-vdivider--lg" aria-hidden="true" />
 
           <div className="navbar-user" aria-label="User profile">
             <div className="navbar-avatar" aria-hidden="true">

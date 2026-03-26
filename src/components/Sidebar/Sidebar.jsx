@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -9,12 +9,15 @@ import {
 import { primaryNav, systemNav } from "../../constants/navigation";
 import "./Sidebar.css";
 import Button from "../ui/Button";
+import useUserStore from "../../stores/userStore";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [open, setOpen] = useState(false);
   const closeButtonRef = useRef(null);
+  const navigate = useNavigate();
+  const logout = useUserStore((state) => state.logout);
 
   useEffect(() => {
     const handleResize = () => {
@@ -69,7 +72,7 @@ export default function Sidebar() {
       {isMobile && !open && (
         <button
           onClick={toggleSidebar}
-          className="sidebar-mobile-toggle fixed top-18 left-2 z-50 p-2 rounded-lg border"
+          className="sidebar-mobile-toggle fixed top-18 left-2 z-50 p-2 rounded-md border"
           aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
           type="button"
@@ -125,7 +128,7 @@ export default function Sidebar() {
             <button
               onClick={toggleSidebar}
               className="sidebar-toggle-btn font-bold rounded transition-all"
-              aria-label={collapsed ? "Déplier la navigation" : "Réduire la navigation"}
+              aria-label={collapsed ? "Expand the navigation" : "Reduce the navigation"}
               type="button"
             >
               <FontAwesomeIcon
@@ -199,7 +202,12 @@ export default function Sidebar() {
             <Button
               variant="outline"
               className="sidebar-logout w-full"
-              onClick={() => console.log("Logout")}
+              onClick={() => {
+                localStorage.removeItem("token");
+                logout();
+                setOpen(false);
+                navigate("/login");
+              }}
             >
               <FontAwesomeIcon
                 icon={faRightFromBracket}
