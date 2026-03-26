@@ -8,8 +8,6 @@ export default function Button({
   loading = false,
   disabled = false,
   type = "button",
-  leftIcon,
-  rightIcon,
   children,
 }) {
   const baseClasses = "btn";
@@ -28,17 +26,7 @@ export default function Button({
       type={type}
       aria-busy={loading}
     >
-      {loading ? (
-        <span className="btn-spinner" aria-label="loading" />
-      ) : children ? (
-        children
-      ) : (
-        <>
-          {leftIcon && <span className="btn__icon btn__icon--left">{leftIcon}</span>}
-          {text}
-          {rightIcon && <span className="btn__icon btn__icon--right">{rightIcon}</span>}
-        </>
-      )}
+      {loading ? <span className="btn-spinner" aria-label="loading" /> : children ?? text}
     </button>
   );
 }
