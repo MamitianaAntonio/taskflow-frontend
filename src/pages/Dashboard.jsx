@@ -8,8 +8,8 @@ export default function Dashboard() {
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-auto p-6">
-          <Outlet /> {/* Le contenu de la page courante s’affiche ici */}
+        <main className="flex-1 overflow-auto p-2">
+          <Outlet />
         </main>
       </div>
     </div>
