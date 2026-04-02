@@ -62,8 +62,7 @@ export default function Sidebar() {
   }, [isMobile, open]);
 
   const navItemClassName = (collapsed) => ({ isActive }) =>
-    `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-xl transition-all duration-200 relative ${
-      collapsed ? "justify-center" : ""
+    `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-xl transition-all duration-200 relative ${collapsed ? "justify-center" : ""
     } ${isActive ? "is-active" : ""}`;
 
   return (
@@ -84,11 +83,10 @@ export default function Sidebar() {
       {/* OVERLAY */}
       {isMobile && (
         <div
-          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${
-            open
+          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${open
               ? "opacity-100 visible pointer-events-auto"
               : "opacity-0 invisible pointer-events-none"
-          }`}
+            }`}
           onClick={() => setOpen(false)}
         />
       )}
@@ -162,7 +160,7 @@ export default function Sidebar() {
                   title={collapsed ? item.label : undefined}
                   end
                 >
-                  <FontAwesomeIcon icon={item.icon} className="sidebar-nav-icon flex-shrink-0" />
+                  <FontAwesomeIcon icon={item.icon} className="sidebar-nav-icon shrink-0" />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
               ))}
