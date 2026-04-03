@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faXmark,
-  faRightFromBracket,
+  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 import { primaryNav, systemNav } from "../../constants/navigation";
 import "./Sidebar.css";
@@ -62,7 +62,7 @@ export default function Sidebar() {
   }, [isMobile, open]);
 
   const navItemClassName = (collapsed) => ({ isActive }) =>
-    `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-xl transition-all duration-200 relative ${collapsed ? "justify-center" : ""
+    `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-md transition-all duration-200 relative ${collapsed ? "justify-center" : ""
     } ${isActive ? "is-active" : ""}`;
 
   return (
@@ -196,7 +196,6 @@ export default function Sidebar() {
           </div>
 
           {/* LOGOUT */}
-          <div className="mt-4 p-2">
             <Button
               variant="outline"
               className="sidebar-logout w-full"
@@ -208,12 +207,11 @@ export default function Sidebar() {
               }}
             >
               <FontAwesomeIcon
-                icon={faRightFromBracket}
+                icon={faPowerOff}
                 className="sidebar-nav-icon flex-shrink-0"
               />
               {!collapsed && <span>Logout</span>}
             </Button>
-          </div>
         </div>
       </aside>
     </>

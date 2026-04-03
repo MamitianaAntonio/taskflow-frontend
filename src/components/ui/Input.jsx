@@ -8,7 +8,7 @@ const Input = ({ placeholder, type, value, onChange, className, ...rest }) => {
       value={value}
       onChange={onChange}
       className={`input 
-        w-full px-4 py-3 rounded-md text-[1.7vh] outline-none
+        w-full px-3 py-2 rounded-md text-[1.7vh] outline-none
         bg-(--bg-primary) text-(--text-primary) 
         border border-(--border-color)
         disabled:opacity-50 disabled:cursor-not-allowed
