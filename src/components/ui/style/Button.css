@@ -1,5 +1,5 @@
 .btn {
-  padding: 0.85rem 1.75rem;
+  padding: 0.40rem 1.70rem;
   gap: 0.5rem;
   align-items: center;
   display: inline-flex;
@@ -56,9 +56,9 @@
 
 .btn-outline:hover {
   transform: translateY(-3px);
-  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
-  box-shadow: 0 8px 20px
-    color-mix(in srgb, var(--accent-color) 25%, transparent);
+  color: var(--text-white);
+  background: var(--accent-color);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color) 25%, transparent);
 }
 
 .btn-outline:active {
