@@ -1,44 +1,49 @@
 export default function TaskOverview() {
+  const total = 24;
+  const completed = 18;
+  const incomplete = 6;
+  const pct = Math.round((completed / total) * 100);
+
   return (
-    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-4">
-      {/* Title */}
-      <p className="text-sm font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest">
-        Tasks Overview
-      </p>
-
-      {/* Stats */}
-      <div className="flex items-center justify-between">
-        {/* Total */}
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-3xl font-bold font-mono text-(--text-primary)">
-            24
-          </span>
-          <span className="text-xs text-(--text-primary) opacity-40 uppercase tracking-widest">
-            Total
+    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-1">
+          <p className="text-[11px] font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest">
+            Tasks Overview
+          </p>
+          <span className="text-5xl font-bold font-mono text-(--text-primary) leading-none">
+            {total}
           </span>
         </div>
+        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--color-success)/15 text-(--color-success) tracking-wide">
+          {pct}% done
+        </span>
+      </div>
 
-        {/* Divider */}
-        <div className="w-px h-10 bg-(--border-color) opacity-50" />
-
-        {/* Completed */}
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-3xl font-bold font-mono text-emerald-500">
-            18
-          </span>
-          <span className="text-xs text-(--text-primary) opacity-40 uppercase tracking-widest">
-            Completed
-          </span>
+      {/* Progress + Stats */}
+      <div className="flex flex-col gap-2.5">
+        {/* Track */}
+        <div className="w-full h-1.5 rounded-full bg-(--bg-primary) border border-(--border-color) overflow-hidden">
+          <div
+            className="h-full rounded-full bg-(--color-success)"
+            style={{ width: `${pct}%` }}
+          />
         </div>
-
-        {/* Divider */}
-        <div className="w-px h-10 bg-(--border-color) opacity-50" />
-
-        {/* Incomplete */}
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-3xl font-bold font-mono text-rose-500">6</span>
-          <span className="text-xs text-(--text-primary) opacity-40 uppercase tracking-widest">
-            Incomplete
+        {/* Stats row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-(--color-success)" />
+            <span className="text-sm font-bold font-mono text-(--color-success)">{completed}</span>
+            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">Completed</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-(--color-highlight)" />
+            <span className="text-sm font-bold font-mono text-(--color-highlight)">{incomplete}</span>
+            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">Incomplete</span>
+          </div>
+          <span className="text-sm font-mono text-(--text-primary) opacity-40">
+            {completed} / {total}
           </span>
         </div>
       </div>
