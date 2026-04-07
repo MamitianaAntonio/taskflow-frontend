@@ -68,7 +68,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="navbar-user" aria-label="User profile">
+          <div className="navbar-user sm:hidden" aria-label="User profile">
             <div className="navbar-avatar" aria-hidden="true">
               {initials}
             </div>

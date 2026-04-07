@@ -219,6 +219,10 @@
 
 /* ====================== RESPONSIVE ====================== */
 @media (max-width: 767px) {
+  .navbar-user {
+    visibility: hidden;
+  }
+
   .navbar-inner {
     height: auto;
     padding: 0.8rem 1rem;
