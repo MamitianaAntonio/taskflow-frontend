@@ -3,59 +3,54 @@ import useUserStore from "../../stores/userStore";
 import Button from "../ui/Button";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import TaskOverview from "./TaskOverview";
+import TaskStats from "./TaskStats";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
 
   return (
-    <div className="p-2 space-y-2">
-      {/* Title */}
-      <h1
-        className="
-        w-full bg-(--bg-secondary) px-4 py-3 
-         rounded-lg
-        text-xl font-semibold tracking-tight text-(--text-primary)
-        flex items-center gap-2 border border-(--border-color)
-        uppercase font-mono
-        "
-      >
-        <span className=" w-1.5 h-5 bg-(--accent-color) rounded-full" />
-        Dashboard Profile
-      </h1>
+    <div className="p-3 sm:p-4 flex flex-col gap-3">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-md font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-50">
+          Dashboard
+        </h1>
+      </div>
 
       {/* Profile card */}
-      <div className="bg-(--bg-secondary) px-5 py-4 border border-(--border-color) rounded-lg flex items-center gap-4">
-        {/* Left — Avatar + Info */}
-        <div className="flex items-center gap-4 flex-1">
-          {/* Avatar */}
-          <div
-            className="w-16 h-16 text-3xl font-bold text-(--text-white) rounded-lg 
-            border border-(--border-color) flex items-center justify-center select-none
-            bg-gradient-to-br from-(--gradient-from) to-(--gradient-to) backdrop-blur-sm"
-          >
-            A
-          </div>
-
-          {/* Info */}
-          <div className="flex flex-col gap-0.5">
-            <p className="font-mono font-semibold text-(--text-primary)">
-              Antonio
-            </p>
-            <p className="text-sm text-(--text-secondary) font-mono">
-              antonio@mail.com
-            </p>
-          </div>
+      <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex items-center gap-4">
+        {/* Avatar */}
+        <div
+          className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 text-2xl sm:text-3xl font-bold
+          text-(--text-white) rounded-lg border border-(--border-color)
+          flex items-center justify-center select-none
+          bg-gradient-to-br from-(--gradient-from) to-(--gradient-to)"
+        >
+          {user?.name?.[0] ?? "A"}
         </div>
 
-        {/* Right — Settings button */}
-        <Button variant="outline" className="">
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <p className="font-mono font-semibold text-(--text-primary) truncate">
+            {user?.name ?? "Antonio"}
+          </p>
+          <p className="text-sm text-(--text-secondary) font-mono truncate">
+            {user?.email ?? "antonio@mail.com"}
+          </p>
+        </div>
+
+        {/* Settings */}
+        <Button variant="outline" className="shrink-0 flex items-center gap-2">
           <FontAwesomeIcon icon={faGear} />
-          Settings
+          <span className="hidden sm:inline text-sm">Settings</span>
         </Button>
       </div>
 
-      {/* Tasks Stats */}
-      <TaskOverview />
+      {/* Stats grid — stacked on mobile, side-by-side on sm+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <TaskStats completed={7} incomplete={3} total={10} />
+        <TaskOverview />
+      </div>
     </div>
   );
 }
