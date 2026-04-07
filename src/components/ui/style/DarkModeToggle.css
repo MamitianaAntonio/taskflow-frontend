@@ -13,6 +13,8 @@
   width: 2rem;
   height: 2rem;
   border-radius: 999px;
+  min-width: 2rem;
+flex-shrink: 0;
   border: 2px solid var(--border-color);
   background: var(--bg-secondary);
   color: var(--text-primary);
@@ -25,6 +27,8 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     background-color 0.2s ease;
+  position: relative;
+  right: 0.5rem;
 }
 
 .darkmode-toggle-btn:hover {
