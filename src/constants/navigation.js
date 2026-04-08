@@ -10,7 +10,7 @@ import {
 
 // primary navigation (dashboard, tasks, projects, team)
 export const primaryNav = [
-  { key: "dashboard", label: "Dashboard", icon: faChartLine, path: "/" },
+  { key: "dashboard", label: "Dashboard", icon: faChartLine, path: "/dashboard" },
   { key: "tasks", label: "Tasks", icon: faListCheck, path: "/tasks" },
   { key: "projects", label: "Projects", icon: faFolderOpen, path: "/projects" },
   { key: "team", label: "Team", icon: faUsers, path: "/team" },
