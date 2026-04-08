@@ -134,7 +134,7 @@
 
 .sidebar-nav-link.is-active {
   font-weight: 650;
-  background-color: var(--color-highlight);
+  background-color: var(--accent-color);
 }
 
 .sidebar-nav-link.is-active::before {
