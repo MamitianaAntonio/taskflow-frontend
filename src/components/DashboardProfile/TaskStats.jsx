@@ -17,38 +17,42 @@ const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
   useEffect(() => {
     const s = getComputedStyle(document.documentElement);
     setColors({
-      success: s.getPropertyValue("--color-success").trim() || "#22c55e",
-      highlight: s.getPropertyValue("--color-highlight").trim() || "#ef4444",
+      success: s.getPropertyValue("--color-success").trim() || "#10b981",
+      highlight: s.getPropertyValue("--color-highlight").trim() || "#fbcfe8",
       warning: s.getPropertyValue("--color-warning").trim() || "#f59e0b",
-      bg: s.getPropertyValue("--bg-secondary").trim() || "#f5f5f5",
-      border: s.getPropertyPriority("--border-color").trim()
+      bg: s.getPropertyValue("--bg-secondary").trim(),
     });
   }, []);
 
   const data = {
-    datasets: [{
-      data: [completed, incomplete, remaining],
-      backgroundColor: [colors.success, colors.highlight, colors.warning],
-      borderWidth: 1,
-      borderColor: colors.border,
-    }],
+    datasets: [
+      {
+        data: [completed, incomplete, remaining],
+        backgroundColor: [colors.success, colors.highlight, colors.warning],
+      },
+    ],
   };
 
   const options = {
     cutout: "72%",
     animation: { duration: 600 },
     plugins: { legend: { display: false }, tooltip: { enabled: false } },
-  }
+  };
 
   const items = [
     { label: "Done", value: completed, color: colors.success, pct: (completed / total) * 100 },
-    { label: "Failed", value: incomplete, color: colors.highlight, pct: (incomplete / total) * 100 },
+    {
+      label: "Failed",
+      value: incomplete,
+      color: colors.highlight,
+      pct: (incomplete / total) * 100,
+    },
     { label: "Left", value: remaining, color: colors.warning, pct: (remaining / total) * 100 },
   ];
 
   return (
     <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5 w-full box-border">
-      <p className="text-[11px] font-medium text-(--text-primary) opacity-50 uppercase tracking-widest">
+      <p className="text-[11px] font-bold text-(--text-primary) opacity-50 uppercase tracking-widest">
         Tasks Statistics
       </p>
 
@@ -69,8 +73,10 @@ const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
           {items.map(({ label, value, color, pct: barPct }) => (
             <div key={label} className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: color }} />
-              <span className="text-xs text-(--text-primary) opacity-50 w-10 shrink-0">{label}</span>
-              <div className="flex-1 h-1 rounded-full bg-(--border-color) overflow-hidden">
+              <span className="text-xs text-(--text-primary) opacity-50 w-10 shrink-0">
+                {label}
+              </span>
+              <div className="flex-1 h-1.5 rounded-full bg-(--border-color) overflow-hidden">
                 <div
                   className="h-full rounded-full"
                   style={{ width: `${barPct}%`, background: color }}

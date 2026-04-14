@@ -40,7 +40,8 @@ export default function QuickAddTask({ onAdd }) {
         className={`flex items-center gap-1 text-xl font-semibold shrink-0 transition-opacity ${value.trim() ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
       >
-        <FontAwesomeIcon icon={faAdd} /> Add
+        <FontAwesomeIcon icon={faAdd} />
+        <p>Add</p>
       </Button>
     </form>
   );
