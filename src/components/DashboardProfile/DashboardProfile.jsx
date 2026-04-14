@@ -6,9 +6,9 @@ import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
 import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
-import { useState } from 'react'
+import { useState } from "react";
 import QuickAddTask from "./QuickAddTask";
-import tasksData from "../../data/tasks.json"
+import tasksData from "../../data/tasks.json";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
@@ -39,9 +39,7 @@ export default function DashboardProfile() {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-(--text-primary) truncate">
-            {user?.name ?? "Antonio"}
-          </p>
+          <p className="font-semibold text-(--text-primary) truncate">{user?.name ?? "Antonio"}</p>
           <p className="text-sm text-(--text-secondary) font-mono truncate">
             {user?.email ?? "antonio@mail.com"}
           </p>
@@ -54,6 +52,13 @@ export default function DashboardProfile() {
         </Button>
       </div>
 
+      {/* task hub */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-md font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-50">
+          Insights
+        </h1>
+      </div>
+
       {/* Stats grid — stacked on mobile, side-by-side on sm+ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <TaskStats completed={7} incomplete={3} total={10} />
@@ -62,7 +67,17 @@ export default function DashboardProfile() {
 
       {/* Quick Add Task */}
       <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4">
+        <p className="text-[11px] font-semibold text-(--text-primary) opacity-50 uppercase py-2 tracking-widest">
+          Quick add task
+        </p>
         <QuickAddTask />
+      </div>
+
+      {/* task hub */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-md font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-50">
+          Workspace
+        </h1>
       </div>
 
       {/* Tasks Sections */}

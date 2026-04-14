@@ -63,12 +63,15 @@ const Navbar = () => {
             </div>
             <div className="navbar-vdivider" aria-hidden="true" />
             <div className="navbar-datetime-group">
-              <FontAwesomeIcon icon={faClock} className="navbar-datetime-icon navbar-datetime-icon--time" />
+              <FontAwesomeIcon
+                icon={faClock}
+                className="navbar-datetime-icon navbar-datetime-icon--time"
+              />
               <span className="navbar-datetime-time">{formattedTime}</span>
             </div>
           </div>
 
-          <div className="navbar-user sm:hidden" aria-label="User profile">
+          <div className="navbar-user xl:hidden" aria-label="User profile">
             <div className="navbar-avatar" aria-hidden="true">
               {initials}
             </div>

@@ -25,22 +25,25 @@ export default function TaskOverview() {
       <div className="flex flex-col gap-2.5">
         {/* Track */}
         <div className="w-full h-1.5 rounded-full bg-(--bg-primary) border border-(--border-color) overflow-hidden">
-          <div
-            className="h-full rounded-full bg-(--color-success)"
-            style={{ width: `${pct}%` }}
-          />
+          <div className="h-full rounded-full bg-(--color-success)" style={{ width: `${pct}%` }} />
         </div>
         {/* Stats row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-(--color-success)" />
             <span className="text-sm font-bold font-mono text-(--color-success)">{completed}</span>
-            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">Completed</span>
+            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">
+              Completed
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-(--color-highlight)" />
-            <span className="text-sm font-bold font-mono text-(--color-highlight)">{incomplete}</span>
-            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">Incomplete</span>
+            <span className="text-sm font-bold font-mono text-(--color-highlight)">
+              {incomplete}
+            </span>
+            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">
+              Incomplete
+            </span>
           </div>
           <span className="text-sm font-mono text-(--text-primary) opacity-40">
             {completed} / {total}
