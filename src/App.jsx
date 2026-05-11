@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DashboardProfile from "./components/DashboardProfile/DashboardProfile";
+import Taskboard from "./components/TaskBoard/Taskboard";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashboardProfile />}></Route>
+            <Route path="tasks" element={<Taskboard />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

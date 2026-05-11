@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faXmark,
-  faPowerOff,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faXmark, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { primaryNav, systemNav } from "../../constants/navigation";
 import "./Sidebar.css";
 import Button from "../ui/Button";
@@ -61,9 +57,12 @@ export default function Sidebar() {
     };
   }, [isMobile, open]);
 
-  const navItemClassName = (collapsed) => ({ isActive }) =>
-    `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-md transition-all duration-200 relative ${collapsed ? "justify-center" : ""
-    } ${isActive ? "is-active" : ""}`;
+  const navItemClassName =
+    (collapsed) =>
+    ({ isActive }) =>
+      `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-md transition-all duration-200 relative ${
+        collapsed ? "justify-center" : ""
+      } ${isActive ? "is-active" : ""}`;
 
   return (
     <>
@@ -83,10 +82,11 @@ export default function Sidebar() {
       {/* OVERLAY */}
       {isMobile && (
         <div
-          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${open
+          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${
+            open
               ? "opacity-100 visible pointer-events-auto"
               : "opacity-0 invisible pointer-events-none"
-            }`}
+          }`}
           onClick={() => setOpen(false)}
         />
       )}
@@ -126,7 +126,9 @@ export default function Sidebar() {
             <button
               onClick={toggleSidebar}
               className="sidebar-toggle-btn font-bold rounded transition-all"
-              aria-label={collapsed ? "Expand the navigation" : "Reduce the navigation"}
+              aria-label={
+                collapsed ? "Expand the navigation" : "Reduce the navigation"
+              }
               type="button"
             >
               <FontAwesomeIcon
@@ -142,11 +144,7 @@ export default function Sidebar() {
             {/* PRIMARY NAV */}
             {!collapsed && (
               <div className="sidebar-section flex justify-between items-center mb-2 px-2">
-                <span
-                  className="sidebar-section__title"
-                >
-                  Workspace
-                </span>
+                <span className="sidebar-section__title">Workspace</span>
               </div>
             )}
             <div className="flex flex-col gap-2 mb-4">
@@ -158,9 +156,12 @@ export default function Sidebar() {
                   className={navItemClassName(collapsed)}
                   aria-label={collapsed ? item.label : undefined}
                   title={collapsed ? item.label : undefined}
-                  end
+                  end={item.key == "dashboard"}
                 >
-                  <FontAwesomeIcon icon={item.icon} className="sidebar-nav-icon shrink-0" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="sidebar-nav-icon shrink-0"
+                  />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
               ))}
@@ -171,11 +172,7 @@ export default function Sidebar() {
             {/* SYSTEM NAV */}
             {!collapsed && (
               <div className="sidebar-section flex justify-between items-center mt-4 mb-2 px-2">
-                <span
-                  className="sidebar-section__title"
-                >
-                  System
-                </span>
+                <span className="sidebar-section__title">System</span>
               </div>
             )}
             <div className="flex flex-col gap-2 mt-2">
@@ -188,7 +185,10 @@ export default function Sidebar() {
                   aria-label={collapsed ? item.label : undefined}
                   title={collapsed ? item.label : undefined}
                 >
-                  <FontAwesomeIcon icon={item.icon} className="sidebar-nav-icon flex-shrink-0" />
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="sidebar-nav-icon flex-shrink-0"
+                  />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
               ))}
@@ -196,22 +196,22 @@ export default function Sidebar() {
           </div>
 
           {/* LOGOUT */}
-            <Button
-              variant="outline"
-              className="sidebar-logout w-full"
-              onClick={() => {
-                localStorage.removeItem("token");
-                logout();
-                setOpen(false);
-                navigate("/login");
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faPowerOff}
-                className="sidebar-nav-icon flex-shrink-0"
-              />
-              {!collapsed && <span>Logout</span>}
-            </Button>
+          <Button
+            variant="outline"
+            className="sidebar-logout w-full"
+            onClick={() => {
+              localStorage.removeItem("token");
+              logout();
+              setOpen(false);
+              navigate("/login");
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="sidebar-nav-icon flex-shrink-0"
+            />
+            {!collapsed && <span>Logout</span>}
+          </Button>
         </div>
       </aside>
     </>
