@@ -10,15 +10,35 @@ import {
 
 // primary navigation (dashboard, tasks, projects, team)
 export const primaryNav = [
-  { key: "dashboard", label: "Dashboard", icon: faChartLine, path: "/dashboard" },
-  { key: "tasks", label: "Tasks", icon: faListCheck, path: "/tasks" },
-  { key: "projects", label: "Projects", icon: faFolderOpen, path: "/projects" },
-  { key: "team", label: "Team", icon: faUsers, path: "/team" },
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: faChartLine,
+    path: "/dashboard",
+  },
+  { key: "tasks", label: "Tasks", icon: faListCheck, path: "/dashboard/tasks" },
+  {
+    key: "projects",
+    label: "Projects",
+    icon: faFolderOpen,
+    path: "/dashboard/projects",
+  },
+  { key: "team", label: "Team", icon: faUsers, path: "/dashboard/team" },
 ];
 
 // system navigation (notifications, settings, etc.)
 export const systemNav = [
-  { key: "notifications", label: "Notifications", icon: faBell, path: "/notifications" },
-  { key: "history", label: "History", icon: faClockRotateLeft, path: "/history" },
+  {
+    key: "notifications",
+    label: "Notifications",
+    icon: faBell,
+    path: "/notifications",
+  },
+  {
+    key: "history",
+    label: "History",
+    icon: faClockRotateLeft,
+    path: "/history",
+  },
   { key: "settings", label: "Settings", icon: faCog, path: "/settings" },
 ];
