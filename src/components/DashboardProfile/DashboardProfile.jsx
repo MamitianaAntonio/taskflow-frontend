@@ -20,7 +20,7 @@ export default function DashboardProfile() {
       <DashboardGreeting name={user?.name ?? "Unknown"} />
 
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+        <h1 className="text-2xl font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
           Dashboard
         </h1>
       </div>
@@ -39,9 +39,11 @@ export default function DashboardProfile() {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-(--text-primary) truncate">{user?.name ?? "Antonio"}</p>
+          <p className="font-semibold text-(--text-primary) truncate">
+            {user?.name ?? "..."}
+          </p>
           <p className="text-sm text-(--text-secondary) font-mono truncate">
-            {user?.email ?? "antonio@mail.com"}
+            {user?.email ?? "..."}
           </p>
         </div>
 
