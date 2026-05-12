@@ -52,7 +52,7 @@ const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
 
   return (
     <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5 w-full box-border">
-      <p className="text-[11px] font-bold text-(--text-primary) opacity-50 uppercase tracking-widest">
+      <p className="text-xs font-semibold text-(--text-primary) py-2 opacity-50 uppercase tracking-widest">
         Tasks Statistics
       </p>
 
