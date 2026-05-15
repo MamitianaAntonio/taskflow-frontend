@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import axiosClient from "../api/axios";
+import {
+  getAllTodo,
+  createTodo as createTodoService,
+  updateTodo as updateTodoService,
+  deleteTodo as deleteTodoService,
+} from "../services/todo";
 
 const useTodoStore = create((set) => ({
   todos: [],
@@ -8,29 +13,51 @@ const useTodoStore = create((set) => ({
   
   // load todos from backend
   fetchTodos: async () => {
-    set({ isLoading: true });
-    const { data } = await axiosClient.get("/api/todos");
-    set({ todos: data, isLoading: false });
+    set({ isLoading: true, error: null });
+    try {
+      const todos = await getAllTodo();
+      set({ todos, isLoading: false });
+    } catch (error) {
+      set({ error, isLoading: false });
+      throw error;
+    }
   },
 
   // add a new todo
   addTodo: async (title, dueDate = null, priority = 'medium') => {
-    const { data } = await axiosClient.post('/api/todos', { title, dueDate, priority });
-    set((state) => ({ todos: [...state.todos, data] }));
+    try {
+      const todo = await createTodoService({ title, dueDate, priority });
+      set((state) => ({ todos: [...state.todos, todo] }));
+      return todo;
+    } catch (error) {
+      set({ error });
+      throw error;
+    }
   },
 
   // update a todo
   updateTodo: async (id, updates) => {
-    const { data } = await axiosClient.put(`/api/todos/${id}`, updates);
-    set((state) => ({
-      todos: state.todos.map((t) => (t.id === id ? data : t)),
-    }));
+    try {
+      const updated = await updateTodoService(id, updates);
+      set((state) => ({
+        todos: state.todos.map((t) => (t.id === id ? updated : t)),
+      }));
+      return updated;
+    } catch (error) {
+      set({ error });
+      throw error;
+    }
   },
 
   // delete a todo
   deleteTodo: async (id) => {
-    await axiosClient.delete(`/api/todos/${id}`);
-    set((state) => ({ todos: state.todos.filter((t) => t.id !== id) }));
+    try {
+      await deleteTodoService(id);
+      set((state) => ({ todos: state.todos.filter((t) => t.id !== id) }));
+    } catch (error) {
+      set({ error });
+      throw error;
+    }
   },
 }));
 
