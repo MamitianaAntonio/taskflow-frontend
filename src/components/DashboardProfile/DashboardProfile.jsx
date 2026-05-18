@@ -1,4 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
+import useTodoStore from "../../stores/todoStore";
 import useUserStore from "../../stores/userStore";
 import Button from "../ui/Button";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
@@ -6,13 +8,28 @@ import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
 import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
-import { useState } from "react";
 import QuickAddTask from "./QuickAddTask";
-import tasksData from "../../data/tasks.json";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
-  const [tasks, setTasks] = useState(tasksData);
+  const tasks = useTodoStore((state) => state.todos);
+  const fetchTodos = useTodoStore((state) => state.fetchTodos);
+  const addTodo = useTodoStore((state) => state.addTodo);
+
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
+
+  const dashboardTasks = tasks.map((task) => ({
+    ...task,
+    completed: task.status === "done",
+    completedAt: task.completedAt || (task.status === "done" ? task.updatedAt || task.dueDate : null),
+  }));
+
+  const total = dashboardTasks.length;
+  const completedCount = dashboardTasks.filter((task) => task.status === "done").length;
+  const incompleteCount = dashboardTasks.filter((task) => task.status === "doing").length;
+  const leftCount = dashboardTasks.filter((task) => task.status === "todo").length;
 
   return (
     <div className="p-3 sm:p-4 flex flex-col gap-4">
@@ -63,8 +80,8 @@ export default function DashboardProfile() {
 
       {/* Stats grid — stacked on mobile, side-by-side on sm+ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <TaskStats completed={7} incomplete={3} total={10} />
-        <TaskOverview />
+        <TaskStats completed={completedCount} incomplete={incompleteCount} left={leftCount} total={total} />
+        <TaskOverview completed={completedCount} incomplete={incompleteCount} total={total} />
       </div>
 
       {/* task hub */}
@@ -79,13 +96,13 @@ export default function DashboardProfile() {
         <p className="text-xs font-semibold text-(--text-primary) opacity-60 uppercase py-2 tracking-widest">
           Quick add task
         </p>
-        <QuickAddTask />
+        <QuickAddTask onAdd={addTodo} />
       </div>
 
       {/* Tasks Sections */}
       <div className="w-full flex flex-col md:flex-row gap-4">
         {/* Each section inside DashboardTasks will stack nicely */}
-        <DashboardTasks tasks={tasks} />
+        <DashboardTasks tasks={dashboardTasks} />
       </div>
     </div>
   );
