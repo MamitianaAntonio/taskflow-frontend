@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faClock, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faClock, faCalendarDays, faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 
 // Utility functions
@@ -21,27 +21,66 @@ const TaskRow = ({ task }) => {
     day: "numeric",
   });
 
+  const statusLabel = task.completed
+    ? "Completed"
+    : isToday(task.dueDate)
+    ? "Today"
+    : "";
+
+  const statusColor = task.overdue
+    ? "var(--color-error)"
+    : task.completed
+    ? "var(--color-success)"
+    : "var(--color-warning)";
+
   return (
-    <div className="flex items-center justify-between gap-3 p-3 rounded-lg border border-(--border-color) hover:bg-(--bg-hover) transition-colors">
+    <div
+      className="flex items-center justify-between gap-3 p-3 rounded-lg border transition-colors"
+      style={{
+        borderColor: "var(--border-color)",
+        backgroundColor: "var(--bg-primary)",
+      }}
+    >
+      {/* Left side: icon + title */}
       <div className="flex items-center gap-3">
-        <div
-          className={`w-3 h-3 rounded-full shrink-0 ${task.overdue ? "bg-(--color-error)" : "bg-(--color-success)"
-            }`}
-        />
+        {task.completed ? (
+          <FontAwesomeIcon
+            icon={faCheckCircle}
+            className="w-4 h-4 shrink-0"
+            style={{ color: "var(--color-success)" }}
+          />
+        ) : (
+          <FontAwesomeIcon
+            icon={faTimesCircle}
+            className="w-4 h-4 shrink-0"
+            style={{ color: statusColor }}
+          />
+        )}
         <div className="flex flex-col">
-          <p className="text-sm font-semibold text-(--text-primary) truncate">{task.title}</p>
-          <span className="text-xs text-(--text-secondary)">
-            {task.completed ? "Completed" : isToday(task.dueDate) ? "Today" : ""}
-          </span>
+          <p
+            className="text-sm truncate"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {task.title}
+          </p>
+          {statusLabel && (
+            <span
+              className="text-xs"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {statusLabel}
+            </span>
+          )}
         </div>
       </div>
+
+      {/* Right side: due date badge */}
       <span
-        className={`text-xs font-mono shrink-0 px-2 py-1 rounded-full ${task.overdue
-          ? "bg-(--color-error)/20 text-(--color-error)"
-          : task.completed
-            ? "bg-(--color-success)/20 text-(--color-success)"
-            : "bg-(--color-warning)/20 text-(--color-warning)"
-          }`}
+        className="text-xs font-mono font-semibold shrink-0 px-2 py-1 rounded-full"
+        style={{
+          backgroundColor: `${statusColor}/20`,
+          color: statusColor,
+        }}
       >
         {dueDateStr}
       </span>
