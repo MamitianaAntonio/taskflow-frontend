@@ -3,9 +3,10 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 ChartJS.register(ArcElement, Tooltip);
 
-const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
-  const remaining = Math.max(0, total - completed - incomplete);
-  const pct = Math.round((completed / total) * 100);
+const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
+  const incompleteValue = Math.max(0, incomplete);
+  const leftValue = Math.max(0, left);
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   const [colors, setColors] = useState({
     success: "#22c55e",
@@ -27,27 +28,22 @@ const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
   const data = {
     datasets: [
       {
-        data: [completed, incomplete, remaining],
+        data: [completed, incompleteValue, leftValue],
         backgroundColor: [colors.success, colors.highlight, colors.warning],
       },
     ],
   };
 
   const options = {
-    cutout: "72%",
-    animation: { duration: 600 },
+    cutout: "76%",
+    animation: { duration: 800 },
     plugins: { legend: { display: false }, tooltip: { enabled: false } },
   };
 
   const items = [
-    { label: "Done", value: completed, color: colors.success, pct: (completed / total) * 100 },
-    {
-      label: "Failed",
-      value: incomplete,
-      color: colors.highlight,
-      pct: (incomplete / total) * 100,
-    },
-    { label: "Left", value: remaining, color: colors.warning, pct: (remaining / total) * 100 },
+    { label: "Done", value: completed, color: colors.success, pct: total > 0 ? (completed / total) * 100 : 0 },
+    { label: "Incomplete", value: incompleteValue, color: colors.highlight, pct: total > 0 ? (incompleteValue / total) * 100 : 0 },
+    { label: "Left", value: leftValue, color: colors.warning, pct: total > 0 ? (leftValue / total) * 100 : 0 },
   ];
 
   return (
@@ -73,13 +69,13 @@ const TaskStats = ({ completed = 18, incomplete = 3, total = 24 }) => {
           {items.map(({ label, value, color, pct: barPct }) => (
             <div key={label} className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: color }} />
-              <span className="text-xs text-(--text-primary) opacity-50 w-10 shrink-0">
+              <span className="text-xs text-(--text-primary) opacity-50 min-w-20 shrink-0 truncate">
                 {label}
               </span>
               <div className="flex-1 h-1.5 rounded-full bg-(--border-color) overflow-hidden">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: `${barPct}%`, background: color }}
+                  style={{ width: `${barPct} %`, background: color }}
                 />
               </div>
               <span className="text-xs font-mono font-medium text-(--text-primary) w-5 text-right shrink-0">
