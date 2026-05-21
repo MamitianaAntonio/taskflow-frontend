@@ -76,8 +76,7 @@ const Navbar = () => {
               {initials}
             </div>
             <div className="navbar-user-text">
-              <span className="navbar-user-name">{user?.name ?? "Guest"}</span>
-              <span className="navbar-user-email">{user?.email ?? ""}</span>
+              <span className="navbar-user-name font-mono px-2">{user?.name ?? "Guest"}</span>
             </div>
           </div>
         </div>
