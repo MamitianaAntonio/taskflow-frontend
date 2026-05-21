@@ -8,7 +8,6 @@ import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
 import { useState } from "react";
 import QuickAddTask from "./QuickAddTask";
-import tasksData from "../../data/tasks.json";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
