@@ -47,3 +47,8 @@ export const updateTodo = async (
   );
   return response.data.updated;
 };
+
+// delete a todo
+export const deleteTodo = async (id: number): Promise<void> => {
+  await axiosClient.delete(`/api/todos/${id}`);
+};

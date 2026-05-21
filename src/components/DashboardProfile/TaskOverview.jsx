@@ -1,8 +1,5 @@
-export default function TaskOverview() {
-  const total = 24;
-  const completed = 18;
-  const incomplete = 6;
-  const pct = Math.round((completed / total) * 100);
+export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 }) {
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   return (
     <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5">

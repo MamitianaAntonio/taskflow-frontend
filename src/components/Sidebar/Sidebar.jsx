@@ -160,7 +160,7 @@ export default function Sidebar() {
                 >
                   <FontAwesomeIcon
                     icon={item.icon}
-                    className="sidebar-nav-icon shrink-0"
+                    className="sidebar-nav-icon shrink-0 hover:text-(--text-white)"
                   />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
@@ -187,7 +187,7 @@ export default function Sidebar() {
                 >
                   <FontAwesomeIcon
                     icon={item.icon}
-                    className="sidebar-nav-icon flex-shrink-0"
+                    className="sidebar-nav-icon shrink-0"
                   />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
@@ -208,7 +208,7 @@ export default function Sidebar() {
           >
             <FontAwesomeIcon
               icon={faPowerOff}
-              className="sidebar-nav-icon flex-shrink-0"
+              className="sidebar-nav-icon shrink-0"
             />
             {!collapsed && <span>Logout</span>}
           </Button>

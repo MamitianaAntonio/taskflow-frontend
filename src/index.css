@@ -1,36 +1,51 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --bg-primary: #F4F4F5;
-  --bg-secondary: #FFFFFF;
-  --text-primary: #09090B;
-  --text-secondary: #71717a;
-  --text-white: #ffffff;
-  --border-color: #e4e4e7;
-  --shadow: rgba(236, 72, 153, 0.07);
-  --accent-color: #e879a0;
-  --gradient-from: #f472b6;
-  --gradient-to: #db2777;
-  --color-success: #10b981;
-  --color-highlight: #fce7f3;
-  --color-warning: #f59e0b;
-  --overlay: rgba(0, 0, 0, 0.6);
+  /* Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FAFAFA;
+  /* Text */
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-white: #FFFFFF;
+  /* Borders & Shadows */
+  --border-color: #E5E5E5;
+  --shadow: rgba(0, 0, 0, 0.06);
+  /* Accents (pink focus) */
+  --accent-color: #EC4899;
+  --gradient-from: #EC4899;
+  --gradient-to: #F472B6;
+  --color-highlight: #F9A8D4;
+  /* Status colors */
+  --color-error: #e93f3f;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  /* Overlay */
+  --overlay: rgba(0, 0, 0, 0.45);
 }
+
 [data-theme="dark"] {
+  /* Backgrounds */
   --bg-primary: #09090B;
   --bg-secondary: #111113;
-  --text-primary: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-white: #ffffff;
-  --border-color: #27272a;
+  /* Text */
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-white: #FFFFFF;
+  /* Borders & Shadows */
+  --border-color: #27272A;
   --shadow: rgba(0, 0, 0, 0.5);
-  --accent-color: #f472b6;
-  --gradient-from: #ec4899;
-  --gradient-to: #be185d;
-  --color-success: #34d399;
-  --color-highlight: #ec4899;
-  --color-warning: #fbbf24;
+  /* Accents (pink focus) */
+  --accent-color: #F472B6;
+  --gradient-from: #EC4899;
+  --gradient-to: #BE185D;
+  --color-highlight: #EC4899;
+  /* Status colors */
+  --color-error: #e93f3f;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  /* Overlay */
   --overlay: rgba(0, 0, 0, 0.7);
 }
 
@@ -39,7 +54,7 @@ body {
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "Raleway", sans-serif;
+  font-family: "Manrope", sans-serif;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
