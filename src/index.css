@@ -18,6 +18,7 @@
   --gradient-to: #F472B6;
   --color-highlight: #F9A8D4;
   /* Status colors */
+  --color-error: #e93f3f;
   --color-success: #10B981;
   --color-warning: #F59E0B;
   /* Overlay */
@@ -41,6 +42,7 @@
   --gradient-to: #BE185D;
   --color-highlight: #EC4899;
   /* Status colors */
+  --color-error: #e93f3f;
   --color-success: #34D399;
   --color-warning: #FBBF24;
   /* Overlay */
