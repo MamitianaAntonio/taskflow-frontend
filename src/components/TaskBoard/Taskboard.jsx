@@ -6,11 +6,11 @@ import TaskRow from "./TaskRow";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskFilter from "./TaskFilter";
-
-const STATUSES = ["all", "todo", "doing", "done"];
-const cycle = { todo: "doing", doing: "done", done: "todo" };
+import TaskList from "./TaskList";
 
 export default function Taskboard() {
+  const cycle = { todo: "doing", doing: "done", done: "todo" };
+
   const todos = useTodoStore((state) => state.todos);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
@@ -143,34 +143,12 @@ export default function Taskboard() {
       )}
 
       {/* Task list */}
-      <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-(--border-color) bg-(--accent-color)">
-          <h2 className="text-sm font-semibold text-(--text-white)">Tasks</h2>
-          <p className="mt-1 text-xs text-(--text-white)">
-            Click a task to view details
-          </p>
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="py-16 text-center text-sm text-(--text-secondary)">
-            <FontAwesomeIcon
-              icon={faInbox}
-              className="mx-auto mb-4 text-3xl opacity-40"
-            />
-            <p>No tasks match this filter.</p>
-          </div>
-        ) : (
-          filtered.map((task) => (
-            <TaskRow
-              key={task.id}
-              task={task}
-              onCycle={cycleStatus}
-              onDelete={deleteTask}
-              onClick={() => setSelectedTask(task)}
-            />
-          ))
-        )}
-      </div>
+      <TaskList
+        filtered={filtered}
+        cycleStatus={cycleStatus}
+        deleteTask={deleteTask}
+        setSelectedTask={setSelectedTask}
+      />
     </div>
   );
 }
