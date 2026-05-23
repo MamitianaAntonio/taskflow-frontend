@@ -1,77 +1,81 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCircleHalfStroke, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+
 const baseClass =
   "w-[70px] px-3 py-1 rounded-full text-xs font-medium border transition-all duration-200";
 
 const statusConfig = {
   todo: {
     label: "Todo",
-    className: `
-      ${baseClass}
-      bg-(--bg-secondary)/60
-      text-(--text-secondary)
-      border-(--border-color)
-      hover:bg-(--bg-secondary)
-      `,
+    icon: faCircle,
+    dot: "bg-(--text-secondary)",
+    pill: "bg-(--bg-secondary) text-(--text-secondary) border-(--border-color)",
   },
-
   doing: {
     label: "Doing",
-    className: `
-      ${baseClass}
-      bg-(--color-warning)/15
-      text-(--color-warning)
-      border-(--color-warning)/30
-      hover:bg-(--color-warning)/20
-      `,
+    icon: faCircleHalfStroke,
+    dot: "bg-(--color-warning)",
+    pill: "bg-(--bg-secondary) text-(--color-warning) border-(--border-color)",
   },
-
   done: {
     label: "Done",
-    className: `
-      ${baseClass}
-      bg-(--color-success)/15
-      text-(--color-success)
-      border-(--color-success)/30
-      hover:bg-(--color-success)/20
-      `,
+    icon: faCircleCheck,
+    dot: "bg-(--color-success)",
+    pill: "bg-(--bg-secondary) text-(--color-success) border-(--border-color)",
   },
 };
 
-export default function TaskRow({ task, onCycle, onDelete, onClick }) {
+export default function TaskRow ({ task, onCycle, onDelete, onClick }) {
+  const cfg = statusConfig[task.status];
+
   return (
     <div
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-3
-        border-b border-(--border-color) last:border-b-0
-        hover:bg-(--bg-primary) transition-colors group cursor-pointer"
+      className="group flex items-center gap-3 px-4 py-3 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary) transition-colors cursor-pointer"
     >
+      {/* Status dot */}
+      <span className={`size-2 rounded-full shrink-0 ${cfg.dot}`} />
+
+      {/* Label */}
+      <p
+        className={`flex-1 text-sm min-w-0 truncate transition-colors
+        ${
+          task.status === "done"
+            ? "line-through text-(--text-secondary)"
+            : "text-(--text-primary)"
+        }`}
+      >
+        {task.label}
+      </p>
+
+      {/* Status pill */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onCycle(task.id);
         }}
-        className={`text-[10px] font-mono px-2 py-0.5 rounded-lg shrink-0 transition-all
-          ${statusConfig[task.status].className}`}
+        className={`inline-flex items-center gap-1.5 pl-1.5 pr-2.5 py-0.5 rounded-md text-[11px] font-medium border shrink-0 transition-[filter] hover:brightness-95 ${cfg.pill}`}
+        aria-label="Change status"
       >
-        {task.status}
+        <FontAwesomeIcon
+          icon={cfg.icon}
+          className="text-[11px]"
+          aria-hidden="true"
+        />
+        {cfg.label}
       </button>
 
-      <span
-        className={`flex-1 text-sm text-(--text-primary) truncate
-        ${task.status === "done" ? "line-through opacity-40" : ""}`}
-      >
-        {task.label}
-      </span>
-
+      {/* Delete */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onDelete(task.id);
         }}
-        className="opacity-0 group-hover:opacity-100 transition-opacity
-          text-(--text-tertiary) hover:text-(--color-danger) text-sm px-1"
+        className="opacity-0 group-hover:opacity-100 transition-opacity text-(--text-primary) hover:text-(--color-error) p-1 rounded"
         aria-label="Delete task"
       >
-        ✕
+        <FontAwesomeIcon icon={faXmark} className="text-[13px]" />
       </button>
     </div>
   );
