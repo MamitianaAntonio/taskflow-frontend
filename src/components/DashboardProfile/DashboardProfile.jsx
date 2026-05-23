@@ -8,7 +8,7 @@ import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
 import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
-import QuickAddTask from "./QuickAddTask";
+import QuickAddTask from "../ui/QuickAddTask";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
@@ -43,7 +43,10 @@ export default function DashboardProfile() {
       </div>
 
       {/* Profile card */}
-      <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex items-center gap-4">
+      <div
+        className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex items-center gap-4 "
+        style={{ boxShadow: "var(--shadow-pink)" }}
+      >
         {/* Avatar */}
         <div
           className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 text-2xl sm:text-3xl font-bold
@@ -80,8 +83,17 @@ export default function DashboardProfile() {
 
       {/* Stats grid — stacked on mobile, side-by-side on sm+ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <TaskStats completed={completedCount} incomplete={incompleteCount} left={leftCount} total={total} />
-        <TaskOverview completed={completedCount} incomplete={incompleteCount} total={total} />
+        <TaskStats
+          completed={completedCount}
+          incomplete={incompleteCount}
+          left={leftCount}
+          total={total}
+        />
+        <TaskOverview
+          completed={completedCount}
+          incomplete={incompleteCount}
+          total={total}
+        />
       </div>
 
       {/* task hub */}
@@ -92,12 +104,7 @@ export default function DashboardProfile() {
       </div>
 
       {/* Quick Add Task */}
-      <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4">
-        <p className="text-xs font-semibold text-(--text-primary) opacity-60 uppercase py-2 tracking-widest">
-          Quick add task
-        </p>
-        <QuickAddTask onAdd={addTodo} />
-      </div>
+      <QuickAddTask onAdd={addTodo} />
 
       {/* Tasks Sections */}
       <div className="w-full flex flex-col md:flex-row gap-4">
