@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import QuickAddTask from "../DashboardProfile/QuickAddTask";
+import QuickAddTask from "../ui/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faInbox, faList, faSpinner, faTableColumns, faTasks } from "@fortawesome/free-solid-svg-icons";
 import TaskRow from "./TaskRow";
