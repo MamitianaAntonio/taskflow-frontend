@@ -1,4 +1,5 @@
-import "./style/Button.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function Button({
   text,
@@ -13,16 +14,22 @@ export default function Button({
   icon,
   iconPosition = "left",
 }) {
-  const baseClasses = "btn";
-  const variantClasses = {
-    primary: "btn-primary",
-    outline: "btn-outline",
-    text: "btn-text",
+  const base =
+    `inline-flex items-center justify-center gap-2 rounded-lg font-medium text-sm tracking-wide 
+    cursor-pointer transition-all duration-200 relative overflow-hidden outline-none focus-visible:ring-2 
+    focus-visible:ring-(--color-success) focus-visible:ring-offset-2`;
+
+  const variants = {
+    primary:
+      "bg-gradient-to-br from-(--gradient-from) to-(--gradient-to) text-(--text-white) shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0",
+    outline:
+      "bg-transparent border border-(--accent-color) text-(--accent-color) shadow-sm hover:-translate-y-0.5 hover:bg-(--accent-color) hover:text-(--text-white) hover:shadow-md active:translate-y-0",
+    text: "bg-transparent text-(--text-primary) hover:bg-black/5 rounded",
   };
 
-  const sizeClasses = {
+  const sizes = {
     small: "px-3 py-1.5 text-xs",
-    medium: "",
+    medium: "px-6 py-2.5",
     large: "px-6 py-3 text-base",
   };
 
@@ -30,22 +37,30 @@ export default function Button({
 
   return (
     <button
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className} ${finalDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
+      type={type}
       onClick={onClick}
       disabled={finalDisabled}
-      type={type}
       aria-busy={loading}
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className} ${finalDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
     >
       {loading ? (
-        <span className="btn-spinner" aria-label="loading" />
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="animate-spin"
+          aria-label="loading"
+        />
       ) : (
         <>
           {icon && iconPosition === "left" && (
-            <span className="btn__icon btn__icon--left">{icon}</span>
+            <span className="inline-flex items-center justify-center leading-none">
+              {icon}
+            </span>
           )}
           {children ?? text}
           {icon && iconPosition === "right" && (
-            <span className="btn__icon btn__icon--right">{icon}</span>
+            <span className="inline-flex items-center justify-center leading-none">
+              {icon}
+            </span>
           )}
         </>
       )}
