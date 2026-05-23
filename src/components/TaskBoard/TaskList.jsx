@@ -4,7 +4,7 @@ import TaskRow from "./TaskRow";
 
 export default function TaskList({ filtered, cycleStatus, deleteTask, setSelectedTask }) {
   return (
-    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col shadow-md h-102">
+    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-102" style={{ boxShadow: 'var(--shadow-pink)' }}>
 
       {/* Header */}
       <div className="flex bg-(--bg-secondary) items-start justify-between px-5 py-4 border-b border-(--border-color)">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import QuickAddTask from "../DashboardProfile/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faInbox, faList, faSpinner, faTableColumns } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faInbox, faList, faSpinner, faTableColumns, faTasks } from "@fortawesome/free-solid-svg-icons";
 import TaskRow from "./TaskRow";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
@@ -98,8 +98,8 @@ export default function Taskboard() {
           Your flow
         </h1>
         <FontAwesomeIcon
-          icon={faTableColumns}
-          className="text-3xl text-(--text-tertiary)"
+          icon={faTasks}
+          className="text-2xl text-(--accent-color)"
         />
       </div>
 
@@ -107,12 +107,7 @@ export default function Taskboard() {
       <TaskboadStats stats={stats} />
 
       {/* Quick add */}
-      <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-        <p className="text-[11px] uppercase tracking-widest text-(--text-tertiary) mb-3">
-          Quick add task
-        </p>
-        <QuickAddTask onAdd={addTodo} />
-      </div>
+      <QuickAddTask onAdd={addTodo} />
 
       {/* Filter */}
       <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
