@@ -12,6 +12,7 @@
   /* Borders & Shadows */
   --border-color: #E5E5E5;
   --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-pink: 0 3px 10px rgba(180, 83, 120, 0.14);
   /* Accents (pink focus) */
   --accent-color: #EC4899;
   --gradient-from: #EC4899;
@@ -36,6 +37,7 @@
   /* Borders & Shadows */
   --border-color: #27272A;
   --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-pink: 0 1px 4px rgba(236, 72, 153, 0.12);
   /* Accents (pink focus) */
   --accent-color: #F472B6;
   --gradient-from: #EC4899;

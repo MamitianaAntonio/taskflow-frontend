@@ -7,6 +7,7 @@ export default function TaskboadStats({ stats }) {
         <div
           key={label}
           className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4"
+          style={{ boxShadow: 'var(--shadow-pink)' }}
         >
           <div
             className={`w-5 h-5 rounded-md flex items-center justify-center mb-3 ${bg}`}
