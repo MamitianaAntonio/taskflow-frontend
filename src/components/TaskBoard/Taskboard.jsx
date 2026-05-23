@@ -7,6 +7,7 @@ import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskFilter from "./TaskFilter";
 import TaskList from "./TaskList";
+import TaskboadStats from "./TaskboadStats";
 
 export default function Taskboard() {
   const cycle = { todo: "doing", doing: "done", done: "todo" };
@@ -103,24 +104,7 @@ export default function Taskboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        {stats.map(({ label, value, color, icon, bg }) => (
-          <div
-            key={label}
-            className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4"
-          >
-            <div
-              className={`w-5 h-5 rounded-md flex items-center justify-center mb-3 ${bg}`}
-            >
-              <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
-            </div>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-(--text-tertiary)">
-              {label}
-            </p>
-            <p className={`mt-2 text-3xl font-semibold ${color}`}>{value}</p>
-          </div>
-        ))}
-      </div>
+      <TaskboadStats stats={stats} />
 
       {/* Quick add */}
       <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
