@@ -14,8 +14,7 @@ export default function Button({
   icon,
   iconPosition = "left",
 }) {
-  const base =
-    `inline-flex items-center justify-center gap-2 rounded-lg font-medium text-sm tracking-wide 
+  const base = `inline-flex items-center justify-center gap-2 rounded-lg text-sm tracking-wide 
     cursor-pointer transition-all duration-200 relative overflow-hidden outline-none focus-visible:ring-2 
     focus-visible:ring-(--color-success) focus-visible:ring-offset-2`;
 
@@ -28,9 +27,9 @@ export default function Button({
   };
 
   const sizes = {
-    small: "px-3 py-1.5 text-xs",
-    medium: "px-6 py-2.5",
-    large: "px-6 py-3 text-base",
+    small: "px-2 py-1.5 text-xs",
+    medium: "px-4 py-2.5",
+    large: "px-4 py-3 text-base",
   };
 
   const finalDisabled = disabled || loading;
