@@ -14,8 +14,8 @@ export default function QuickAddTask({ onAdd }) {
   };
 
   return (
-    <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-      <p className="text-[11px] uppercase tracking-widest text-(--text-secondary) mb-3">
+    <div className="w-full rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-(--text-secondary) mb-3">
         Quick add task
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2.5 items-stretch">
@@ -49,6 +49,7 @@ export default function QuickAddTask({ onAdd }) {
         {/* Button */}
         <Button
           type="submit"
+          size="small"
           variant="outline"
           onClick={handleSubmit}
           className="h-11 w-11 sm:w-auto px-0 sm:px-6 shrink-0"
