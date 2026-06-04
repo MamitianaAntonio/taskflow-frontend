@@ -60,7 +60,7 @@ export default function Sidebar() {
   const navItemClassName =
     (collapsed) =>
     ({ isActive }) =>
-      `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-md transition-all duration-200 relative ${
+      `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-all duration-300 relative ${
         collapsed ? "justify-center" : ""
       } ${isActive ? "is-active" : ""}`;
 
@@ -143,7 +143,7 @@ export default function Sidebar() {
           <div>
             {/* PRIMARY NAV */}
             {!collapsed && (
-              <div className="sidebar-section flex justify-between items-center mb-2 px-2">
+              <div className="sidebar-section flex justify-between items-center mb-2 px-1">
                 <span className="sidebar-section__title">Workspace</span>
               </div>
             )}

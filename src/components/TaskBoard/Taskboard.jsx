@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import QuickAddTask from "../ui/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faInbox, faList, faSpinner, faTableColumns, faTasks } from "@fortawesome/free-solid-svg-icons";
-import TaskRow from "./TaskRow";
+import {
+  faClock,
+  faList,
+  faSpinner,
+  faTasks,
+} from "@fortawesome/free-solid-svg-icons";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskFilter from "./TaskFilter";
 import TaskList from "./TaskList";
 import TaskboadStats from "./TaskboadStats";
+import CustomTask from "./CustomTask";
 
 export default function Taskboard() {
   const cycle = { todo: "doing", doing: "done", done: "todo" };
@@ -27,12 +32,12 @@ export default function Taskboard() {
 
   const tasks = Array.isArray(todos)
     ? todos.map((todo) => ({
-        id: todo.id,
-        label: todo.title,
-        status: todo.status || "todo",
-        dueDate: todo.dueDate,
-        priority: todo.priority || "medium",
-      }))
+      id: todo.id,
+      label: todo.title,
+      status: todo.status || "todo",
+      dueDate: todo.dueDate,
+      priority: todo.priority || "medium",
+    }))
     : [];
 
   const statusCount = tasks.reduce(
@@ -67,28 +72,28 @@ export default function Taskboard() {
   };
 
   const stats = [
-  {
-    label: "Total",
-    value: tasks.length,
-    color: "text-(--text-primary)",
-    bg: "bg-(--border-color)",
-    icon: faList,
-  },
-  {
-    label: "To do",
-    value: statusCount.todo,
-    color: "text-(--color-warning)",
-    bg: "bg-(--color-warning)/10",
-    icon: faClock,
-  },
-  {
-    label: "In progress",
-    value: statusCount.doing,
-    color: "text-(--accent-color)",
-    bg: "bg-(--accent-color)/10",
-    icon: faSpinner,
-  },
-];
+    {
+      label: "Total",
+      value: tasks.length,
+      color: "text-(--text-primary)",
+      bg: "bg-(--border-color)",
+      icon: faList,
+    },
+    {
+      label: "To do",
+      value: statusCount.todo,
+      color: "text-(--color-warning)",
+      bg: "bg-(--color-warning)/10",
+      icon: faClock,
+    },
+    {
+      label: "In progress",
+      value: statusCount.doing,
+      color: "text-(--accent-color)",
+      bg: "bg-(--accent-color)/10",
+      icon: faSpinner,
+    },
+  ];
 
   return (
     <div className="p-6 flex flex-col gap-5">
@@ -106,8 +111,12 @@ export default function Taskboard() {
       {/* Stats */}
       <TaskboadStats stats={stats} />
 
-      {/* Quick add */}
-      <QuickAddTask onAdd={addTodo} />
+      <div className="flex w-full gap-4">
+        {/* Quick add */}
+        <QuickAddTask onAdd={addTodo} />
+        {/* custom task */}
+        <CustomTask />
+      </div>
 
       {/* Filter */}
       <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
