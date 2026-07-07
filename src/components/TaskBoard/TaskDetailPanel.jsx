@@ -1,19 +1,9 @@
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import TaskDetailFields from "./TaskDetailFields";
 import Button from "../ui/Button";
-
-function useClosingAnimation(onClose, duration = 200) {
-  const [closing, setClosing] = useState(false);
-
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(onClose, duration);
-  };
-
-  return { closing, handleClose };
-}
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640);
@@ -35,79 +25,131 @@ export default function TaskDetailPanel({
   localDueDate, setLocalDueDate,
   dueDateStr, saving, dirty,
 }) {
-  const { closing, handleClose } = useClosingAnimation(onClose, 220);
   const isMobile = useIsMobile();
-
-  const containerClass = isMobile
-    ? "fixed bottom-0 left-0 right-0 z-50 rounded-t-[28px]"
-    : "fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg";
-
-  const animationClass = closing
-    ? "opacity-0 translate-y-8 scale-[0.98]"
-    : "opacity-100 translate-y-0 scale-100";
 
   return (
     <>
-      <div
-        className={`fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-opacity duration-200 ${
-          closing ? "opacity-0" : "opacity-100"
-        }`}
-        onClick={handleClose}
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 z-40 bg-(--overlay) backdrop-blur-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={onClose}
       />
 
-      <div
-        className={`border border-(--border-color) bg-(--bg-primary) shadow-[0_22px_60px_rgba(0,0,0,0.14)] p-6 w-[min(92vw,36rem)] max-h-[92vh] overflow-y-auto transition-all duration-200 ${containerClass} ${animationClass}`}
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color)">Détails de la tâche</p>
-            <h2 className="mt-2 text-xl font-semibold text-(--text-primary)">{task.label}</h2>
-          </div>
-          <button
-            onClick={handleClose}
-            className="rounded-full p-2 text-(--text-tertiary) transition hover:bg-(--bg-secondary) hover:text-(--accent-color)"
-            aria-label="Fermer"
+      <AnimatePresence>
+        {isMobile ? (
+          /* Mobile: bottom sheet */
+          <motion.div
+            key="detail-mobile"
+            className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-primary) rounded-t-[28px] shadow-2xl max-h-[90vh] overflow-y-auto"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-        </div>
+            {/* Drag handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full bg-(--border-color)" />
+            </div>
 
-        <div className="mt-5 space-y-5">
-          <TaskDetailFields
-            localTitle={localTitle}
-            setLocalTitle={setLocalTitle}
-            localStatus={localStatus}
-            setLocalStatus={setLocalStatus}
-            localPriority={localPriority}
-            setLocalPriority={setLocalPriority}
-            localDueDate={localDueDate}
-            setLocalDueDate={setLocalDueDate}
-            dueDateStr={dueDateStr}
-            saving={saving}
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-5 mt-5 border-t border-(--border-color)">
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto"
-            onClick={handleClose}
-            icon={<FontAwesomeIcon icon={faXmark} />}
-            text="Cancel"
-            disabled={saving}
-          />
-          <Button
-            variant="primary"
-            className="w-full sm:w-auto"
-            onClick={onSave}
-            loading={saving}
-            disabled={!dirty}
-            icon={<FontAwesomeIcon icon={faFloppyDisk} />}
-            text="Save changes"
-          />
-        </div>
-      </div>
+            <div className="px-6 pb-6">
+              <Header task={task} onClose={onClose} />
+              <div className="mt-5 space-y-5">
+                <TaskDetailFields
+                  localTitle={localTitle}
+                  setLocalTitle={setLocalTitle}
+                  localStatus={localStatus}
+                  setLocalStatus={setLocalStatus}
+                  localPriority={localPriority}
+                  setLocalPriority={setLocalPriority}
+                  localDueDate={localDueDate}
+                  setLocalDueDate={setLocalDueDate}
+                  dueDateStr={dueDateStr}
+                  saving={saving}
+                />
+              </div>
+              <Actions onClose={onClose} onSave={onSave} saving={saving} dirty={dirty} />
+            </div>
+          </motion.div>
+        ) : (
+          /* Desktop: centered modal */
+          <motion.div
+            key="detail-desktop"
+            className="fixed top-1/2 left-1/2 z-50 w-[min(92vw,36rem)] max-h-[92vh] overflow-y-auto
+                       bg-(--bg-primary) border border-(--border-color) rounded-xl shadow-[0_22px_60px_rgba(0,0,0,0.14)]"
+            initial={{ opacity: 0, y: -20, x: "-50%", translateY: "-50%", scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", translateY: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: 20, x: "-50%", translateY: "-50%", scale: 0.96 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="p-6">
+              <Header task={task} onClose={onClose} />
+              <div className="mt-5 space-y-5">
+                <TaskDetailFields
+                  localTitle={localTitle}
+                  setLocalTitle={setLocalTitle}
+                  localStatus={localStatus}
+                  setLocalStatus={setLocalStatus}
+                  localPriority={localPriority}
+                  setLocalPriority={setLocalPriority}
+                  localDueDate={localDueDate}
+                  setLocalDueDate={setLocalDueDate}
+                  dueDateStr={dueDateStr}
+                  saving={saving}
+                />
+              </div>
+              <Actions onClose={onClose} onSave={onSave} saving={saving} dirty={dirty} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
+  );
+}
+
+function Header({ task, onClose }) {
+  return (
+    <div className="flex items-center justify-between gap-3 pt-2">
+      <div>
+        <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold">
+          Task details
+        </p>
+        <h2 className="mt-2 text-xl font-semibold text-(--text-primary)">{task.label}</h2>
+      </div>
+      <button
+        onClick={onClose}
+        className="rounded-full w-8 h-8 flex items-center justify-center text-(--text-secondary) transition hover:bg-(--bg-secondary) hover:text-(--accent-color) hover:border hover:border-(--accent-color)/30"
+        aria-label="Close"
+      >
+        <FontAwesomeIcon icon={faXmark} />
+      </button>
+    </div>
+  );
+}
+
+function Actions({ onClose, onSave, saving, dirty }) {
+  return (
+    <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-5 mt-5 border-t border-(--border-color)">
+      <Button
+        variant="outline"
+        className="w-full sm:w-auto"
+        onClick={onClose}
+        icon={<FontAwesomeIcon icon={faXmark} />}
+        text="Cancel"
+        disabled={saving}
+      />
+      <Button
+        variant="primary"
+        className="w-full sm:w-auto"
+        onClick={onSave}
+        loading={saving}
+        disabled={!dirty}
+        icon={<FontAwesomeIcon icon={faFloppyDisk} />}
+        text="Save changes"
+      />
+    </div>
   );
 }
