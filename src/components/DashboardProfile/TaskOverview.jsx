@@ -4,7 +4,7 @@ export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 
   return (
     <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex flex-col gap-4">
       <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest font-interface">
-        Tasks Overview
+        Completion progress
       </p>
 
       <div className="flex items-end justify-between">

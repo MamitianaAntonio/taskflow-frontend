@@ -13,7 +13,7 @@ export const isUpcoming = (date) => {
 };
 
 export const getCountPhrase = (label, count) => {
-  if (label === "Today & Overdue") {
+  if (label === "Due today & overdue") {
     if (count === 0) return "No tasks due today — enjoy your day!";
     if (count === 1) return "You have 1 task that needs your attention.";
     return `You have ${count} tasks to get through today.`;
@@ -23,7 +23,7 @@ export const getCountPhrase = (label, count) => {
     if (count === 1) return "1 task is coming up soon.";
     return `${count} tasks are coming up in the next 3 days.`;
   }
-  if (label === "Recently Completed") {
+  if (label === "Completed recently") {
     if (count === 0) return "No tasks completed yet.";
     if (count === 1) return "Nice, you completed 1 task!";
     return `Great job — ${count} tasks done!`;

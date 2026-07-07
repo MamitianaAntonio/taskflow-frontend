@@ -37,7 +37,7 @@ export default function DashboardProfile() {
       {/* Welcome + Profile in one row */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
-          <DashboardGreeting name={user?.name ?? "Unknown"} />
+          <DashboardGreeting name={user?.name ?? "there"} />
         </div>
         <div className="flex items-center gap-4 bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 sm:p-4 shrink-0">
           <div
@@ -46,14 +46,14 @@ export default function DashboardProfile() {
             flex items-center justify-center select-none
             bg-linear-to-br from-(--gradient-from) to-(--gradient-to)"
           >
-            {user?.name?.[0] ?? "A"}
+            {user?.name?.[0] ?? "U"}
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm text-(--text-primary) truncate">
-              {user?.name ?? "..."}
+              {user?.name ?? "Guest user"}
             </p>
             <p className="text-xs text-(--text-secondary) font-mono truncate">
-              {user?.email ?? "..."}
+              {user?.email ?? "No email address"}
             </p>
           </div>
           <Button variant="outline" size="small">
@@ -78,10 +78,20 @@ export default function DashboardProfile() {
       </div>
 
       {/* Quick Add Task */}
-      <QuickAddTask onAdd={addTodo} />
+      <div>
+        <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest mb-2 font-interface">
+          Quick add
+        </p>
+        <QuickAddTask onAdd={addTodo} />
+      </div>
 
       {/* Tasks Sections */}
-      <DashboardTasks tasks={dashboardTasks} />
+      <div>
+        <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest mb-2 font-interface">
+          Task overview
+        </p>
+        <DashboardTasks tasks={dashboardTasks} />
+      </div>
 
     </div>
   );

@@ -1,4 +1,4 @@
-export default function DashboardGreeting({ name = "Unknown" }) {
+export default function DashboardGreeting({ name = "there" }) {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
