@@ -5,10 +5,10 @@ import TaskFilter from "./TaskFilter";
 
 export default function TaskList({ filtered, cycleStatus, deleteTask, setSelectedTask, filter, setFilter, tasks }) {
   return (
-    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-102" style={{ boxShadow: 'var(--shadow-pink)' }}>
+    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-102 border-t-2 border-t-(--accent-color)" style={{ boxShadow: 'var(--shadow-pink)' }}>
 
       {/* Header — merged filter + count */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-color)">
+      <div className="flex items-center justify-between px-4 py-3 bg-(--accent-color)/5">
         <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
         <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color) text-(--text-muted) font-interface">
           {filtered.length} task{filtered.length !== 1 ? "s" : ""}

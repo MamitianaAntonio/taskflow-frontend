@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useTodoStore from "../../stores/todoStore";
 import useUserStore from "../../stores/userStore";
 import Button from "../ui/Button";
-import { faGear, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
 import DashboardGreeting from "./DashboardGreeting";
@@ -39,7 +39,7 @@ export default function DashboardProfile() {
         <div className="flex-1">
           <DashboardGreeting name={user?.name ?? "Unknown"} />
         </div>
-        <div className="flex items-center gap-4 bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 sm:p-4 shrink-0">
+        <div className="flex items-center gap-4 bg-gradient-to-br from-(--bg-secondary) to-(--accent-color)/5 border border-(--border-color) rounded-lg p-3 sm:p-4 shrink-0">
           <div
             className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 text-xl sm:text-2xl font-bold
             text-(--text-white) rounded-lg
