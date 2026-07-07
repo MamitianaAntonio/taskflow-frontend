@@ -1,4 +1,4 @@
-import { faFloppyDisk, faX } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
