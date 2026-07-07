@@ -33,7 +33,7 @@ export default function TaskDetailPanel({
   localStatus, setLocalStatus,
   localPriority, setLocalPriority,
   localDueDate, setLocalDueDate,
-  dueDateStr, saving, dirty, hasChanges,
+  dueDateStr, saving, dirty,
 }) {
   const { closing, handleClose } = useClosingAnimation(onClose, 220);
   const isMobile = useIsMobile();
@@ -102,7 +102,7 @@ export default function TaskDetailPanel({
             className="w-full sm:w-auto"
             onClick={onSave}
             loading={saving}
-            disabled={!dirty && !hasChanges}
+            disabled={!dirty}
             icon={<FontAwesomeIcon icon={faFloppyDisk} />}
             text="Save changes"
           />
