@@ -78,11 +78,11 @@ export default function TaskDetailPanel({
           /* Desktop: centered modal */
           <motion.div
             key="detail-desktop"
-            className="fixed top-1/2 left-1/2 z-50 w-[min(92vw,36rem)] max-h-[92vh] overflow-y-auto
-                       bg-(--bg-primary) border border-(--border-color) rounded-xl shadow-[0_22px_60px_rgba(0,0,0,0.14)]"
-            initial={{ opacity: 0, y: -20, x: "-50%", translateY: "-50%", scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, x: "-50%", translateY: "-50%", scale: 1 }}
-            exit={{ opacity: 0, y: 20, x: "-50%", translateY: "-50%", scale: 0.96 }}
+            className="fixed top-1/2 left-1/2 z-50 w-[min(92vw,36rem)]
+                       bg-(--bg-secondary) rounded-xl shadow-xl overflow-hidden"
+            initial={{ opacity: 0, y: -20, x: "-50%", translateY: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%", translateY: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%", translateY: "-50%" }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
             <div>
