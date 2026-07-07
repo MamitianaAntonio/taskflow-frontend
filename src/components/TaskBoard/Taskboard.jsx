@@ -105,9 +105,7 @@ export default function Taskboard() {
         <h1 className="text-xl sm:text-2xl font-semibold font-mono uppercase tracking-widest text-(--accent-color)">
           Your flow
         </h1>
-        <div className="w-9 h-9 rounded-lg bg-(--accent-color)/10 flex items-center justify-center border border-(--accent-color)/20">
-          <FontAwesomeIcon icon={faTasks} className="text-sm text-(--accent-color)" />
-        </div>
+        <FontAwesomeIcon icon={faTasks} className="text-xl sm:text-2xl text-(--accent-color)" />
       </div>
 
       {/* Stats */}
