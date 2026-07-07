@@ -13,21 +13,21 @@ export const STATUS_OPTIONS = [
     label: "To do",
     icon: faCircleDot,
     classes:
-      "bg-blue-50  border-blue-400  text-blue-800  dark:bg-blue-950  dark:border-blue-500  dark:text-blue-200",
+      "bg-(--color-warning)/12 border-(--color-warning)/30 text-(--color-warning)",
   },
   {
     value: "doing",
     label: "In progress",
     icon: faSpinner,
     classes:
-      "bg-amber-50 border-amber-400 text-amber-800 dark:bg-amber-950 dark:border-amber-500 dark:text-amber-200",
+      "bg-(--accent-color)/12 border-(--accent-color)/30 text-(--accent-color)",
   },
   {
     value: "done",
     label: "Done",
     icon: faCircleCheck,
     classes:
-      "bg-green-50 border-green-400 text-green-800 dark:bg-green-950 dark:border-green-500 dark:text-green-200",
+      "bg-(--color-success)/12 border-(--color-success)/30 text-(--color-success)",
   },
 ];
 

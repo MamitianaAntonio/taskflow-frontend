@@ -9,14 +9,14 @@ const statusConfig = {
   todo: {
     label: "Todo",
     icon: faCircle,
-    dot: "bg-(--text-secondary)",
-    pill: "bg-(--bg-secondary) text-(--text-secondary) border-(--border-color)",
+    dot: "bg-(--color-warning)",
+    pill: "bg-(--bg-secondary) text-(--color-warning) border-(--border-color)",
   },
   doing: {
     label: "Doing",
     icon: faCircleHalfStroke,
-    dot: "bg-(--color-warning)",
-    pill: "bg-(--bg-secondary) text-(--color-warning) border-(--border-color)",
+    dot: "bg-(--accent-color)",
+    pill: "bg-(--bg-secondary) text-(--accent-color) border-(--border-color)",
   },
   done: {
     label: "Done",
