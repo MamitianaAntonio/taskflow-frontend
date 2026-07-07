@@ -9,7 +9,7 @@ export default function TaskSection({ icon, label, color, tasks }) {
     >
       <div className="flex items-center gap-2 mb-2">
         <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
-        <p className="text-xs font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+        <p className="text-xs font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60 font-interface">
           {label}
         </p>
       </div>

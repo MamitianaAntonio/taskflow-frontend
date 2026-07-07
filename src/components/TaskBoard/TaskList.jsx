@@ -14,7 +14,7 @@ export default function TaskList({ filtered, cycleStatus, deleteTask, setSelecte
           </div>
           <div>
             <p className="text-[15px] font-medium text-(--accent-color)">Tasks</p>
-            <p className="text-[11px] text-(--text-secondary) mt-0.5">Click a task to view details</p>
+            <p className="text-[11px] text-(--text-secondary) mt-0.5 font-interface">Click a task to view details</p>
           </div>
         </div>
         <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color) text-(--text-secondary)">

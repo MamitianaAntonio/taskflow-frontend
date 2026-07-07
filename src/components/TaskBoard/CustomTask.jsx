@@ -37,7 +37,7 @@ export default function CustomTask() {
 
   return (
     <div className="w-full rounded-lg border border-(--border-color) bg-(--color-success)/90 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-(--text-white) mb-3">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-(--text-white) mb-3 font-interface">
         Add Custom task
       </p>
       <div className="flex items-center justify-between">

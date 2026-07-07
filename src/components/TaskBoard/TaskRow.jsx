@@ -55,7 +55,7 @@ export default function TaskRow ({ task, onCycle, onDelete, onClick }) {
           e.stopPropagation();
           onCycle(task.id);
         }}
-        className={`inline-flex items-center gap-1.5 pl-1.5 pr-2.5 py-0.5 rounded-md text-[11px] font-medium border shrink-0 transition-[filter] hover:brightness-95 ${cfg.pill}`}
+        className={`inline-flex items-center gap-1.5 pl-1.5 pr-2.5 py-0.5 rounded-md text-[11px] font-medium border font-interface shrink-0 transition-[filter] hover:brightness-95 ${cfg.pill}`}
         aria-label="Change status"
       >
         <FontAwesomeIcon

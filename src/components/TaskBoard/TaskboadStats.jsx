@@ -14,7 +14,7 @@ export default function TaskboadStats({ stats }) {
           >
             <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
           </div>
-          <p className="text-[10px] uppercase tracking-[0.35em] text-(--text-muted) font-semibold">
+          <p className="text-[10px] uppercase tracking-[0.35em] text-(--text-muted) font-semibold font-interface">
             {label}
           </p>
           <p className={`mt-2 text-3xl font-semibold ${color}`}>{value}</p>

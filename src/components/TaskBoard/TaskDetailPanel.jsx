@@ -114,7 +114,7 @@ function Header({ task, onClose }) {
   return (
     <div className="flex justify-between items-center px-6 pt-5 pb-4 border-b border-(--border-color)">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold">Task details</p>
+        <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold font-interface">Task details</p>
         <h2 className="mt-1 text-lg font-semibold text-(--text-primary)">{task.label}</h2>
       </div>
       <button

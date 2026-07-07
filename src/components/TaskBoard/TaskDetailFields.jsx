@@ -15,7 +15,7 @@ function BadgeGroup({ options, value, onChange }) {
           key={opt.value}
           type="button"
           onClick={() => onChange(opt.value)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border font-interface transition-all duration-200
             ${value === opt.value
               ? `${opt.classes} scale-105 shadow-sm`
               : "bg-(--bg-primary) border-(--border-color) text-(--text-secondary) hover:border-(--accent-color) hover:text-(--accent-color) hover:scale-105"
@@ -34,7 +34,7 @@ function BadgeGroup({ options, value, onChange }) {
 function Field({ label, icon, children }) {
   return (
     <div className="mb-4">
-      <label className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-(--text-secondary) uppercase tracking-widest">
+      <label className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-(--text-secondary) uppercase tracking-widest font-interface">
         {icon && (
           <FontAwesomeIcon icon={icon} className="text-[10px] text-(--accent-color)" />
         )}

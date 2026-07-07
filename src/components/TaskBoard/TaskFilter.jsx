@@ -16,7 +16,7 @@ export default function TaskFilter( { tasks, filter, setFilter } ) {
           <button
             key={s}
             onClick={() => setFilter(s)}
-            className={`text-xs font-semibold px-4 py-2 rounded-full border transition-all duration-200 flex items-center gap-2
+            className={`text-xs font-semibold px-4 py-2 rounded-full border font-interface transition-all duration-200 flex items-center gap-2
               ${filter === s ? filterColors[s] : "border-(--border-color) text-(--text-muted) hover:border-(--accent-color) hover:text-(--accent-color)"}`}
           >
             {s === "all" ? "All" : s}

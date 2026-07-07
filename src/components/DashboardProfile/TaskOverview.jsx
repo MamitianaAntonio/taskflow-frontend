@@ -9,7 +9,7 @@ export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
-          <p className="text-xs font-semibold py-2 text-(--text-primary) opacity-50 uppercase tracking-widest">
+          <p className="text-xs font-semibold py-2 text-(--text-primary) opacity-50 uppercase tracking-widest font-interface">
             Tasks Overview
           </p>
           <span className="text-5xl font-bold font-mono text-(--text-primary) leading-none">
