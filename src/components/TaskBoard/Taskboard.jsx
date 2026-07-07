@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
-import TaskFilter from "./TaskFilter";
 import TaskList from "./TaskList";
 import TaskboadStats from "./TaskboadStats";
 import CustomTask from "./CustomTask";
@@ -121,9 +120,6 @@ export default function Taskboard() {
         </div>
       </div>
 
-      {/* Filter */}
-      <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
-
       {/* Task detail */}
       <AnimatePresence>
         {selectedTask && (
@@ -136,12 +132,15 @@ export default function Taskboard() {
         )}
       </AnimatePresence>
 
-      {/* Task list */}
+      {/* Task list (with integrated filter) */}
       <TaskList
         filtered={filtered}
         cycleStatus={cycleStatus}
         deleteTask={deleteTask}
         setSelectedTask={setSelectedTask}
+        filter={filter}
+        setFilter={setFilter}
+        tasks={tasks}
       />
     </div>
   );

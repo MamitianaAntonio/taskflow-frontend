@@ -1,23 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faList } from "@fortawesome/free-solid-svg-icons";
 import TaskRow from "./TaskRow";
+import TaskFilter from "./TaskFilter";
 
-export default function TaskList({ filtered, cycleStatus, deleteTask, setSelectedTask }) {
+export default function TaskList({ filtered, cycleStatus, deleteTask, setSelectedTask, filter, setFilter, tasks }) {
   return (
     <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-102" style={{ boxShadow: 'var(--shadow-pink)' }}>
 
-      {/* Header */}
-      <div className="flex bg-(--bg-secondary) items-start justify-between px-5 py-4 border-b border-(--border-color)">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-(--accent-color)/10 border border-(--border-color) flex items-center justify-center shrink-0">
-            <FontAwesomeIcon icon={faList} className="text-sm text-(--accent-color)" />
-          </div>
-          <div>
-            <p className="text-[15px] font-medium text-(--accent-color)">Tasks</p>
-            <p className="text-[11px] text-(--text-secondary) mt-0.5 font-interface">Click a task to view details</p>
-          </div>
-        </div>
-        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color) text-(--text-secondary)">
+      {/* Header — merged filter + count */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-color)">
+        <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
+        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color) text-(--text-muted) font-interface">
           {filtered.length} task{filtered.length !== 1 ? "s" : ""}
         </span>
       </div>
