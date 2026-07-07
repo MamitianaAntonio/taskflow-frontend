@@ -1,4 +1,4 @@
-import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -31,7 +31,7 @@ export default function TaskDetailPanel({
     <>
       {/* Backdrop */}
       <motion.div
-        className="fixed inset-0 z-40 bg-(--overlay) backdrop-blur-sm"
+        className="fixed inset-0 bg-(--overlay) z-40"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -55,9 +55,9 @@ export default function TaskDetailPanel({
               <div className="w-10 h-1 rounded-full bg-(--border-color)" />
             </div>
 
-            <div className="px-6 pb-6">
+            <div className="pb-6">
               <Header task={task} onClose={onClose} />
-              <div className="mt-5 space-y-5">
+              <div className="px-6 mt-5 space-y-5">
                 <TaskDetailFields
                   localTitle={localTitle}
                   setLocalTitle={setLocalTitle}
@@ -85,9 +85,9 @@ export default function TaskDetailPanel({
             exit={{ opacity: 0, y: 20, x: "-50%", translateY: "-50%", scale: 0.96 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <div className="p-6">
+            <div>
               <Header task={task} onClose={onClose} />
-              <div className="mt-5 space-y-5">
+              <div className="p-6 mt-5 space-y-5">
                 <TaskDetailFields
                   localTitle={localTitle}
                   setLocalTitle={setLocalTitle}
@@ -112,19 +112,21 @@ export default function TaskDetailPanel({
 
 function Header({ task, onClose }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-2">
+    <div className="flex justify-between items-center px-6 pt-5 pb-4 border-b border-(--border-color)">
       <div>
         <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold">
           Task details
         </p>
-        <h2 className="mt-2 text-xl font-semibold text-(--text-primary)">{task.label}</h2>
+        <h2 className="mt-1 text-lg font-semibold text-(--text-primary)">{task.label}</h2>
       </div>
       <button
         onClick={onClose}
-        className="rounded-full w-8 h-8 flex items-center justify-center text-(--text-secondary) transition hover:bg-(--bg-secondary) hover:text-(--accent-color) hover:border hover:border-(--accent-color)/30"
+        className="w-7 h-7 flex items-center justify-center rounded-md
+          text-(--text-secondary) hover:text-(--accent-color) hover:bg-(--bg-primary)
+          transition-colors"
         aria-label="Close"
       >
-        <FontAwesomeIcon icon={faXmark} />
+        <FontAwesomeIcon icon={faX} size="md" />
       </button>
     </div>
   );
