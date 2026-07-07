@@ -37,7 +37,7 @@ export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 
             <span className="text-sm font-bold font-mono text-(--color-success)">
               {completed}
             </span>
-            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">
+            <span className="text-[11px] font-semibold text-(--color-success) uppercase tracking-widest">
               Completed
             </span>
           </div>
@@ -46,7 +46,7 @@ export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 
             <span className="text-sm font-bold font-mono text-(--color-highlight)">
               {incomplete}
             </span>
-            <span className="text-[11px] font-semibold text-(--text-primary) opacity-40 uppercase tracking-widest">
+            <span className="text-[11px] font-semibold text-(--color-highlight) uppercase tracking-widest">
               Incomplete
             </span>
           </div>

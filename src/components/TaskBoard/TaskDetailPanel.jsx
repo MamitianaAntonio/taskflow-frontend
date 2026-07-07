@@ -114,9 +114,7 @@ function Header({ task, onClose }) {
   return (
     <div className="flex justify-between items-center px-6 pt-5 pb-4 border-b border-(--border-color)">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold">
-          Task details
-        </p>
+        <p className="text-[10px] uppercase tracking-[0.35em] text-(--accent-color) font-semibold">Task details</p>
         <h2 className="mt-1 text-lg font-semibold text-(--text-primary)">{task.label}</h2>
       </div>
       <button
@@ -134,7 +132,7 @@ function Header({ task, onClose }) {
 
 function Actions({ onClose, onSave, saving, dirty }) {
   return (
-    <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-5 mt-5 border-t border-(--border-color)">
+    <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 p-4 my-4 border-t border-(--border-color)">
       <Button
         variant="outline"
         className="w-full sm:w-auto"

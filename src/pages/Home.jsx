@@ -38,10 +38,11 @@ function Home() {
             src="home-photo.png"
             alt="Home photo"
           />
-          <h1 className="font-sans text-(--text-primary) text-4xl font-bold">
-            TaskFlow
+          <h1 className="font-sans text-4xl font-bold">
+            <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">Task</span>
+            <span className="text-(--text-primary)">Flow</span>
           </h1>
-          <h3 className="font-sans text-(--text-primary) text-[1.7vh] max-sm:text-base">
+          <h3 className="font-sans text-(--text-secondary) text-[1.7vh] max-sm:text-base">
             "Organize your task, keep your flow"
           </h3>
           <Button

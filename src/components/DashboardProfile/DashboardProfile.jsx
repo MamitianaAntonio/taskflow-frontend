@@ -36,8 +36,9 @@ export default function DashboardProfile() {
       {/* Header */}
       <DashboardGreeting name={user?.name ?? "Unknown"} />
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-6 rounded-full bg-(--accent-color)" />
+        <h1 className="text-2xl font-semibold font-mono uppercase tracking-widest text-(--accent-color)">
           Dashboard
         </h1>
       </div>
@@ -75,8 +76,9 @@ export default function DashboardProfile() {
       </div>
 
       {/* task hub */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-base font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-4 rounded-full bg-(--color-info)" />
+        <h1 className="text-base font-semibold font-mono uppercase tracking-widest text-(--color-info)">
           Insights
         </h1>
       </div>
@@ -97,8 +99,9 @@ export default function DashboardProfile() {
       </div>
 
       {/* task hub */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-base font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-4 rounded-full bg-(--color-success)" />
+        <h1 className="text-base font-semibold font-mono uppercase tracking-widest text-(--color-success)">
           Workspace
         </h1>
       </div>
