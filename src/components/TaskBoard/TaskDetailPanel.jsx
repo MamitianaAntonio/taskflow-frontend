@@ -1,7 +1,8 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import TaskDetailFields from "./TaskDetailFields";
+import Button from "../ui/Button";
 
 function useClosingAnimation(onClose, duration = 200) {
   const [closing, setClosing] = useState(false);
@@ -26,7 +27,14 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function TaskDetailPanel({ task, onClose, onUpdate, label, setLabel, dueDateStr }) {
+export default function TaskDetailPanel({
+  task, onClose, onSave,
+  localTitle, setLocalTitle,
+  localStatus, setLocalStatus,
+  localPriority, setLocalPriority,
+  localDueDate, setLocalDueDate,
+  dueDateStr, saving, dirty, hasChanges,
+}) {
   const { closing, handleClose } = useClosingAnimation(onClose, 220);
   const isMobile = useIsMobile();
 
@@ -66,11 +74,37 @@ export default function TaskDetailPanel({ task, onClose, onUpdate, label, setLab
 
         <div className="mt-5 space-y-5">
           <TaskDetailFields
-            task={task}
-            onUpdate={onUpdate}
-            label={label}
-            setLabel={setLabel}
+            localTitle={localTitle}
+            setLocalTitle={setLocalTitle}
+            localStatus={localStatus}
+            setLocalStatus={setLocalStatus}
+            localPriority={localPriority}
+            setLocalPriority={setLocalPriority}
+            localDueDate={localDueDate}
+            setLocalDueDate={setLocalDueDate}
             dueDateStr={dueDateStr}
+            saving={saving}
+          />
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-5 mt-5 border-t border-(--border-color)">
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto"
+            onClick={handleClose}
+            icon={<FontAwesomeIcon icon={faXmark} />}
+            text="Cancel"
+            disabled={saving}
+          />
+          <Button
+            variant="primary"
+            className="w-full sm:w-auto"
+            onClick={onSave}
+            loading={saving}
+            disabled={!dirty && !hasChanges}
+            icon={<FontAwesomeIcon icon={faFloppyDisk} />}
+            text="Save changes"
           />
         </div>
       </div>

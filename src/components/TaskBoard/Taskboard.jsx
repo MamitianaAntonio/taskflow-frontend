@@ -61,9 +61,17 @@ export default function Taskboard() {
     if (selectedTask?.id === id) setSelectedTask(null);
   };
 
-  const updateTask = (id, changes) => {
-    updateTodo(id, changes);
-    setSelectedTask((prev) => (prev ? { ...prev, ...changes } : null));
+  const updateTask = async (id, changes) => {
+    await updateTodo(id, changes);
+    setSelectedTask((prev) => {
+      if (!prev) return null;
+      const mapped = { ...changes };
+      if (mapped.title !== undefined) {
+        mapped.label = mapped.title;
+        delete mapped.title;
+      }
+      return { ...prev, ...mapped };
+    });
   };
 
   const stats = [
