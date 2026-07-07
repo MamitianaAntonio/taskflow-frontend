@@ -72,7 +72,7 @@ export default function TaskRow ({ task, onCycle, onDelete, onClick }) {
           e.stopPropagation();
           onDelete(task.id);
         }}
-        className="opacity-0 group-hover:opacity-100 transition-opacity text-(--text-primary) hover:text-(--color-error) p-1 rounded"
+        className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-(--text-primary) hover:text-(--color-error) p-1 rounded"
         aria-label="Delete task"
       >
         <FontAwesomeIcon icon={faXmark} className="text-[13px]" />

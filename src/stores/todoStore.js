@@ -24,10 +24,10 @@ const useTodoStore = create((set) => ({
   },
 
   // add a new todo
-  addTodo: async (title, dueDate = null, priority = 'medium') => {
+  addTodo: async (title, dueDate = null, priority = 'medium', status = 'todo') => {
     try {
       const todoDueDate = dueDate ?? new Date().toISOString().split("T")[0];
-      const todo = await createTodoService({ title, dueDate: todoDueDate, priority });
+      const todo = await createTodoService({ title, dueDate: todoDueDate, priority, status });
       set((state) => ({ todos: [...state.todos, todo] }));
       return todo;
     } catch (error) {

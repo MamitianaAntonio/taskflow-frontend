@@ -75,7 +75,7 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
               <div className="flex-1 h-1.5 rounded-full bg-(--border-color) overflow-hidden">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: `${barPct} %`, background: color }}
+                  style={{ width: `${barPct}%`, background: color }}
                 />
               </div>
               <span className="text-xs font-mono font-medium text-(--text-primary) w-5 text-right shrink-0">
