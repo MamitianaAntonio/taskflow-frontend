@@ -108,7 +108,7 @@
 
 .sidebar-nav-link:hover {
   color: var(--text-white);
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), var(--gradient-to));
 }
 
 .sidebar-nav-icon {
@@ -132,7 +132,8 @@
 .sidebar-nav-link.is-active {
   color: var(--text-white);
   font-weight: 650;
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), var(--gradient-to));
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--accent-color) 35%, transparent);
 }
 
 .sidebar-nav-link.is-active .sidebar-nav-icon{

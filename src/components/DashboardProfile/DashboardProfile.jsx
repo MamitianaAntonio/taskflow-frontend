@@ -44,7 +44,7 @@ export default function DashboardProfile() {
 
       {/* Profile card */}
       <div
-        className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex items-center gap-4 "
+        className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex items-center gap-4 border-l-4 border-l-(--accent-color)"
         style={{ boxShadow: "var(--shadow-pink)" }}
       >
         {/* Avatar */}

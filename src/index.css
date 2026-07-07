@@ -5,9 +5,11 @@
   /* Backgrounds */
   --bg-primary: #fffffff2;
   --bg-secondary: #fafafaf5;
+  --bg-tertiary: #F8F4F8;
   /* Text */
   --text-primary: #1A1A1A;
   --text-secondary: #4A4A4A;
+  --text-muted: #8A8A9A;
   --text-white: #FFFFFF;
   /* Borders & Shadows */
   --border-color: #E5E5E5;
@@ -15,6 +17,7 @@
   --shadow-pink: 0 3px 10px rgba(180, 83, 120, 0.14);
   /* Accents (pink focus) */
   --accent-color: #EC4899;
+  --accent-muted: #FDF2F8;
   --gradient-from: #EC4899;
   --gradient-to: #F472B6;
   --color-highlight: #F9A8D4;
@@ -22,6 +25,7 @@
   --color-error: #e93f3f;
   --color-success: #10B981;
   --color-warning: #F59E0B;
+  --color-info: #3B82F6;
   /* Overlay */
   --overlay: rgba(0, 0, 0, 0.45);
 }
@@ -30,9 +34,11 @@
   /* Backgrounds */
   --bg-primary: #09090B;
   --bg-secondary: #111113;
+  --bg-tertiary: #1A151F;
   /* Text */
   --text-primary: #FAFAFA;
   --text-secondary: #A1A1AA;
+  --text-muted: #6B6B7B;
   --text-white: #FFFFFF;
   /* Borders & Shadows */
   --border-color: #27272A;
@@ -40,6 +46,7 @@
   --shadow-pink: 0 1px 4px rgba(236, 72, 153, 0.12);
   /* Accents (pink focus) */
   --accent-color: #F472B6;
+  --accent-muted: #2D1B29;
   --gradient-from: #EC4899;
   --gradient-to: #BE185D;
   --color-highlight: #EC4899;
@@ -47,6 +54,7 @@
   --color-error: #e93f3f;
   --color-success: #34D399;
   --color-warning: #FBBF24;
+  --color-info: #60A5FA;
   /* Overlay */
   --overlay: rgba(0, 0, 0, 0.5);
 }

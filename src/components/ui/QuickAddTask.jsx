@@ -14,10 +14,15 @@ export default function QuickAddTask({ onAdd }) {
   };
 
   return (
-    <div className="w-full rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-(--text-secondary) mb-3">
-        Quick add task
-      </p>
+    <div className="w-full rounded-lg border border-(--border-color) bg-(--bg-tertiary) p-4 border-l-4 border-l-(--accent-color)">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-5 h-5 rounded-md flex items-center justify-center bg-(--accent-color)/15">
+          <FontAwesomeIcon icon={faPlus} className="text-[10px] text-(--accent-color)" />
+        </div>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-(--accent-color)">
+          Quick add task
+        </p>
+      </div>
       <form onSubmit={handleSubmit} className="flex gap-2.5 items-stretch">
         {/* Input */}
         <div
