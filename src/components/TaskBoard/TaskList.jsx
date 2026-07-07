@@ -19,8 +19,8 @@ export default function TaskList({ filtered, cycleStatus, deleteTask, setSelecte
       {filtered.length === 0 ? (
         <div className="py-20 flex flex-col items-center gap-2 text-(--text-secondary)">
           <FontAwesomeIcon icon={faInbox} className="text-4xl opacity-30" />
-          <p className="text-sm font-medium text-(--text-primary)">No tasks found</p>
-          <p className="text-xs">No tasks match this filter.</p>
+          <p className="text-sm font-medium text-(--text-primary)">Nothing here yet</p>
+          <p className="text-xs">Add a task above to get started.</p>
         </div>
       ) : (
         <ul className="overflow-y-auto flex-1 ">

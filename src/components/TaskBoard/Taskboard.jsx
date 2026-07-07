@@ -79,10 +79,11 @@ export default function Taskboard() {
         </div>
         <button
           onClick={() => setShowCustom(true)}
+          title="Create a task with details"
           className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-(--border-color) bg-(--bg-primary) text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all font-interface shrink-0"
         >
           <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
-          Custom
+          New task
         </button>
       </div>
 

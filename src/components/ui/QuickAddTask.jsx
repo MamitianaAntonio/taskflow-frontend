@@ -32,7 +32,7 @@ export default function QuickAddTask({ onAdd }) {
         onChange={(e) => setValue(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        placeholder="Add a task"
+        placeholder="Write a task and press Enter"
         className="flex-1 min-w-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) outline-none"
       />
       {value.trim() && (
