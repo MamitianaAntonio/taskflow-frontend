@@ -32,7 +32,6 @@ function Auth() {
       </div>
       {/* Left Side */}
       <div className="hidden md:flex md:w-1/2 items-center justify-center bg-(--bg-tertiary) p-10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-(--accent-muted) via-transparent to-(--color-info)/5 pointer-events-none" />
         <div
           key={isLogin}
           className="relative z-10 max-w-md text-center animate-fadeSlideUp"
