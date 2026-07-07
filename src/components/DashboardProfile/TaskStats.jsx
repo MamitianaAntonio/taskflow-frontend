@@ -47,7 +47,7 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-(--bg-secondary) to-(--color-success)/5 border border-(--border-color) rounded-lg p-5 flex flex-col gap-5 w-full box-border">
+    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5 w-full box-border">
       <p className="text-xs font-semibold text-(--text-primary) py-2 opacity-50 uppercase tracking-widest font-interface">
         Tasks Statistics
       </p>

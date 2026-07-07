@@ -1,23 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { isOverdue } from "../../constants/taskUtilities";
 
 export default function TaskSection({ icon, label, color, tasks }) {
   const count = tasks.length;
-
-  const cssVar = color.match(/var\((.+?)\)/)?.[1];
+  const urgent = tasks.some((t) => t.overdue);
 
   return (
-    <div
-      className="border border-(--border-color) rounded-lg p-3 flex items-center gap-3"
-      style={{ background: `linear-gradient(135deg, var(--bg-secondary) 60%, color-mix(in srgb, var(${cssVar}) 8%, transparent))` }}
-    >
+    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 flex items-center gap-3">
       <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-(--bg-primary)">
         <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-(--text-primary) opacity-60 font-interface">
-          {label}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-xs font-semibold text-(--text-primary) opacity-60 font-interface">
+            {label}
+          </p>
+          {urgent && (
+            <span className="w-1.5 h-1.5 rounded-full bg-(--color-error) animate-pulse" />
+          )}
+        </div>
         <p className={`text-lg font-bold font-mono ${color}`}>
           {count}
         </p>
