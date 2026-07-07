@@ -1,22 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getCountPhrase } from "../../constants/taskUtilities";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function TaskSection({ icon, label, color, tasks }) {
+  const count = tasks.length;
+
   return (
-    <div
-      className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-4 flex flex-col gap-2"
-      style={{ boxShadow: "var(--shadow-pink)" }}
-    >
-      <div className="flex items-center gap-2 mb-2">
+    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 flex items-center gap-3">
+      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-(--bg-primary)">
         <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
-        <p className="text-xs font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60 font-interface">
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold text-(--text-primary) opacity-60 font-interface">
           {label}
         </p>
+        <p className={`text-lg font-bold font-mono ${color}`}>
+          {count}
+        </p>
       </div>
-
-      <p className="text-md font-mono text-(--text-secondary) py-2">
-        {getCountPhrase(label, tasks.length)}
-      </p>
+      {count > 0 && (
+        <FontAwesomeIcon icon={faArrowRight} className={`text-xs ${color} opacity-50`} />
+      )}
     </div>
   );
 }
