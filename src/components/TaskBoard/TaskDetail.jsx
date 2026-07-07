@@ -8,13 +8,16 @@ export default function TaskDetail({ task, onClose, onUpdate }) {
     setLabel(task.label);
   }, [task.label]);
 
-  const dueDateStr = task.dueDate
-    ? new Date(task.dueDate).toLocaleDateString([], {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "No date";
+  const dueDateStr = (() => {
+    if (!task.dueDate) return "No date";
+    const d = new Date(task.dueDate);
+    if (isNaN(d.getTime())) return "No date";
+    return d.toLocaleDateString([], {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  })();
 
   return (
     <TaskDetailPanel

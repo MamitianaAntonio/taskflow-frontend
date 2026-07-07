@@ -32,7 +32,7 @@ export default function TaskList({ filtered, cycleStatus, deleteTask, setSelecte
       ) : (
         <ul className="overflow-y-auto flex-1 ">
           {filtered.map((task) => (
-            <li key={task.id} className="border-b border-b-(--border-color)">
+            <li key={task.id}>
               <TaskRow
                 task={task}
                 onCycle={cycleStatus}

@@ -38,10 +38,10 @@ function Home() {
             src="home-photo.png"
             alt="Home photo"
           />
-          <h1 className="font-quicksand text-dark text-4xl font-bold">
+          <h1 className="font-sans text-(--text-primary) text-4xl font-bold">
             TaskFlow
           </h1>
-          <h3 className="font-quicksand text-dark text-[1.7vh] max-sm:text-base">
+          <h3 className="font-sans text-(--text-primary) text-[1.7vh] max-sm:text-base">
             "Organize your task, keep your flow"
           </h3>
           <Button
@@ -52,7 +52,7 @@ function Home() {
           />
         </div>
 
-        <h3 className="font-quicksand text-dark font-light mb-4">
+        <h3 className="font-sans text-(--text-primary) font-light mb-4">
           © Copyright 2026 Taskflow
         </h3>
       </div>

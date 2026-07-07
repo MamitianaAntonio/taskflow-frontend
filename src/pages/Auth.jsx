@@ -80,7 +80,7 @@ function Auth() {
       </div>
 
       {/* Footer */}
-      <h3 className="absolute bottom-0 w-full text-center font-quicksand text-(--text-primary) font-light mb-4 sm:text-sm text-xs">
+      <h3 className="absolute bottom-0 w-full text-center font-sans text-(--text-primary) font-light mb-4 sm:text-sm text-xs">
         © Copyright 2026 TaskFlow
       </h3>
     </div>

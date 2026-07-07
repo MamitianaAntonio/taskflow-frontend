@@ -13,10 +13,10 @@ import TaskFilter from "./TaskFilter";
 import TaskList from "./TaskList";
 import TaskboadStats from "./TaskboadStats";
 import CustomTask from "./CustomTask";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Taskboard() {
   const cycle = { todo: "doing", doing: "done", done: "todo" };
-
   const todos = useTodoStore((state) => state.todos);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
@@ -66,11 +66,6 @@ export default function Taskboard() {
     setSelectedTask((prev) => (prev ? { ...prev, ...changes } : null));
   };
 
-  const addTask = (label) => {
-    if (!label.trim()) return;
-    addTodo(label.trim());
-  };
-
   const stats = [
     {
       label: "Total",
@@ -96,39 +91,89 @@ export default function Taskboard() {
   ];
 
   return (
-    <div className="p-6 flex flex-col gap-5">
+    <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 mx-auto">
       {/* Header */}
       <div className="rounded-lg flex items-center justify-between">
-        <h1 className="text-2xl font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
+        <h1 className="text-xl sm:text-2xl font-semibold font-mono uppercase tracking-widest text-(--text-primary) opacity-60">
           Your flow
         </h1>
         <FontAwesomeIcon
           icon={faTasks}
-          className="text-2xl text-(--accent-color)"
+          className="text-xl sm:text-2xl text-(--accent-color)"
         />
       </div>
 
       {/* Stats */}
       <TaskboadStats stats={stats} />
 
-      <div className="flex w-full gap-4">
-        {/* Quick add */}
-        <QuickAddTask onAdd={addTodo} />
-        {/* custom task */}
-        <CustomTask />
+      {/* Quick add + Custom task — stack on mobile */}
+      <div className="flex flex-col sm:flex-row w-full gap-3">
+        <div className="flex-1">
+          <QuickAddTask onAdd={addTodo} />
+        </div>
+        <div className="flex-1">
+          <CustomTask />
+        </div>
       </div>
 
       {/* Filter */}
       <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
 
-      {/* Task detail panel */}
-      {selectedTask && (
-        <TaskDetail
-          task={selectedTask}
-          onClose={() => setSelectedTask(null)}
-          onUpdate={updateTask}
-        />
-      )}
+      {/* Task detail — bottom drawer on mobile, inline on sm+ */}
+      <AnimatePresence>
+        {selectedTask && (
+          <>
+            {/* Mobile backdrop */}
+            <motion.div
+              key="detail-backdrop"
+              className="fixed inset-0 bg-(--overlay) z-40 sm:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setSelectedTask(null)}
+            />
+
+            {/* Mobile: bottom drawer */}
+            <motion.div
+              key="detail-drawer"
+              className="fixed bottom-0 left-0 right-0 z-50 sm:hidden
+                         bg-(--bg-secondary) rounded-t-2xl shadow-2xl
+                         max-h-[85vh] overflow-y-auto"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            >
+              {/* Drag handle */}
+              <div className="flex justify-center pt-3 pb-1">
+                <div className="w-10 h-1 rounded-full bg-(--border-color)" />
+              </div>
+              <TaskDetail
+                task={selectedTask}
+                onClose={() => setSelectedTask(null)}
+                onUpdate={updateTask}
+              />
+            </motion.div>
+
+            {/* Desktop: inline */}
+            <motion.div
+              key="detail-inline"
+              className="hidden sm:block"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <TaskDetail
+                task={selectedTask}
+                onClose={() => setSelectedTask(null)}
+                onUpdate={updateTask}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Task list */}
       <TaskList
