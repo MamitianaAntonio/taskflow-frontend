@@ -1,63 +1,49 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faAdd } from "@fortawesome/free-solid-svg-icons";
-import Button from "./Button";
 
 export default function QuickAddTask({ onAdd }) {
   const [value, setValue] = useState("");
+  const [focused, setFocused] = useState(false);
+  const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e?.preventDefault();
     if (!value.trim()) return;
     onAdd?.(value.trim());
     setValue("");
+    inputRef.current?.focus();
   };
 
   return (
-    <div className="w-full rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-(--text-secondary) mb-3">
-        Quick add task
-      </p>
-      <form onSubmit={handleSubmit} className="flex gap-2.5 items-stretch">
-        {/* Input */}
-        <div
-          className={`flex-1 min-w-0 flex items-center gap-2.5 px-3.5 h-11 rounded-lg border bg-(--bg-primary) transition-all duration-150
-          ${
-            value.length > 0
-              ? "border-(--accent-color)/30 ring-1 ring-(--accent-color)/50"
-              : "border-(--border-color) hover:border-(--accent-color)/50"
-          }`}
-        >
-          <FontAwesomeIcon
-            icon={faAdd}
-            className="text-sm shrink-0 text-(--accent-color)"
-          />
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="New task title…"
-            className="flex-1 min-w-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-secondary)/40 outline-none"
-          />
-          <span
-            className={`text-[11px] font-mono text-(--text-secondary) shrink-0 transition-opacity duration-150 ${value.length > 0 ? "opacity-100" : "opacity-0"}`}
-          >
-            {value.length}
-          </span>
-        </div>
-
-        {/* Button */}
-        <Button
+    <form
+      onSubmit={handleSubmit}
+      className={`flex items-center gap-3 rounded-xl border bg-(--bg-primary) px-4 py-2.5 transition-all duration-200
+        ${focused ? "border-(--accent-color)/40 ring-1 ring-(--accent-color)/20" : "border-(--border-color) hover:border-(--text-muted)"}`}
+    >
+      <FontAwesomeIcon
+        icon={faAdd}
+        className={`text-sm shrink-0 transition-colors duration-200 ${focused ? "text-(--accent-color)" : "text-(--text-muted)"}`}
+      />
+      <input
+        ref={inputRef}
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        placeholder="Write a task and press Enter"
+        className="flex-1 min-w-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) outline-none"
+      />
+      {value.trim() && (
+        <button
           type="submit"
-          size="small"
-          variant="outline"
-          onClick={handleSubmit}
-          className="h-11 w-11 sm:w-auto px-0 sm:px-6 shrink-0"
-          icon={<FontAwesomeIcon icon={faPlus} className="text-sm" />}
+          className="text-xs font-semibold text-(--accent-color) hover:text-(--text-primary) transition-colors font-interface"
         >
-          <span className="hidden sm:inline">Add task</span>
-        </Button>
-      </form>
-    </div>
+          <FontAwesomeIcon icon={faPlus} className="mr-1 text-[10px]" />
+          Add
+        </button>
+      )}
+    </form>
   );
 }

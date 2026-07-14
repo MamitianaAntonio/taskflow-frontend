@@ -40,7 +40,7 @@ export default function DashboardTasks({ tasks = [] }) {
       <div className="flex-1">
         <TaskSection
           icon={faClock}
-          label="Today & Overdue"
+          label="Due today & overdue"
           color="text-(--color-highlight)"
           tasks={todayAndOverdue}
         />
@@ -56,7 +56,7 @@ export default function DashboardTasks({ tasks = [] }) {
       <div className="flex-1">
         <TaskSection
           icon={faCircleCheck}
-          label="Recently Completed"
+          label="Completed recently"
           color="text-(--color-success)"
           tasks={recentlyDone}
         />

@@ -1,76 +1,116 @@
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTag,
+  faCircleHalfStroke,
+  faFlag,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
+import { PRIORITY_OPTIONS, STATUS_OPTIONS } from "../../constants/taskForm";
 
-const statusConfig = {
-  todo:  { label: "Todo",  activeClass: "bg-(--color-warning)/12 text-(--color-warning) border-(--color-warning)/30" },
-  doing: { label: "Doing", activeClass: "bg-(--accent-color)/12 text-(--accent-color) border-(--accent-color)/30" },
-  done:  { label: "Done",  activeClass: "bg-(--color-success)/12 text-(--color-success) border-(--color-success)/30" },
-};
-
-const priorityConfig = {
-  low:    { label: "Low" },
-  medium: { label: "Medium" },
-  high:   { label: "High" },
-};
-
-const pill = "text-[11px] font-medium px-3 py-1.5 rounded-full border transition-all duration-150 cursor-pointer";
-const pillIdle = "border-(--border-color) text-(--text-secondary) hover:border-(--accent-color) hover:text-(--text-primary)";
-
-export default function TaskDetailFields({ task, onUpdate, label, setLabel, dueDateStr }) {
+function BadgeGroup({ options, value, onChange }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-wrap gap-2">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border font-interface transition-all duration-200
+            ${value === opt.value
+              ? `${opt.classes} scale-105 shadow-sm`
+              : "bg-(--bg-primary) border-(--border-color) text-(--text-secondary) hover:border-(--accent-color) hover:text-(--accent-color) hover:scale-105"
+            }`}
+        >
+          {opt.icon && (
+            <FontAwesomeIcon icon={opt.icon} className="text-[10px]" />
+          )}
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
+function Field({ label, icon, children }) {
+  return (
+    <div className="mb-4">
+      <label className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-(--text-secondary) uppercase tracking-widest font-interface">
+        {icon && (
+          <FontAwesomeIcon icon={icon} className="text-[10px] text-(--accent-color)" />
+        )}
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+export default function TaskDetailFields({
+  localTitle, setLocalTitle,
+  localStatus, setLocalStatus,
+  localPriority, setLocalPriority,
+  localDueDate, setLocalDueDate,
+  dueDateStr, saving,
+}) {
+  return (
+    <div>
       {/* Title */}
-      <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-        <p className="text-[11px] uppercase tracking-[0.08em] text-(--text-tertiary) mb-2">Task title</p>
-        <input
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          onBlur={() => onUpdate(task.id, { label })}
-          className="w-full rounded-md border border-(--border-color) bg-(--bg-primary) px-3.5 py-2.5 text-sm text-(--text-primary) outline-none transition focus:border-(--accent-color)"
-        />
-      </div>
+      <Field label="Task title" icon={faTag}>
+        <div className="relative">
+          <FontAwesomeIcon
+            icon={faTag}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-(--accent-color) text-xs pointer-events-none"
+          />
+          <input
+            type="text"
+            placeholder="What needs to be done?"
+            value={localTitle}
+            onChange={(e) => setLocalTitle(e.target.value)}
+            disabled={saving}
+            className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+              bg-(--bg-primary) text-(--text-primary) placeholder:text-(--text-secondary) transition-colors
+              border-(--border-color) focus:border-(--accent-color) disabled:opacity-50"
+          />
+        </div>
+      </Field>
 
       {/* Status + Priority */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-          <p className="text-[11px] uppercase tracking-[0.08em] text-(--text-tertiary) mb-2">Status</p>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {Object.entries(statusConfig).map(([s, { label, activeClass }]) => (
-              <button
-                key={s}
-                onClick={() => onUpdate(task.id, { status: s })}
-                className={`${pill} ${task.status === s ? activeClass : pillIdle}`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4">
-          <p className="text-[11px] uppercase tracking-[0.08em] text-(--text-tertiary) mb-2">Priority</p>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {Object.entries(priorityConfig).map(([p, { label }]) => (
-              <button
-                key={p}
-                onClick={() => onUpdate(task.id, { priority: p })}
-                className={`${pill} ${task.priority === p ? "bg-(--text-primary) text-(--bg-primary) border-(--text-primary)" : pillIdle}`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field label="Status" icon={faCircleHalfStroke}>
+          <BadgeGroup
+            options={STATUS_OPTIONS}
+            value={localStatus}
+            onChange={setLocalStatus}
+          />
+        </Field>
+        <Field label="Priority" icon={faFlag}>
+          <BadgeGroup
+            options={PRIORITY_OPTIONS}
+            value={localPriority}
+            onChange={setLocalPriority}
+          />
+        </Field>
       </div>
 
       {/* Due date */}
-      <div className="rounded-lg border border-(--border-color) bg-(--bg-secondary) p-4 flex items-center gap-3">
-        <FontAwesomeIcon icon={faCalendar} className="text-sm text-(--text-tertiary)" />
-        <p className="text-[11px] uppercase tracking-[0.08em] text-(--text-tertiary)">Due date</p>
-        <p className="ml-auto text-sm text-(--text-secondary)">{dueDateStr}</p>
-      </div>
-
+      <Field label="Due date" icon={faCalendarDays}>
+        <div className="relative">
+          <FontAwesomeIcon
+            icon={faCalendarDays}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-(--accent-color) text-xs pointer-events-none"
+          />
+          <input
+            type="datetime-local"
+            value={localDueDate}
+            onChange={(e) => setLocalDueDate(e.target.value)}
+            disabled={saving}
+            className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+              bg-(--bg-primary) text-(--text-primary) transition-colors
+              border-(--border-color) focus:border-(--accent-color) disabled:opacity-50"
+          />
+        </div>
+        <p className="mt-1 text-xs text-(--text-secondary)">{dueDateStr}</p>
+      </Field>
     </div>
   );
 }

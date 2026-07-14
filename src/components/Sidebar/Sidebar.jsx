@@ -117,7 +117,7 @@ export default function Sidebar() {
               ref={closeButtonRef}
               onClick={() => setOpen(false)}
               className="sidebar-close-btn font-bold rounded transition-all"
-              aria-label="Fermer la navigation"
+              aria-label="Close navigation"
               type="button"
             >
               <FontAwesomeIcon icon={faXmark} />

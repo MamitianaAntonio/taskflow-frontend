@@ -1,6 +1,5 @@
 .sidebar {
   overflow-x: hidden;
-  box-shadow: 0 10px 30px var(--shadow);
   border-right: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
 }
@@ -54,6 +53,7 @@
 }
 
 .sidebar-section__title {
+  font-family: "Roboto", sans-serif;
   color: var(--text-secondary);
   font-size: 0.75rem;
   font-weight: 600;
