@@ -34,6 +34,17 @@ export default function CustomTask({ onClose }) {
 
   return (
     <>
+      <motion.div
+        key="backdrop"
+        className="absolute inset-0 z-40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        style={{ backgroundColor: "rgba(0,0,0,0.06)" }}
+        onClick={onClose}
+      />
+
       {isMobile ? (
         <motion.div
           key="bottom-sheet"
