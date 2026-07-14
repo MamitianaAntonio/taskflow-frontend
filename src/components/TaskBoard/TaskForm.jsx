@@ -6,17 +6,12 @@ import {
   faCalendarDays,
   faXmark,
   faPlus,
-  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { PRIORITY_OPTIONS, STATUS_OPTIONS } from "../../constants/taskForm";
 import Button from "../ui/Button";
-
-function toLocalDatetime(date) {
-  const d = new Date(date);
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 16);
-}
+import { BadgeGroup, Field } from "../form";
+import { toLocalDatetime } from "../../utils/date";
 
 const defaultValues = {
   title: "",
@@ -24,53 +19,6 @@ const defaultValues = {
   dueDate: toLocalDatetime(new Date()),
   priority: "medium",
 };
-
-function BadgeGroup({ options, value, onChange }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((opt) => (
-        <button
-          key={opt.value}
-          type="button"
-          onClick={() => onChange(opt.value)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border font-interface transition-all duration-200
-            ${value === opt.value
-              ? `${opt.classes} scale-105 shadow-sm`
-              : "bg-(--bg-primary) border-(--border-color) text-(--text-secondary) hover:border-(--accent-color) hover:text-(--accent-color) hover:scale-105"
-            }`}
-        >
-          {opt.icon && (
-            <FontAwesomeIcon icon={opt.icon} className="text-[10px]" />
-          )}
-          {opt.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function Field({ label, icon, error, children }) {
-  return (
-    <div className="mb-4">
-      <label className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-(--text-secondary) uppercase tracking-widest font-interface">
-        {icon && (
-          <FontAwesomeIcon
-            icon={icon}
-            className="text-[10px] text-(--accent-color)"
-          />
-        )}
-        {label}
-      </label>
-      {children}
-      {error && (
-        <p className="mt-1.5 text-xs text-(--color-error) flex items-center gap-1.5 animate-pulse">
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
 
 export default function TaskForm({ onSubmit, onCancel, loading = false }) {
   const [form, setForm] = useState(defaultValues);
