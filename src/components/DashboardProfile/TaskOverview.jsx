@@ -24,12 +24,12 @@ export default function TaskOverview({ completed = 0, incomplete = 0, total = 0 
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <div className="flex items-center gap-2 bg-(--color-success)/5 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg px-3 py-2">
           <div className="w-2 h-2 rounded-full bg-(--color-success) shrink-0" />
           <span className="text-sm font-bold font-mono text-(--color-success)">{completed}</span>
           <span className="text-[10px] text-(--color-success) font-interface">completed</span>
         </div>
-        <div className="flex items-center gap-2 bg-(--color-highlight)/5 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg px-3 py-2">
           <div className="w-2 h-2 rounded-full bg-(--color-highlight) shrink-0" />
           <span className="text-sm font-bold font-mono text-(--color-highlight)">{incomplete}</span>
           <span className="text-[10px] text-(--color-highlight) font-interface">incomplete</span>
