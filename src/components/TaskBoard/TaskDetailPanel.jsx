@@ -51,28 +51,27 @@ export default function TaskDetailPanel({
       {isMobile ? (
         <motion.div
           key="detail-mobile"
-          className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-secondary) rounded-t-[28px] shadow-2xl max-h-[90vh] overflow-y-auto"
+          className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-secondary) rounded-t-[28px] shadow-2xl max-h-[92vh] overflow-y-auto"
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           <div className="flex justify-center pt-3 pb-1">
-            <div className="w-10 h-1 rounded-full bg-(--border-color)" />
+            <div className="w-10 h-1.5 rounded-full bg-(--border-color)" />
           </div>
 
-          <div className="flex justify-between items-center px-6 pt-2 pb-4 border-b border-(--border-color)">
-            <h3 className="font-semibold text-base text-(--text-primary)">
+          <div className="flex justify-between items-center px-5 pt-2 pb-4 border-b border-(--border-color)">
+            <h3 className="font-semibold text-base text-(--text-primary) truncate pr-2">
               {task.label}
             </h3>
             <button
               onClick={onClose}
-              className="w-7 h-7 flex items-center justify-center rounded-md
-                text-(--text-secondary) hover:text-(--accent-color) hover:bg-(--bg-primary)
-                transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-lg active:bg-(--bg-primary) transition-colors shrink-0"
               aria-label="Close"
             >
-              <FontAwesomeIcon icon={faX} size="md" />
+              <FontAwesomeIcon icon={faX} size="md" className="text-(--text-secondary)" />
             </button>
           </div>
 

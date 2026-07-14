@@ -59,7 +59,9 @@ export default function TaskForm({ onSubmit, onCancel, loading = false }) {
             placeholder="What needs to be done?"
             value={form.title}
             onChange={(e) => set("title", e.target.value)}
-            className={`w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+            autoFocus
+            enterkeyhint="next"
+            className={`w-full pl-9 pr-3 py-3 min-h-[48px] text-[15px] rounded-lg border outline-none
               bg-(--bg-primary) text-(--text-primary) placeholder:text-(--text-secondary) transition-colors
               ${errors.title
                 ? "border-(--color-error) focus:border-(--color-error)"
@@ -98,7 +100,8 @@ export default function TaskForm({ onSubmit, onCancel, loading = false }) {
             type="datetime-local"
             value={form.dueDate}
             onChange={(e) => set("dueDate", e.target.value)}
-            className={`w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+            enterkeyhint="done"
+            className={`w-full pl-9 pr-3 py-3 min-h-[48px] text-[15px] rounded-lg border outline-none
               bg-(--bg-primary) text-(--text-primary) transition-colors
               ${errors.dueDate
                 ? "border-(--color-error) focus:border-(--color-error)"

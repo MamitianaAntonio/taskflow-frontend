@@ -30,7 +30,9 @@ export default function TaskDetailFields({
             value={localTitle}
             onChange={(e) => setLocalTitle(e.target.value)}
             disabled={saving}
-            className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+            autoFocus
+            enterkeyhint="next"
+            className="w-full pl-9 pr-3 py-3 min-h-[48px] text-[15px] rounded-lg border outline-none
               bg-(--bg-primary) text-(--text-primary) placeholder:text-(--text-secondary) transition-colors
               border-(--border-color) focus:border-(--accent-color) disabled:opacity-50"
           />
@@ -67,7 +69,8 @@ export default function TaskDetailFields({
             value={localDueDate}
             onChange={(e) => setLocalDueDate(e.target.value)}
             disabled={saving}
-            className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border outline-none
+            enterkeyhint="done"
+            className="w-full pl-9 pr-3 py-3 min-h-[48px] text-[15px] rounded-lg border outline-none
               bg-(--bg-primary) text-(--text-primary) transition-colors
               border-(--border-color) focus:border-(--accent-color) disabled:opacity-50"
           />
