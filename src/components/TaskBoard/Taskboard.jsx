@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import QuickAddTask from "../ui/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircle,
+  faCircleCheck,
+  faCircleHalfStroke,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskList from "./TaskList";
@@ -60,6 +65,21 @@ export default function Taskboard() {
     });
   };
 
+  const statusIndication = {
+    todo: {
+      label: "todo",
+      icon: faCircle,
+    },
+    doing: {
+      label: "doing",
+      icon: faCircleHalfStroke,
+    },
+    done: {
+      label: "done",
+      icon: faCircleCheck,
+    },
+  };
+
   return (
     <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 mx-auto">
       {/* Header */}
@@ -111,6 +131,16 @@ export default function Taskboard() {
           />
         )}
       </AnimatePresence>
+
+      {/* Status indication */}
+      <div className="flex items-center gap-4 text-xs font-interface text-(--text-muted)">
+        {Object.values(statusIndication).map((s) => (
+          <span key={s.label} className="flex items-center gap-1.5">
+            <FontAwesomeIcon icon={s.icon} className="text-[12px]" />
+            {s.label}
+          </span>
+        ))}
+      </div>
 
       {/* Task list */}
       <TaskList
