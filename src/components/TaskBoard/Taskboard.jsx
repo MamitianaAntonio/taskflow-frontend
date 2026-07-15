@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import QuickAddTask from "../ui/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircle,
+  faCircleCheck,
+  faCircleHalfStroke,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskList from "./TaskList";
@@ -60,6 +65,21 @@ export default function Taskboard() {
     });
   };
 
+  const statusIndication = {
+    todo: {
+      label: "todo",
+      icon: faCircle,
+    },
+    doing: {
+      label: "doing",
+      icon: faCircleHalfStroke,
+    },
+    done: {
+      label: "done",
+      icon: faCircleCheck,
+    },
+  };
+
   return (
     <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 mx-auto">
       {/* Header */}
@@ -85,7 +105,8 @@ export default function Taskboard() {
         <button
           onClick={() => setShowCustom(true)}
           title="Create a new task with custom fields"
-          className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-(--border-color) bg-(--bg-primary) text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all font-interface shrink-0"
+          className="flex items-center gap-1.5 px-3 py-3 rounded-xl border border-(--border-color) bg-(--bg-primary)
+          text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all font-interface shrink-0"
         >
           <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
           New task
@@ -110,6 +131,16 @@ export default function Taskboard() {
           />
         )}
       </AnimatePresence>
+
+      {/* Status indication */}
+      <div className="flex items-center gap-4 text-xs font-interface text-(--text-muted)">
+        {Object.values(statusIndication).map((s) => (
+          <span key={s.label} className="flex items-center gap-1.5">
+            <FontAwesomeIcon icon={s.icon} className="text-[12px]" />
+            {s.label}
+          </span>
+        ))}
+      </div>
 
       {/* Task list */}
       <TaskList

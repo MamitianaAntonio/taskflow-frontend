@@ -1,6 +1,15 @@
-import { faXmark, faBolt, faFlag, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmark,
+  faBolt,
+  faFlag,
+  faCalendarDay,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleHalfStroke, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircle,
+  faCircleHalfStroke,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 const priorityConfig = {
   low: { color: "text-(--color-info)", bg: "bg-(--bg-secondary)" },
@@ -50,10 +59,13 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`group flex items-center gap-3 px-4 py-3 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary)/80 transition-all cursor-pointer border-l-2 ${cfg.bar}`}
+      className={`group flex items-center gap-3 px-4 py-3 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary)/80
+      transition-all cursor-pointer border-l-2 ${cfg.bar}`}
     >
       {/* Status icon */}
-      <span className={`text-sm ${task.status === "done" ? "text-(--color-success)" : task.status === "doing" ? "text-(--accent-color)" : "text-(--color-warning)"} shrink-0`}>
+      <span
+        className={`text-sm ${task.status === "done" ? "text-(--color-success)" : task.status === "doing" ? "text-(--accent-color)" : "text-(--color-warning)"} shrink-0`}
+      >
         <FontAwesomeIcon icon={cfg.icon} />
       </span>
 
@@ -75,8 +87,13 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
 
       {/* Priority badge */}
       {task.priority && task.priority !== "low" && (
-        <span className={`hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold font-interface ${prioCfg.bg} ${prioCfg.color}`}>
-          <FontAwesomeIcon icon={task.priority === "high" ? faBolt : faFlag} className="text-[9px]" />
+        <span
+          className={`hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold font-interface ${prioCfg.bg} ${prioCfg.color}`}
+        >
+          <FontAwesomeIcon
+            icon={task.priority === "high" ? faBolt : faFlag}
+            className="text-[9px]"
+          />
           {task.priority}
         </span>
       )}

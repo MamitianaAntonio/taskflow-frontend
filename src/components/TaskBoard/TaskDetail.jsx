@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import TaskDetailPanel from "./TaskDetailPanel";
-
-function toLocalDatetime(date) {
-  if (!date) return "";
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return "";
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 16);
-}
+import { toLocalDatetime, formatDate } from "../../utils/date";
 
 export default function TaskDetail({ task, onClose, onUpdate }) {
   const [localTitle, setLocalTitle] = useState(task.label);
@@ -32,16 +25,7 @@ export default function TaskDetail({ task, onClose, onUpdate }) {
     return false;
   }, [localTitle, localStatus, localPriority, localDueDate, task]);
 
-  const dueDateStr = (() => {
-    if (!task.dueDate) return "No date";
-    const d = new Date(task.dueDate);
-    if (isNaN(d.getTime())) return "No date";
-    return d.toLocaleDateString([], {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  })();
+  const dueDateStr = formatDate(task.dueDate);
 
   const handleSave = async () => {
     const changes = {};
