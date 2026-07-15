@@ -1,12 +1,19 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInbox, faList } from "@fortawesome/free-solid-svg-icons";
+import { faInbox } from "@fortawesome/free-solid-svg-icons";
 import TaskRow from "./TaskRow";
 import TaskFilter from "./TaskFilter";
 
-export default function TaskList({ filtered, cycleStatus, deleteTask, setSelectedTask, filter, setFilter, tasks }) {
+export default function TaskList({
+  filtered,
+  cycleStatus,
+  deleteTask,
+  setSelectedTask,
+  filter,
+  setFilter,
+  tasks,
+}) {
   return (
-    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-102">
-
+    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-130">
       {/* Header — merged filter + count */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-color)">
         <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
@@ -19,7 +26,9 @@ export default function TaskList({ filtered, cycleStatus, deleteTask, setSelecte
       {filtered.length === 0 ? (
         <div className="py-20 flex flex-col items-center gap-2 text-(--text-secondary)">
           <FontAwesomeIcon icon={faInbox} className="text-4xl opacity-30" />
-          <p className="text-sm font-medium text-(--text-primary)">Nothing here yet</p>
+          <p className="text-sm font-medium text-(--text-primary)">
+            Nothing here yet
+          </p>
           <p className="text-xs">Add a task above to get started.</p>
         </div>
       ) : (
@@ -36,7 +45,6 @@ export default function TaskList({ filtered, cycleStatus, deleteTask, setSelecte
           ))}
         </ul>
       )}
-
     </div>
   );
 }
