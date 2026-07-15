@@ -51,7 +51,8 @@ export default function TaskDetailPanel({
       {isMobile ? (
         <motion.div
           key="detail-mobile"
-          className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-secondary) rounded-t-[28px] shadow-2xl max-h-[92vh] overflow-y-auto"
+          className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-secondary) rounded-t-md border-t-2 border-t-(--border-color)
+          shadow-2xl max-h-[92vh] overflow-y-auto"
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
@@ -71,7 +72,11 @@ export default function TaskDetailPanel({
               className="w-9 h-9 flex items-center justify-center rounded-lg active:bg-(--bg-primary) transition-colors shrink-0"
               aria-label="Close"
             >
-              <FontAwesomeIcon icon={faX} size="md" className="text-(--text-secondary)" />
+              <FontAwesomeIcon
+                icon={faX}
+                size="md"
+                className="text-(--text-secondary)"
+              />
             </button>
           </div>
 
