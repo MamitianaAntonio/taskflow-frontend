@@ -63,7 +63,7 @@ export default function DashboardProfile() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <TaskStats
           completed={completedCount}
           incomplete={incompleteCount}
