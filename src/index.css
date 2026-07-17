@@ -17,6 +17,7 @@
   --shadow-pink: 0 3px 10px rgba(180, 83, 120, 0.14);
   /* Accents (pink focus) */
   --accent-color: #EC4899;
+  --accent-bg: #FDF2F8;
   --accent-muted: #FDF2F8;
   --gradient-from: #EC4899;
   --gradient-to: #F472B6;
@@ -46,6 +47,7 @@
   --shadow-pink: 0 1px 4px rgba(236, 72, 153, 0.12);
   /* Accents (pink focus) */
   --accent-color: #F472B6;
+  --accent-bg: #2D1B29;
   --accent-muted: #2D1B29;
   --gradient-from: #EC4899;
   --gradient-to: #BE185D;

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import Button from "./Button";
 
 export default function QuickAddTask({ onAdd }) {
   const [value, setValue] = useState("");
@@ -36,13 +37,12 @@ export default function QuickAddTask({ onAdd }) {
         className="flex-1 min-w-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) outline-none"
       />
       {value.trim() && (
-        <button
+        <Button
+          variant="outline"
+          size="small"
           type="submit"
-          className="text-xs font-semibold text-(--accent-color) hover:text-(--text-primary) transition-colors font-interface"
-        >
-          <FontAwesomeIcon icon={faPlus} className="mr-1 text-[10px]" />
-          Add
-        </button>
+          text="Add"
+        />
       )}
     </form>
   );
