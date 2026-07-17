@@ -6,7 +6,7 @@ const cardBg = {
   "In progress": "bg-(--accent-color)/5",
 };
 
-export default function TaskboadStats({ stats }) {
+export default function TaskboardStats({ stats }) {
   return (
     <div className="grid grid-cols-3 gap-3">
       {stats.map(({ label, value, color, icon, bg }) => (
