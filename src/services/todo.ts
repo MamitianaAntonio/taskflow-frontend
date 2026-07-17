@@ -6,6 +6,7 @@ interface Todo {
   status: "todo" | "doing" | "done";
   dueDate: string | null;
   priority: string;
+  projectId?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,6 +24,7 @@ type UpdateTodoPayload = {
   status?: "todo" | "doing" | "done";
   dueDate?: string | null;
   priority?: string;
+  projectId?: number | null;
 };
 
 // get all todo on server
