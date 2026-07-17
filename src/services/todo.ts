@@ -15,6 +15,7 @@ type CreateTodoPayload = {
   status?: "todo" | "doing" | "done";
   dueDate?: string | null;
   priority?: string;
+  projectId?: number;
 };
 
 type UpdateTodoPayload = {
