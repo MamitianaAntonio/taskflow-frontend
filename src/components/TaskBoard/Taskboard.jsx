@@ -6,11 +6,13 @@ import {
   faCircleCheck,
   faCircleHalfStroke,
   faPlus,
+  faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskList from "./TaskList";
 import CustomTask from "./CustomTask";
+import TaskboardStats from "./TaskboardStats";
 import { AnimatePresence } from "framer-motion";
 
 export default function Taskboard() {
@@ -112,6 +114,32 @@ export default function Taskboard() {
           New task
         </button>
       </div>
+
+      <TaskboardStats
+        stats={[
+          {
+            label: "Total",
+            value: tasks.length,
+            color: "text-(--text-primary)",
+            icon: faClipboardList,
+            bg: "bg-(--text-muted)/10",
+          },
+          {
+            label: "To do",
+            value: tasks.filter((t) => t.status === "todo").length,
+            color: "text-(--color-warning)",
+            icon: faCircle,
+            bg: "bg-(--color-warning)/10",
+          },
+          {
+            label: "In progress",
+            value: tasks.filter((t) => t.status === "doing").length,
+            color: "text-(--accent-color)",
+            icon: faCircleHalfStroke,
+            bg: "bg-(--accent-color)/10",
+          },
+        ]}
+      />
 
       {/* Custom task modal */}
       <AnimatePresence>
