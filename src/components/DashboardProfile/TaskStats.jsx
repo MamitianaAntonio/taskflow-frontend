@@ -47,25 +47,25 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
   ];
 
   return (
-    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-5 flex flex-col gap-5 w-full box-border">
-      <p className="text-xs font-semibold text-(--text-primary) py-2 opacity-50 uppercase tracking-widest font-interface">
+    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 flex flex-col gap-3 w-full box-border">
+      <p className="text-xs font-semibold text-(--text-primary) py-1 opacity-50 uppercase tracking-widest font-interface">
         Task breakdown
       </p>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-3">
         {/* Donut */}
-        <div className="relative w-40 h-40 shrink-0">
+        <div className="relative w-28 h-28 shrink-0">
           <Doughnut data={data} options={options} />
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-3xl font-bold font-mono text-(--text-primary) leading-none">
+            <span className="text-xl font-bold font-mono text-(--text-primary) leading-none">
               {pct}%
             </span>
-            <span className="text-[11px] text-(--text-primary) opacity-40 mt-0.5">done</span>
+            <span className="text-[10px] text-(--text-primary) opacity-40 mt-0.5">done</span>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex flex-col gap-2.5 flex-1 min-w-0">
+        <div className="flex flex-col gap-1.5 flex-1 min-w-0 w-full sm:w-auto">
           {items.map(({ label, value, color, pct: barPct }) => (
             <div key={label} className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: color }} />

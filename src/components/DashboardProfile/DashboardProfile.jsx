@@ -1,14 +1,12 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import useTodoStore from "../../stores/todoStore";
 import useUserStore from "../../stores/userStore";
-import Button from "../ui/Button";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
 import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
 import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
 import QuickAddTask from "../ui/QuickAddTask";
+import ProfileCard from "./ProfileCard";
 
 export default function DashboardProfile() {
   const user = useUserStore((state) => state.user);
@@ -39,31 +37,11 @@ export default function DashboardProfile() {
         <div className="flex-1">
           <DashboardGreeting name={user?.name ?? "there"} />
         </div>
-        <div className="flex items-center gap-4 bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 sm:p-4 shrink-0">
-          <div
-            className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 text-xl sm:text-2xl font-bold
-            text-(--text-white) rounded-lg
-            flex items-center justify-center select-none
-            bg-linear-to-br from-(--gradient-from) to-(--gradient-to)"
-          >
-            {user?.name?.[0] ?? "U"}
-          </div>
-          <div className="min-w-0">
-            <p className="font-semibold text-sm text-(--text-primary) truncate">
-              {user?.name ?? "Guest user"}
-            </p>
-            <p className="text-xs text-(--text-secondary) font-mono truncate">
-              {user?.email ?? "No email address"}
-            </p>
-          </div>
-          <Button variant="outline" size="small">
-            <FontAwesomeIcon icon={faGear} />
-          </Button>
-        </div>
+        <ProfileCard user={user} />
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <TaskStats
           completed={completedCount}
           incomplete={incompleteCount}
