@@ -15,7 +15,7 @@ export default function TaskList({
   return (
     <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-130">
       {/* Header — merged filter + count */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-color)">
+      <div className="flex bg-(--bg-secondary) items-center justify-between px-4 py-3 border-b border-(--border-color)">
         <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
         <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color) text-(--text-muted) font-interface">
           {filtered.length} task{filtered.length !== 1 ? "s" : ""}
