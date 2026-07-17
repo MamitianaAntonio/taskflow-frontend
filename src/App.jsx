@@ -7,6 +7,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DashboardProfile from "./components/DashboardProfile/DashboardProfile";
 import Taskboard from "./components/TaskBoard/Taskboard";
+import Projects from "./components/Projects/Projects";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashboardProfile />}></Route>
             <Route path="tasks" element={<Taskboard />}></Route>
+            <Route path="projects" element={<Projects />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
