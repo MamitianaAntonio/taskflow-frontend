@@ -22,7 +22,7 @@ export default function Button({
     primary:
       "bg-gradient-to-br from-(--gradient-from) to-(--gradient-to) text-(--text-white) shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0",
     outline:
-      "bg-transparent border border-(--accent-color) text-(--accent-color) shadow-sm hover:-translate-y-0.5 hover:bg-(--accent-color) hover:text-(--text-white) hover:shadow-md active:translate-y-0",
+      "rounded-xl border border-(--border-color) text-(--text-muted) font-semibold hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all",
     text: "bg-transparent text-(--text-primary) hover:bg-black/5 rounded",
   };
 
