@@ -107,8 +107,9 @@ export default function Taskboard() {
         <button
           onClick={() => setShowCustom(true)}
           title="Create a new task with custom fields"
-          className="flex items-center gap-1.5 px-3 py-3 rounded-xl border border-(--border-color) bg-(--bg-primary)
-          text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all font-interface shrink-0"
+          className="flex items-center gap-1.5 px-3 py-4 rounded-xl border border-(--border-color) bg-(--bg-primary)
+          text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all
+          font-interface shrink-0"
         >
           <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
           New task
