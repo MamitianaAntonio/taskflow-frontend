@@ -39,7 +39,7 @@ export default function DashboardGreeting({ name = "there" }) {
           {`, ${name}!`}
         </h2>
 
-        <p className="text-sm text-(--text-primary) opacity-60 mt-1 font-interface">
+        <p className="text-md text-(--text-primary) opacity-60 mt-1 font-interface">
           {subtitle}
         </p>
       </div>
