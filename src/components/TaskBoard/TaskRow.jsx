@@ -71,7 +71,7 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
 
       {/* Label */}
       <p
-        className={`flex-1 text-sm min-w-0 truncate transition-colors
+        className={`flex-1 font-medium text-(--text-secondary) text-sm min-w-0 truncate transition-colors
         ${task.status === "done" ? "line-through text-(--text-secondary)" : "text-(--text-primary)"}`}
       >
         {task.label}

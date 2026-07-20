@@ -19,7 +19,7 @@ export default function QuickAddTask({ onAdd }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`flex items-center gap-3 rounded-xl border bg-(--bg-primary) px-4 py-2.5 transition-all duration-200
+      className={`w-full flex items-center gap-3 rounded-xl border bg-(--bg-primary) px-4 py-2.5 transition-[color,background-color,border-color,box-shadow] duration-200
         ${focused ? "border-(--accent-color)/40 ring-1 ring-(--accent-color)/20" : "border-(--border-color) hover:border-(--text-muted)"}`}
     >
       <FontAwesomeIcon
@@ -36,14 +36,10 @@ export default function QuickAddTask({ onAdd }) {
         placeholder="Write a task and press Enter"
         className="flex-1 min-w-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) outline-none"
       />
-      {value.trim() && (
-        <Button
-          variant="outline"
-          size="small"
-          type="submit"
-          text="Add"
-        />
-      )}
+      <Button
+        variant="outline" size="small" type="submit" text="Add"
+        className={!value.trim() ? "invisible" : ""}
+      />
     </form>
   );
 }
