@@ -1,4 +1,8 @@
-import { faFloppyDisk, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faFloppyDisk,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -41,10 +45,10 @@ export default function TaskDetailPanel({
         key="backdrop"
         className="absolute inset-0 z-40"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: 0.5 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        style={{ backgroundColor: "rgba(0,0,0,0.06)" }}
+        style={{ backgroundColor: "rgba(0,0,0,0.09)" }}
         onClick={onClose}
       />
 
@@ -52,7 +56,7 @@ export default function TaskDetailPanel({
         <motion.div
           key="detail-mobile"
           className="fixed bottom-0 left-0 right-0 z-50 bg-(--bg-secondary) rounded-t-md border-t-2 border-t-(--border-color)
-          shadow-2xl max-h-[92vh] overflow-y-auto"
+          shadow-xl max-h-[92vh] overflow-y-auto"
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
@@ -63,9 +67,9 @@ export default function TaskDetailPanel({
             <div className="w-10 h-1.5 rounded-full bg-(--border-color)" />
           </div>
 
-          <div className="flex justify-between items-center px-5 pt-2 pb-4 border-b border-(--border-color)">
-            <h3 className="font-semibold text-base text-(--text-primary) truncate pr-2">
-              {task.label}
+          <div className="flex justify-between items-center px-4 pt-2 pb-2 border-b border-(--border-color)">
+            <h3 className="font-medium font-mono text-base text-(--text-primary)">
+              {task.tabel}
             </h3>
             <button
               onClick={onClose}
@@ -73,7 +77,7 @@ export default function TaskDetailPanel({
               aria-label="Close"
             >
               <FontAwesomeIcon
-                icon={faX}
+                icon={faClose}
                 size="md"
                 className="text-(--text-secondary)"
               />
@@ -123,8 +127,8 @@ export default function TaskDetailPanel({
           exit={{ opacity: 0, y: 20, x: "-50%", translateY: "-50%" }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
-          <div className="flex justify-between items-center px-6 pt-5 pb-4 border-b border-(--border-color)">
-            <h3 className="font-semibold text-base text-(--text-primary)">
+          <div className="flex justify-between items-center px-4 pt-2 pb-2 border-b border-(--border-color)">
+            <h3 className="font-medium font-mono text-base text-(--text-primary)">
               {task.label}
             </h3>
             <button
@@ -134,7 +138,7 @@ export default function TaskDetailPanel({
                 transition-colors"
               aria-label="Close"
             >
-              <FontAwesomeIcon icon={faX} size="md" />
+              <FontAwesomeIcon icon={faClose} size="md" />
             </button>
           </div>
 
