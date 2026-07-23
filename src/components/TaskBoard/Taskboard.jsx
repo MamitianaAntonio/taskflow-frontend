@@ -103,14 +103,14 @@ export default function Taskboard() {
       </div>
 
       {/* Quick add row */}
-      <div className="flex items-start gap-2">
+      <div className="flex items-center gap-2">
         <div className="flex-1">
           <QuickAddTask onAdd={addTodo} />
         </div>
         <button
           onClick={() => setShowCustom(true)}
           title="Create a new task with custom fields"
-          className="flex items-center gap-1.5 px-3 py-4 rounded-xl border border-(--border-color) bg-(--bg-primary)
+          className="flex items-center gap-1.5 px-3 py-3.5 rounded-xl border border-(--border-color) bg-(--bg-primary)
           text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all
           font-interface shrink-0"
         >

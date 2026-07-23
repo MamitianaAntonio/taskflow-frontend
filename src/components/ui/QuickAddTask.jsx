@@ -19,7 +19,7 @@ export default function QuickAddTask({ onAdd }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`w-full flex items-center gap-3 rounded-xl border bg-(--bg-primary) px-4 py-2.5 transition-[color,background-color,border-color,box-shadow] duration-200
+      className={`w-full flex items-center gap-2 rounded-xl border bg-(--bg-primary) px-3 py-2 transition-[color,background-color,border-color,box-shadow] duration-200
         ${focused ? "border-(--accent-color)/40 ring-1 ring-(--accent-color)/20" : "border-(--border-color) hover:border-(--text-muted)"}`}
     >
       <FontAwesomeIcon
