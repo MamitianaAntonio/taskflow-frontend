@@ -86,11 +86,14 @@ export default function Taskboard() {
     <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 mx-auto">
       {/* Header */}
       <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold font-mono uppercase tracking-widest text-(--accent-color) leading-none">
+        <div className="tracking-tight">
+          <h1
+            className="text-xl sm:text-2xl font-semibold uppercase
+            bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent"
+          >
             Your flow
           </h1>
-          <p className="text-xs text-(--text-muted) mt-1.5 font-interface">
+          <p className="text-md text-(--text-muted) mt-1.5 font-interface">
             Manage and track your daily tasks
           </p>
         </div>
