@@ -59,7 +59,7 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`group flex items-center gap-3 px-4 py-3 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary)/80
+      className={`group flex items-center gap-3 px-4 py-2 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary)/80
       transition-all cursor-pointer border-l-2 ${cfg.bar}`}
     >
       {/* Status icon */}

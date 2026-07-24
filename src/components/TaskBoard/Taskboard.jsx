@@ -86,11 +86,14 @@ export default function Taskboard() {
     <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 mx-auto">
       {/* Header */}
       <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold font-mono uppercase tracking-widest text-(--accent-color) leading-none">
+        <div className="tracking-tight">
+          <h1
+            className="text-xl sm:text-2xl font-semibold uppercase
+            bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent"
+          >
             Your flow
           </h1>
-          <p className="text-xs text-(--text-muted) mt-1.5 font-interface">
+          <p className="text-md text-(--text-muted) mt-1.5 font-interface">
             Manage and track your daily tasks
           </p>
         </div>
@@ -100,14 +103,14 @@ export default function Taskboard() {
       </div>
 
       {/* Quick add row */}
-      <div className="flex items-start gap-2">
+      <div className="flex items-center gap-2">
         <div className="flex-1">
           <QuickAddTask onAdd={addTodo} />
         </div>
         <button
           onClick={() => setShowCustom(true)}
           title="Create a new task with custom fields"
-          className="flex items-center gap-1.5 px-3 py-4 rounded-xl border border-(--border-color) bg-(--bg-primary)
+          className="flex items-center gap-1.5 px-3 py-3.5 rounded-xl border border-(--border-color) bg-(--bg-primary)
           text-xs font-semibold text-(--text-muted) hover:text-(--accent-color) hover:border-(--accent-color)/40 transition-all
           font-interface shrink-0"
         >

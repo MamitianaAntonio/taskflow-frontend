@@ -9,10 +9,13 @@ import { LoadingState, EmptyState, NoResults } from "./ProjectStates";
 function ProjectHeader() {
   return (
     <div>
-      <h1 className="text-xl sm:text-2xl font-semibold font-mono uppercase tracking-widest text-(--accent-color) leading-none">
+      <h1
+        className="text-xl sm:text-2xl font-semibold uppercase
+            bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent"
+      >
         Projects
       </h1>
-      <p className="text-xs text-(--text-muted) mt-1.5 font-interface">
+      <p className="text-md text-(--text-muted) mt-1.5 font-interface">
         Organize your tasks into projects
       </p>
     </div>
@@ -67,6 +70,10 @@ export default function Projects() {
       {!loading && projects.length > 0 && filtered.length === 0 && search && (
         <NoResults search={search} />
       )}
+
+      <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest font-interface">
+        ALL PROJECTS
+      </p>
 
       {!loading && projects.length > 0 && filtered.length > 0 && (
         <ProjectGrid
