@@ -59,10 +59,9 @@ export default function Sidebar() {
 
   const navItemClassName =
     (collapsed) =>
-    ({ isActive }) =>
-      `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-all duration-300 relative ${
-        collapsed ? "justify-center" : ""
-      } ${isActive ? "is-active" : ""}`;
+      ({ isActive }) =>
+        `sidebar-nav-link flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-all duration-300 relative ${collapsed ? "justify-center" : ""
+        } ${isActive ? "is-active" : ""}`;
 
   return (
     <>
@@ -82,11 +81,10 @@ export default function Sidebar() {
       {/* OVERLAY */}
       {isMobile && (
         <div
-          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${
-            open
-              ? "opacity-100 visible pointer-events-auto"
-              : "opacity-0 invisible pointer-events-none"
-          }`}
+          className={`sidebar-overlay fixed inset-0 transition-opacity z-30 ${open
+            ? "opacity-100 visible pointer-events-auto"
+            : "opacity-0 invisible pointer-events-none"
+            }`}
           onClick={() => setOpen(false)}
         />
       )}

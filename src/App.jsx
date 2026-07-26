@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardProfile from "./components/DashboardProfile/DashboardProfile";
 import Taskboard from "./components/TaskBoard/Taskboard";
 import Projects from "./components/Projects/Projects";
+import ProjectDetails from "./components/Projects/ProjectDetails";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route index element={<DashboardProfile />}></Route>
             <Route path="tasks" element={<Taskboard />}></Route>
             <Route path="projects" element={<Projects />}></Route>
+            <Route path="projects/:projectId" element={<ProjectDetails />} />
           </Route>
         </Routes>
       </BrowserRouter>

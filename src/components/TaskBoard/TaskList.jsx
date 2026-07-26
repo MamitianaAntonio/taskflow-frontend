@@ -13,27 +13,22 @@ export default function TaskList({
   tasks,
 }) {
   return (
-    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-130">
-      {/* Header — merged filter + count */}
+    <div className="rounded-xl border border-(--border-color) bg-(--bg-primary) overflow-hidden w-full flex flex-col h-115">
       <div className="flex bg-(--bg-secondary) items-center justify-between px-3 py-2 border-b border-(--border-color)">
         <TaskFilter tasks={tasks} filter={filter} setFilter={setFilter} />
-        <span className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-(--bg-secondary) border border-(--border-color)
-          text-(--text-muted) font-interface">
-          {filtered.length} task{filtered.length !== 1 ? "s" : ""}
+        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-(--border-color) text-(--text-muted) font-interface">
+          {filtered.length}
         </span>
       </div>
 
-      {/* Empty state */}
       {filtered.length === 0 ? (
-        <div className="py-20 flex flex-col items-center gap-2 text-(--text-secondary)">
-          <FontAwesomeIcon icon={faInbox} className="text-4xl opacity-30" />
-          <p className="text-sm font-medium text-(--text-primary)">
-            Nothing here yet
-          </p>
-          <p className="text-xs">Add a task above to get started.</p>
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 text-(--text-secondary) px-4">
+          <FontAwesomeIcon icon={faInbox} className="text-xl text-(--accent-color) opacity-40" />
+          <p className="text-sm text-(--text-primary)">No tasks yet</p>
+          <p className="text-xs text-(--text-muted)">Add one above to get started.</p>
         </div>
       ) : (
-        <ul className="overflow-y-auto flex-1 ">
+        <ul className="overflow-y-auto flex-1">
           {filtered.map((task) => (
             <li key={task.id}>
               <TaskRow

@@ -11,12 +11,12 @@ export function LoadingState() {
 
 export function EmptyState() {
   return (
-    <div className="py-20 flex flex-col items-center gap-2 text-(--text-secondary)">
-      <FontAwesomeIcon icon={faFolderOpen} className="text-4xl opacity-30" />
+    <div className="py-20 flex flex-col items-center gap-2 text-(--text-secondary) rounded-xl border border-dashed border-(--border-color) bg-(--accent-bg)/20">
+      <FontAwesomeIcon icon={faFolderOpen} className="text-4xl text-(--accent-color) opacity-40" />
       <p className="text-sm font-medium text-(--text-primary)">
         No projects yet
       </p>
-      <p className="text-xs">Create a project to get started.</p>
+      <p className="text-xs text-(--text-muted)">Create a project to get started.</p>
     </div>
   );
 }

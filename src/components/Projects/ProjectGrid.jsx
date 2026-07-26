@@ -3,12 +3,15 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function ProjectGrid({ projects, onSelect }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {projects.map((project) => (
         <div
           key={project.id}
           onClick={() => onSelect(project.id)}
-          className="group rounded-xl border border-(--border-color) bg-(--bg-secondary) p-4 flex flex-col gap-3 cursor-pointer hover:border-(--accent-color) transition-colors"
+          className="group rounded-xl border border-(--border-color) bg-(--bg-secondary) p-4 flex flex-col gap-3 cursor-pointer
+           shadow-sm hover:shadow-(--shadow-pink) hover:border-(--accent-color) hover:bg-(--accent-bg)/50
+            transition-all relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-[3px]
+             before:bg-(--accent-color) before:opacity-0 group-hover:before:opacity-100 before:transition-opacity"
         >
           <div className="min-w-0">
             <p className="text-sm font-semibold text-(--text-primary) truncate">
@@ -26,12 +29,12 @@ export default function ProjectGrid({ projects, onSelect }) {
           </div>
 
           <div className="flex items-center justify-between mt-auto pt-2 border-t border-(--border-color)">
-            <span className="text-[11px] text-(--text-muted) font-interface opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-[11px] text-(--accent-color) font-interface opacity-0 group-hover:opacity-100 transition-opacity">
               Open
             </span>
             <FontAwesomeIcon
               icon={faArrowRight}
-              className="text-xs text-(--text-muted) group-hover:text-(--text-primary) transition-colors"
+              className="text-xs text-(--text-muted) group-hover:text-(--accent-color) transition-colors"
             />
           </div>
         </div>
