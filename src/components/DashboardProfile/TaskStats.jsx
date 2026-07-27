@@ -41,13 +41,28 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
   };
 
   const items = [
-    { label: "Done", value: completed, color: colors.success, pct: total > 0 ? (completed / total) * 100 : 0 },
-    { label: "Incomplete", value: incompleteValue, color: colors.highlight, pct: total > 0 ? (incompleteValue / total) * 100 : 0 },
-    { label: "Left", value: leftValue, color: colors.warning, pct: total > 0 ? (leftValue / total) * 100 : 0 },
+    {
+      label: "Done",
+      value: completed,
+      color: colors.success,
+      pct: total > 0 ? (completed / total) * 100 : 0,
+    },
+    {
+      label: "Incomplete",
+      value: incompleteValue,
+      color: colors.highlight,
+      pct: total > 0 ? (incompleteValue / total) * 100 : 0,
+    },
+    {
+      label: "Left",
+      value: leftValue,
+      color: colors.warning,
+      pct: total > 0 ? (leftValue / total) * 100 : 0,
+    },
   ];
 
   return (
-    <div className="bg-(--bg-secondary) border border-(--border-color) rounded-lg p-3 flex flex-col gap-3 w-full box-border">
+    <div className="bg-(--bg-secondary) border border-(--border-color) shadow-sm rounded-lg p-3 flex flex-col gap-3 w-full box-border">
       <p className="text-xs font-semibold text-(--text-primary) py-1 opacity-50 uppercase tracking-widest font-interface">
         Task breakdown
       </p>
@@ -60,7 +75,9 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
             <span className="text-xl font-bold font-mono text-(--text-primary) leading-none">
               {pct}%
             </span>
-            <span className="text-[10px] text-(--text-primary) opacity-40 mt-0.5">done</span>
+            <span className="text-[10px] text-(--text-primary) opacity-40 mt-0.5">
+              done
+            </span>
           </div>
         </div>
 
@@ -68,7 +85,10 @@ const TaskStats = ({ completed = 0, incomplete = 0, left = 0, total = 0 }) => {
         <div className="flex flex-col gap-1.5 flex-1 min-w-0 w-full sm:w-auto">
           {items.map(({ label, value, color, pct: barPct }) => (
             <div key={label} className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: color }} />
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ background: color }}
+              />
               <span className="text-xs text-(--text-primary) opacity-50 min-w-20 shrink-0 truncate">
                 {label}
               </span>
