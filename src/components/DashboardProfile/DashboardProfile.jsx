@@ -21,17 +21,24 @@ export default function DashboardProfile() {
   const dashboardTasks = tasks.map((task) => ({
     ...task,
     completed: task.status === "done",
-    completedAt: task.completedAt || (task.status === "done" ? task.updatedAt || task.dueDate : null),
+    completedAt:
+      task.completedAt ||
+      (task.status === "done" ? task.updatedAt || task.dueDate : null),
   }));
 
   const total = dashboardTasks.length;
-  const completedCount = dashboardTasks.filter((task) => task.status === "done").length;
-  const incompleteCount = dashboardTasks.filter((task) => task.status === "doing").length;
-  const leftCount = dashboardTasks.filter((task) => task.status === "todo").length;
+  const completedCount = dashboardTasks.filter(
+    (task) => task.status === "done",
+  ).length;
+  const incompleteCount = dashboardTasks.filter(
+    (task) => task.status === "doing",
+  ).length;
+  const leftCount = dashboardTasks.filter(
+    (task) => task.status === "todo",
+  ).length;
 
   return (
     <div className="p-3 sm:p-4 flex flex-col gap-4">
-
       {/* Welcome + Profile in one row */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
@@ -70,7 +77,6 @@ export default function DashboardProfile() {
         </p>
         <DashboardTasks tasks={dashboardTasks} />
       </div>
-
     </div>
   );
 }

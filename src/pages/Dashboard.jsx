@@ -8,7 +8,7 @@ export default function Dashboard() {
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-auto p-2 relative">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-2 relative">
           <Outlet />
         </main>
       </div>
