@@ -3,13 +3,12 @@ import {
   faBolt,
   faFlag,
   faCalendarDay,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
   faCircle,
   faCircleHalfStroke,
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CloseButton from "../ui/CloseButton";
 
 const priorityConfig = {
   low: { color: "text-(--color-info)", bg: "bg-(--bg-secondary)" },
@@ -21,20 +20,17 @@ const statusConfig = {
   todo: {
     label: "Todo",
     icon: faCircle,
-    bar: "border-l-(--color-warning)",
-    pill: "bg-(--color-warning)/10 text-(--color-warning) border-(--color-warning)/20",
+    color: "text-(--color-warning)",
   },
   doing: {
     label: "Doing",
     icon: faCircleHalfStroke,
-    bar: "border-l-(--accent-color)",
-    pill: "bg-(--accent-color)/10 text-(--accent-color) border-(--accent-color)/20",
+    color: "text-(--accent-color)",
   },
   done: {
     label: "Done",
     icon: faCircleCheck,
-    bar: "border-l-(--color-success)",
-    pill: "bg-(--color-success)/10 text-(--color-success) border-(--color-success)/20",
+    color: "text-(--color-success)",
   },
 };
 
@@ -59,8 +55,9 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`group flex items-center gap-3 px-4 py-2 border-b border-(--border-color) last:border-b-0 hover:bg-(--bg-secondary)/80
-      transition-all cursor-pointer border-l-2 ${cfg.bar}`}
+      className={`group flex items-center gap-3 px-4 py-2 border-b border-l-2 border-(--border-color)
+    last:border-b-0 hover:bg-(--bg-secondary) hover:border-(--border-color)
+    transition-all cursor-pointer ${cfg.bar}`}
     >
       {/* Status icon */}
       <span
@@ -78,25 +75,29 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
       </p>
 
       {/* Due date */}
-      {dateLabel && (
-        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-(--text-muted) font-interface">
-          <FontAwesomeIcon icon={faCalendarDay} className="text-[10px]" />
-          {dateLabel}
-        </span>
-      )}
+      <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-(--text-muted) font-interface w-20 shrink-0">
+        {dateLabel && (
+          <>
+            <FontAwesomeIcon icon={faCalendarDay} className="text-[10px]" />
+            {dateLabel}
+          </>
+        )}
+      </span>
 
       {/* Priority badge */}
-      {task.priority && task.priority !== "low" && (
-        <span
-          className={`hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold font-interface ${prioCfg.bg} ${prioCfg.color}`}
-        >
-          <FontAwesomeIcon
-            icon={task.priority === "high" ? faBolt : faFlag}
-            className="text-[9px]"
-          />
-          {task.priority}
-        </span>
-      )}
+      <span className="hidden sm:flex items-center w-20 shrink-0">
+        {task.priority && task.priority !== "low" && (
+          <span
+            className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold font-interface ${prioCfg.bg} ${prioCfg.color}`}
+          >
+            <FontAwesomeIcon
+              icon={task.priority === "high" ? faBolt : faFlag}
+              className="text-[9px]"
+            />
+            {task.priority}
+          </span>
+        )}
+      </span>
 
       {/* Status pill */}
       <button
@@ -104,23 +105,22 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
           e.stopPropagation();
           onCycle(task.id);
         }}
-        className={`inline-flex items-center gap-1.5 pl-1.5 pr-2.5 py-0.5 rounded-md text-[11px] font-medium border font-interface shrink-0 transition-all hover:brightness-110 ${cfg.pill}`}
+        className={`inline-flex items-center justify-center gap-1 pl-1 pr-1 py-0.5 rounded-md text-[11px]
+           font-medium border border-(--border-color) hover:border-(--accent-color)/50
+            font-interface shrink-0 w-24 transition-all
+            hover:brightness-110 ${cfg.pill}`}
         aria-label="Change status"
       >
         {cfg.label}
       </button>
 
       {/* Delete */}
-      <button
-        onClick={(e) => {
+      <CloseButton
+        onClose={(e) => {
           e.stopPropagation();
           onDelete(task.id);
         }}
-        className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-(--text-primary) hover:text-(--color-error) p-1 rounded"
-        aria-label="Delete task"
-      >
-        <FontAwesomeIcon icon={faXmark} className="text-[13px]" />
-      </button>
+      />
     </div>
   );
 }
