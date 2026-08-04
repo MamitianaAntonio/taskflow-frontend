@@ -106,7 +106,8 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
           onCycle(task.id);
         }}
         className={`inline-flex items-center justify-center gap-1 pl-1 pr-1 py-0.5 rounded-md text-[11px]
-           font-medium border border-(--border-color) hover:border-(--accent-color)/50 font-interface shrink-0 w-24 transition-all
+           font-medium border border-(--border-color) hover:border-(--accent-color)/50
+            font-interface shrink-0 w-24 transition-all
             hover:brightness-110 ${cfg.pill}`}
         aria-label="Change status"
       >
@@ -115,7 +116,7 @@ export default function TaskRow({ task, onCycle, onDelete, onClick }) {
 
       {/* Delete */}
       <CloseButton
-        onClick={(e) => {
+        onClose={(e) => {
           e.stopPropagation();
           onDelete(task.id);
         }}
