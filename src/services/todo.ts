@@ -44,11 +44,11 @@ export const updateTodo = async (
   id: number,
   todo: UpdateTodoPayload,
 ): Promise<Todo> => {
-  const response = await axiosClient.put<{ updated: Todo }>(
+  const response = await axiosClient.put<{ todo: Todo }>(
     `/api/todos/${id}`,
     todo,
   );
-  return response.data.updated;
+  return response.data.todo;
 };
 
 // delete a todo
