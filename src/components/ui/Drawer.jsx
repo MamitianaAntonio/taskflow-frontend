@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import CloseButton from "./CloseButton";
 
 function useIsMobile() {
@@ -70,16 +70,18 @@ export default function Drawer({ open, onClose, title, children, footer }) {
               className="w-8 h-8 flex items-center justify-center rounded-lg active:bg-(--bg-primary) transition-colors shrink-0"
               aria-label="Close"
             >
-              <FontAwesomeIcon icon={faCircle} size="md" className="text-(--text-secondary)" />
+              <FontAwesomeIcon
+                icon={faCircle}
+                size="md"
+                className="text-(--text-secondary)"
+              />
             </button>
           </div>
 
           {children}
 
           {footer && (
-            <div className="p-4 border-t border-(--border-color)">
-              {footer}
-            </div>
+            <div className="p-4 border-t border-(--border-color)">{footer}</div>
           )}
         </motion.div>
       ) : (

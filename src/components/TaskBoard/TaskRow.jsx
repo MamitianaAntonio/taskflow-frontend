@@ -1,5 +1,4 @@
 import {
-  faXmark,
   faBolt,
   faFlag,
   faCalendarDay,
@@ -9,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CloseButton from "../ui/CloseButton";
+import { formatRelativeDate } from "../../utils/date";
 
 const priorityConfig = {
   low: { color: "text-(--color-info)", bg: "bg-(--bg-secondary)" },
@@ -34,23 +34,10 @@ const statusConfig = {
   },
 };
 
-function formatDate(dateStr) {
-  if (!dateStr) return null;
-  const d = new Date(dateStr);
-  if (isNaN(d)) return null;
-  const now = new Date();
-  const today = now.toDateString();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  if (d.toDateString() === today) return "Today";
-  if (d.toDateString() === tomorrow.toDateString()) return "Tomorrow";
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
 export default function TaskRow({ task, onCycle, onDelete, onClick }) {
   const cfg = statusConfig[task.status];
   const prioCfg = priorityConfig[task.priority] || priorityConfig.medium;
-  const dateLabel = formatDate(task.dueDate);
+  const dateLabel = formatRelativeDate(task.dueDate);
 
   return (
     <div

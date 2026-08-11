@@ -32,7 +32,7 @@ const statusColor = {
 };
 
 const priorityColor = {
-  low: "border(--color-success)/30 text-(--color-success) bg-(--color-success)/10",
+  low: "border-(--color-success)/30 text-(--color-success) bg-(--color-success)/10",
   medium:
     "border-(--accent-color)/30 text-(--accent-color) bg-(--accent-color)/10",
   high: "border-(--color-warning)/30 text-(--color-warning) bg-(--color-warning)/10",
@@ -69,7 +69,7 @@ export default function TaskDetailFields({
             disabled={saving}
             autoFocus
             enterkeyhint="next"
-            className="w-full pl-8 pr-3 py-2 min-h-9 text-sm rounded-lg border outline-none
+            className="w-full pl-4 pr-3 py-2 min-h-9 text-sm rounded-lg border outline-none
               bg-(--bg-primary) text-(--text-primary) placeholder:text-(--text-secondary) transition-colors
               border-(--border-color) focus:border-(--accent-color) disabled:opacity-50"
           />
@@ -92,9 +92,10 @@ export default function TaskDetailFields({
                 type="button"
                 onClick={() => setLocalStatus(opt.value)}
                 className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border font-interface transition-colors
-                  ${localStatus === opt.value
-                    ? statusColor[opt.value]
-                    : "border-(--border-color) text-(--text-muted) hover:border-(--accent-color)/40 hover:text-(--accent-color)"
+                  ${
+                    localStatus === opt.value
+                      ? statusColor[opt.value]
+                      : "border-(--border-color) text-(--text-muted) hover:border-(--accent-color)/40 hover:text-(--accent-color)"
                   }`}
               >
                 <FontAwesomeIcon icon={opt.icon} className="text-[10px]" />
@@ -118,9 +119,10 @@ export default function TaskDetailFields({
                 type="button"
                 onClick={() => setLocalPriority(opt.value)}
                 className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border font-interface transition-colors
-                  ${localPriority === opt.value
-                    ? priorityColor[opt.value]
-                    : "border-(--border-color) text-(--text-muted) hover:border-(--accent-color)/40 hover:text-(--accent-color)"
+                  ${
+                    localPriority === opt.value
+                      ? priorityColor[opt.value]
+                      : "border-(--border-color) text-(--text-muted) hover:border-(--accent-color)/40 hover:text-(--accent-color)"
                   }`}
               >
                 <FontAwesomeIcon icon={opt.icon} className="text-[10px]" />

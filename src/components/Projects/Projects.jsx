@@ -75,6 +75,12 @@ export default function Projects() {
         ALL PROJECTS
       </p>
 
+      {!loading && projects.length > 0 && filtered.length === 0 && !search && (
+        <p className="text-xs text-(--text-muted) font-interface -mt-3">
+          Click on a project to view its board and manage tasks.
+        </p>
+      )}
+
       {!loading && projects.length > 0 && filtered.length > 0 && (
         <ProjectGrid
           projects={filtered}
