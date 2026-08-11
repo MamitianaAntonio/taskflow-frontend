@@ -29,6 +29,7 @@ export default function TaskDetailPanel({
         <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
           <Button
             variant="outline"
+            size="small"
             className="w-full sm:w-auto"
             onClick={onClose}
             icon={<FontAwesomeIcon icon={faXmark} />}
@@ -37,6 +38,7 @@ export default function TaskDetailPanel({
           />
           <Button
             variant="primary"
+            size="small"
             className="w-full sm:w-auto"
             onClick={onSave}
             loading={saving}

@@ -3,7 +3,6 @@ import QuickAddTask from "../ui/QuickAddTask";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircle,
-  faCircleCheck,
   faCircleHalfStroke,
   faPlus,
   faClipboardList,
@@ -11,10 +10,11 @@ import {
 import TaskDetail from "./TaskDetail";
 import useTodoStore from "../../stores/todoStore";
 import TaskList from "./TaskList";
-import CustomTask from "./CustomTask";
+import CustomTask from "../ui/CustomTask";
 import TaskboardStats from "./TaskboardStats";
 import { AnimatePresence } from "framer-motion";
 import Button from "../ui/Button";
+import { statusConfig } from "../../constants/taskConfig";
 
 export default function Taskboard() {
   const cycle = { todo: "doing", doing: "done", done: "todo" };
@@ -66,21 +66,6 @@ export default function Taskboard() {
       }
       return { ...prev, ...mapped };
     });
-  };
-
-  const statusIndication = {
-    todo: {
-      label: "todo",
-      icon: faCircle,
-    },
-    doing: {
-      label: "doing",
-      icon: faCircleHalfStroke,
-    },
-    done: {
-      label: "done",
-      icon: faCircleCheck,
-    },
   };
 
   return (
@@ -165,10 +150,10 @@ export default function Taskboard() {
 
       {/* Status indication */}
       <div className="flex items-center gap-4 text-xs font-interface text-(--text-muted)">
-        {Object.values(statusIndication).map((s) => (
-          <span key={s.label} className="flex items-center gap-1.5">
-            <FontAwesomeIcon icon={s.icon} className="text-[12px]" />
-            {s.label}
+        {Object.entries(statusConfig).map(([status, cfg]) => (
+          <span key={status} className="flex items-center gap-1.5">
+            <FontAwesomeIcon icon={cfg.icon} className={`text-[12px] ${cfg.color}`} />
+            {cfg.label}
           </span>
         ))}
       </div>
