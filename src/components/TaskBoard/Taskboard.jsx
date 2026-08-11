@@ -33,7 +33,9 @@ export default function Taskboard() {
   }, [fetchTodos]);
 
   const tasks = Array.isArray(todos)
-    ? todos.map((todo) => ({
+    ? todos
+      .filter((todo) => !todo.projectId)
+      .map((todo) => ({
       id: todo.id,
       label: todo.title,
       status: todo.status || "todo",
