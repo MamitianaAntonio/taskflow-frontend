@@ -3,6 +3,7 @@ import useTodoStore from "../../stores/todoStore";
 import useUserStore from "../../stores/userStore";
 import TaskOverview from "./TaskOverview";
 import TaskStats from "./TaskStats";
+import ProjectOverview from "./ProjectOverview";
 import DashboardGreeting from "./DashboardGreeting";
 import DashboardTasks from "./DashboardTasks";
 import QuickAddTask from "../ui/QuickAddTask";
@@ -76,6 +77,14 @@ export default function DashboardProfile() {
           Task overview
         </p>
         <DashboardTasks tasks={dashboardTasks} />
+      </div>
+
+      {/* Projects */}
+      <div>
+        <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest mb-2">
+          Projects
+        </p>
+        <ProjectOverview />
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import "./style/Auth.css";
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const {isDarkMode, setIsDarkMode } = useTheme();
+  const { isDarkMode, setIsDarkMode } = useTheme();
   const [isFlipping, setIsFlipping] = useState(false);
   const FormComponent = isLogin ? LoginForm : SignForm;
 
@@ -65,7 +65,7 @@ function Auth() {
       <div className="flex flex-col w-full md:w-1/2 items-center justify-center p-6">
         <img
           className="w-[15vh] max-h-xs"
-          src="home-photo.png"
+          src="/home-photo.png"
           alt="Home photo"
         />
         <h3 className="text-xl text-(--text-secondary) font-bold mb-4">

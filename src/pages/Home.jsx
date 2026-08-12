@@ -35,11 +35,13 @@ function Home() {
         <div className="flex flex-col items-center justify-center grow space-y-6 text-center px-4">
           <img
             className="w-[20vh] max-h-xs"
-            src="home-photo.png"
+            src="/home-photo.png"
             alt="Home photo"
           />
           <h1 className="font-sans text-4xl font-bold">
-            <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">Task</span>
+            <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">
+              Task
+            </span>
             <span className="text-(--text-primary)">Flow</span>
           </h1>
           <h3 className="font-sans text-(--text-secondary) text-[1.7vh] max-sm:text-base">

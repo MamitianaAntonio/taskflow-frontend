@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="navbar-left">
           <div className="navbar-logo" aria-hidden="true">
-            <img src="Logo.png" alt="TaskFlow" />
+            <img src="/Logo.png" alt="TaskFlow" />
           </div>
           <h3 className="navbar-title">
             Task<span className="navbar-title-accent">Flow</span>
@@ -58,7 +58,10 @@ const Navbar = () => {
 
           <div className="navbar-datetime" aria-label="Date and time">
             <div className="navbar-datetime-group">
-              <FontAwesomeIcon icon={faCalendarDay} className="navbar-datetime-icon" />
+              <FontAwesomeIcon
+                icon={faCalendarDay}
+                className="navbar-datetime-icon"
+              />
               <span className="navbar-datetime-date">{formattedDate}</span>
             </div>
             <div className="navbar-vdivider" aria-hidden="true" />
@@ -76,7 +79,9 @@ const Navbar = () => {
               {initials}
             </div>
             <div className="navbar-user-text">
-              <span className="navbar-user-name font-mono px-2">{user?.name ?? "Guest"}</span>
+              <span className="navbar-user-name font-mono px-2">
+                {user?.name ?? "Guest"}
+              </span>
             </div>
           </div>
         </div>
