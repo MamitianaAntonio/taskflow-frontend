@@ -9,6 +9,7 @@ import DashboardProfile from "./components/DashboardProfile/DashboardProfile";
 import Taskboard from "./components/TaskBoard/Taskboard";
 import Projects from "./components/Projects/Projects";
 import ProjectDetails from "./components/Projects/ProjectDetails";
+import Settings from "./components/Settings/Settings";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="tasks" element={<Taskboard />}></Route>
             <Route path="projects" element={<Projects />}></Route>
             <Route path="projects/:projectId" element={<ProjectDetails />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
       </BrowserRouter>
