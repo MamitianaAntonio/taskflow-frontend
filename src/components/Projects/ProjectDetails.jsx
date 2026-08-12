@@ -209,16 +209,26 @@ export default function ProjectDetails() {
 
       {/* Kanban Board */}
       {projectTodos.length === 0 ? (
-        <div className="flex flex-col gap-2 items-center text-(--text-muted) py-16 font-interface rounded-xl border
-         border-dashed border-(--border-color)">
-          <FontAwesomeIcon size="2x" icon={faInbox} className="text-(--text-muted) opacity-50" />
-          <p className="text-sm text-(--text-secondary)">
+        <div
+          className="flex flex-col gap-2 items-center text-(--text-muted) py-16 rounded-xl border
+         border-dashed border-(--border-color)"
+        >
+          <FontAwesomeIcon
+            size="2x"
+            icon={faInbox}
+            className="text-(--text-muted) opacity-50"
+          />
+          <p className="text-sm font-medium text-(--text-primary)">
             No tasks in this project yet.
           </p>
           <p className="text-xs text-(--text-muted)">
             Create your first task to start tracking progress.
           </p>
-          <Button variant="outline" size="small" onClick={() => setShowCreate(true)}>
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => setShowCreate(true)}
+          >
             <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
             Add first task
           </Button>
@@ -259,10 +269,18 @@ export default function ProjectDetails() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center gap-2">
-            <FontAwesomeIcon icon={faWarning} size="1x" className="text-(--color-error)"/>
-            <h3 className="font-bold text-(--color-error) text-xl font-sans">WARNING</h3>
+            <FontAwesomeIcon
+              icon={faWarning}
+              size="1x"
+              className="text-(--color-error)"
+            />
+            <h3 className="font-bold text-(--color-error) text-md font-sans">
+              WARNING
+            </h3>
           </div>
-          <p className="text-(--text-muted) font-sans">Do you want to delete your project ?</p>
+          <p className="text-(--text-muted) font-sans">
+            Do you want to delete your project ?
+          </p>
         </div>
         <Button
           variant="outline"

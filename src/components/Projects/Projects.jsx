@@ -62,6 +62,9 @@ export default function Projects() {
       />
 
       <ProjectSearch search={search} setSearch={setSearch} />
+      <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest font-interface">
+        ALL PROJECTS
+      </p>
 
       {loading && <LoadingState />}
 
@@ -70,10 +73,6 @@ export default function Projects() {
       {!loading && projects.length > 0 && filtered.length === 0 && search && (
         <NoResults search={search} />
       )}
-
-      <p className="text-xs font-semibold text-(--text-primary) opacity-50 uppercase tracking-widest font-interface">
-        ALL PROJECTS
-      </p>
 
       {!loading && projects.length > 0 && filtered.length === 0 && !search && (
         <p className="text-xs text-(--text-muted) font-interface -mt-3">
