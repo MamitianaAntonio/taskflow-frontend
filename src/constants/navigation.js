@@ -40,5 +40,5 @@ export const systemNav = [
     icon: faClockRotateLeft,
     path: "/history",
   },
-  { key: "settings", label: "Settings", icon: faCog, path: "/settings" },
+  { key: "settings", label: "Settings", icon: faCog, path: "/dashboard/settings" },
 ];
