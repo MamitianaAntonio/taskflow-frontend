@@ -14,7 +14,29 @@ import Settings from "./components/Settings/Settings";
 function App() {
   return (
     <ThemeProvider>
-      <Toaster />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "var(--bg-tertiary)",
+            color: "var(--text-primary)",
+            border: "1px solid var(--border-color)",
+            boxShadow: "0 10px 30px var(--shadow-pink)",
+          },
+          success: {
+            iconTheme: {
+              primary: "var(--color-success)",
+              secondary: "var(--bg-secondary)",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "var(--color-error)",
+              secondary: "var(--bg-secondary)",
+            },
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
