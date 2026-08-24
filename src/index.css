@@ -2,76 +2,51 @@
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
-  /* Backgrounds */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #FAFAFB;
-  --bg-tertiary: #F4F4F5;
-
-  /* Text */
-  --text-primary: #18181B;
-  --text-secondary: #52525B; --text-muted: #71717A;
-  --text-white: #FFFFFF;
-
-  /* Borders & Shadows */
-  --border-color: #E5E7EB;
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafb;
+  --bg-tertiary: #f4f4f5;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --text-white: #ffffff;
+  --border-color: #e5e7eb;
   --shadow: rgba(15, 23, 42, 0.07);
   --shadow-pink: 0 10px 30px rgba(236, 72, 153, 0.16);
-
-  /* Accent */
-  --accent-color: #EC4899;
-  --accent-bg: #FDF2F8;
-  --accent-muted: #FCE7F3;
-
-  --gradient-from: #FB7185;
-  --gradient-to: #EC4899;
-
-  --color-highlight: #FDA4CF;
-
-  /* Status */
-  --color-error: #EF4444;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-info: #3B82F6;
-
-  /* Overlay */
+  --accent-color: #ec4899;
+  --accent-bg: #fdf2f8;
+  --accent-muted: #fce7f3;
+  --gradient-from: #fb7185;
+  --gradient-to: #ec4899;
+  --color-highlight: #fda4cf;
+  --color-error: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
   --overlay: rgba(9, 9, 11, 0.45);
 }
 
 [data-theme="dark"] {
-  /* Backgrounds */
-  --bg-primary: #09090B;
-  --bg-secondary: #151518;
-  --bg-tertiary: #1F1F23;
-
-  /* Text */
-  --text-primary: #FAFAFA;
-  --text-secondary: #E4E4E7;
-  --text-muted: #A1A1AA;
-  --text-white: #FFFFFF;
-
-  /* Borders & Shadows */
-  --border-color: #323238;
-  --shadow: rgba(0, 0, 0, 0.5);
-  --shadow-pink: 0 10px 30px rgba(236, 72, 153, 0.22);
-
-  /* Accent */
-  --accent-color: #F472B6;
-  --accent-bg: #3A1027;
-  --accent-muted: #4D1634;
-
-  --gradient-from: #FB7185;
-  --gradient-to: #EC4899;
-
-  --color-highlight: #F9A8D4;
-
-  /* Status */
-  --color-error: #F87171;
-  --color-success: #34D399;
-  --color-warning: #FBBF24;
-  --color-info: #60A5FA;
-
-  /* Overlay */
-  --overlay: rgba(0, 0, 0, 0.6);
+  --bg-primary: #16161a;
+  --bg-secondary: #1c1c21;
+  --bg-tertiary: #26262c;
+  --text-primary: #e4e4e7;
+  --text-secondary: #b8b8c0;
+  --text-muted: #8a8a94;
+  --text-white: #f4f4f5;
+  --border-color: #2c2c33;
+  --shadow: rgba(0, 0, 0, 0.28);
+  --shadow-pink: 0 10px 30px rgba(236, 72, 153, 0.14);
+  --accent-color: #ec7fb0;
+  --accent-bg: #2a1a22;
+  --accent-muted: #3a2230;
+  --gradient-from: #f0899a;
+  --gradient-to: #ec7fb0;
+  --color-highlight: #f0a8c8;
+  --color-error: #e08585;
+  --color-success: #5cbf9a;
+  --color-warning: #e0b06a;
+  --color-info: #7aa8e0;
+  --overlay: rgba(0, 0, 0, 0.45);
 }
 
 @theme {
@@ -83,12 +58,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-
   background: var(--bg-primary);
   color: var(--text-primary);
-
   font-family: var(--font-sans);
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -108,9 +80,9 @@ body {
 
 body {
   transition:
-    background-color .25s ease,
-    color .25s ease,
-    border-color .25s ease;
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 [data-theme="dark"] input[type="datetime-local"] {
