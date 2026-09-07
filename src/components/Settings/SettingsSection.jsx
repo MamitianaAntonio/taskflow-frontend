@@ -1,4 +1,9 @@
-export default function SettingsSection({ title, description, children, footer }) {
+export default function SettingsSection({
+  title,
+  description,
+  children,
+  footer,
+}) {
   return (
     <section className="flex flex-col">
       <div className="mb-4">
@@ -12,11 +17,7 @@ export default function SettingsSection({ title, description, children, footer }
         )}
       </div>
       {children}
-      {footer && (
-        <div className="flex justify-end gap-2 pt-3 border-t border-(--border-color)">
-          {footer}
-        </div>
-      )}
+      {footer && <div className="flex justify-end gap-2 pt-3">{footer}</div>}
     </section>
   );
 }
