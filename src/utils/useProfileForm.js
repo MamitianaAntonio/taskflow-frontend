@@ -6,7 +6,7 @@ import { updateUserEmail, updateUserName } from "../services/user";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function useProfileForm() {
-  const user = useUserStore((state) => state.any);
+  const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
   const [profile, setProfile] = useState({
