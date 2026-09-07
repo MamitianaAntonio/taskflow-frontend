@@ -2,6 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { updateUserPassword } from "../services/user";
 
+const MIN_LENGTH = 6;
+
 export default function usePasswordForm() {
   const [password, setPassword] = useState({
     current: "",
