@@ -1,63 +1,43 @@
-import axiosClient from "../api/axios";
+import axiosClient, { getErrorMessage } from "../api/axios";
+import type { CreateProjectPayload, Project, UpdateProjectPayload } from "../types/project";
 
-interface createProjectData {
-  name: string;
-  description?: string;
-}
+export const getAllProjects = (): Promise<Project[]> =>
+  axiosClient.get<Project[]>("/api/projects").then((r) => r.data);
 
-interface UpdateProjectData {
-  name?: string;
-  description?: string;
-}
-
-export const getAllProjects = async () => {
-  const response = await axiosClient.get("/api/projects");
-  return response.data;
-};
-
-export const getProjectById = async (id: number) => {
+export const getProjectById = async (id: number): Promise<Project> => {
   try {
-    const response = await axiosClient.get(`/api/projects/${id}`);
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.error || "Failed to fetch project");
+    const response = await axiosClient.get<{ project: Project }>(`/api/projects/${id}`);
+    return response.data.project;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to fetch project"));
   }
 };
 
-export const createProject = async (data: createProjectData) => {
+export const createProject = async (data: CreateProjectPayload): Promise<Project> => {
   try {
-    const response = await axiosClient.post("/api/projects", data);
-    return {
-      success: true,
-      status: response.status,
-      message: response.data.message,
-      project: response.data.project,
-    };
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.error || "Failed to create a project",
-    );
+    const response = await axiosClient.post<{ project: Project }>("/api/projects", data);
+    return response.data.project;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to create project"));
   }
 };
 
-export const updateProject = async (id: number, data: UpdateProjectData) => {
+export const updateProject = async (
+  id: number,
+  data: UpdateProjectPayload,
+): Promise<Project> => {
   try {
-    const response = await axiosClient.put(`/api/projects/${id}`, data);
-    return {
-      success: true,
-      message: response.data.message,
-      project: response.data.project,
-    };
-  } catch (error: any) {
-    throw new Error(error.response?.data?.error || "Failed to update project");
+    const response = await axiosClient.put<{ project: Project }>(`/api/projects/${id}`, data);
+    return response.data.project;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update project"));
   }
 };
 
-export const deleteProject = async (id: number) => {
+export const deleteProject = async (id: number): Promise<void> => {
   try {
-    const response = await axiosClient.delete(`/api/projects/${id}`);
-    return { success: true, message: response.data.message };
-  } catch (error: any) {
-    throw new Error(error.response?.data?.error || "Failed to delete project");
+    await axiosClient.delete(`/api/projects/${id}`);
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to delete project"));
   }
 };

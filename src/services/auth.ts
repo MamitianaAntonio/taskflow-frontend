@@ -1,64 +1,25 @@
 import axiosClient from "../api/axios";
-import useUserStore from "../stores/userStore";
-import toast from "react-hot-toast";
+import type { User } from "../types/user";
 
-interface SignUpData {
+export interface SignUpData {
   name: string;
   email: string;
   password: string;
 }
 
-interface LoginData {
+export interface LoginData {
   email: string;
   password: string;
 }
 
-// function to handle user signup
-export const signUp = async (data: SignUpData) => {
-  try {
-    const response = await axiosClient.post("/api/users/register", data);
-
-    if (response.status === 201) {
-      // TODO : handle token and user data properly
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      if (user) {
-        useUserStore.getState().setUser(user);
-      }
-      toast.success("Signup successful!");
-      return {
-        success: true,
-        status: response.status,
-        message: response.data.message,
-      };
-    }
-  } catch (error) {
-    toast.error("Signup failed. Please try again.");
-    throw new Error("Failed to sign up");
-  }
-};
-
-// function to handle user login
-export const login = async (data: LoginData) => {
-  try {
-    const response = await axiosClient.post("/api/users/login", data);
-
-    if (response.status === 200) {
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      if (user) {
-        useUserStore.getState().setUser(user);
-      } 
-
-      toast.success("Login successful!");
-      return {
-        success: true,
-        status: response.status,
-        message: response.data.message,
-      };
-    }
-  } catch (error : any) {
-    toast.error(error.response?.data?.message || "Login failed. Please try again.");
-    throw new Error(error.response?.data?.message || "Failed to log in");
-  }
+export interface AuthResult {
+  token: string;
+  user: User;
+  message?: string;
 }
+
+export const signUp = (data: SignUpData): Promise<AuthResult> =>
+  axiosClient.post("/api/users/register", data).then((response) => response.data);
+
+export const login = (data: LoginData): Promise<AuthResult> =>
+  axiosClient.post("/api/users/login", data).then((response) => response.data);

@@ -1,57 +1,15 @@
 import axiosClient from "../api/axios";
+import type { CreateTodoPayload, Todo, UpdateTodoPayload } from "../types/todo";
 
-interface Todo {
-  id: number;
-  title: string;
-  status: "todo" | "doing" | "done";
-  dueDate: string | null;
-  priority: string;
-  projectId?: number;
-  createdAt: string;
-  updatedAt: string;
-}
+export const getAllTodo = (): Promise<Todo[]> =>
+  axiosClient.get<{ todos: Todo[] }>("/api/todos").then((r) => r.data.todos);
 
-type CreateTodoPayload = {
-  title: string;
-  status?: "todo" | "doing" | "done";
-  dueDate?: string | null;
-  priority?: string;
-  projectId?: number;
-};
+export const createTodo = (data: CreateTodoPayload): Promise<Todo> =>
+  axiosClient.post<{ todo: Todo }>("/api/todos", data).then((r) => r.data.todo);
 
-type UpdateTodoPayload = {
-  title?: string;
-  status?: "todo" | "doing" | "done";
-  dueDate?: string | null;
-  priority?: string;
-  projectId?: number | null;
-};
+export const updateTodo = (id: number, data: UpdateTodoPayload): Promise<Todo> =>
+  axiosClient.put<{ todo: Todo }>(`/api/todos/${id}`, data).then((r) => r.data.todo);
 
-// get all todo on server
-export const getAllTodo = async (): Promise<Todo[]> => {
-  const response = await axiosClient.get<{ todos: Todo[] }>("/api/todos");
-  return response.data.todos;
-};
-
-// create todo
-export const createTodo = async (todo: CreateTodoPayload): Promise<Todo> => {
-  const response = await axiosClient.post<{ todo: Todo }>("/api/todos", todo);
-  return response.data.todo;
-};
-
-// update a todo
-export const updateTodo = async (
-  id: number,
-  todo: UpdateTodoPayload,
-): Promise<Todo> => {
-  const response = await axiosClient.put<{ todo: Todo }>(
-    `/api/todos/${id}`,
-    todo,
-  );
-  return response.data.todo;
-};
-
-// delete a todo
 export const deleteTodo = async (id: number): Promise<void> => {
   await axiosClient.delete(`/api/todos/${id}`);
 };

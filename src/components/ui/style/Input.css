@@ -2,6 +2,6 @@
   color: var(--text-secondary);
 }
 
-.input::focus {
-  box-shadow: 0 0 0 3px var(--accent-color);
+.input:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 18%, transparent);
 }

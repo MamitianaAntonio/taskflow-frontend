@@ -1,53 +1,39 @@
-import axiosClient from "../api/axios";
+import axiosClient, { getErrorMessage } from "../api/axios";
+import type { User } from "../types/user";
 
-export const updateUserName = async (name: string) => {
+export const updateUserName = async (name: string): Promise<User> => {
   try {
-    const response = await axiosClient.put("/api/users/update-name", { name });
-    return response.data;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.error || "Failed to update name",
-    );
+    const response = await axiosClient.put<{ user: User }>("/api/users/update-name", { name });
+    return response.data.user;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update name"));
   }
 };
 
-export const updateUserEmail = async (email: string) => {
+export const updateUserEmail = async (email: string): Promise<User> => {
   try {
-    const response = await axiosClient.put("/api/users/update-email", { email });
-    return response.data;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.error || "Failed to update email",
-    );
+    const response = await axiosClient.put<{ user: User }>("/api/users/update-email", { email });
+    return response.data.user;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update email"));
   }
 };
 
 export const updateUserPassword = async (
   oldPassword: string,
   newPassword: string,
-) => {
+): Promise<void> => {
   try {
-    const response = await axiosClient.put("/api/users/update-password", {
-      oldPassword,
-      newPassword,
-    });
-    return response.data;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Failed to update password",
-    );
+    await axiosClient.put("/api/users/update-password", { oldPassword, newPassword });
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update password"));
   }
 };
 
-export const deleteUserAccount = async () => {
+export const deleteUserAccount = async (): Promise<void> => {
   try {
-    const response = await axiosClient.delete("/api/users/delete-account");
-    return response.data;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.error || "Failed to delete account",
-    );
+    await axiosClient.delete("/api/users/delete-account");
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to delete account"));
   }
 };

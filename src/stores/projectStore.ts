@@ -1,100 +1,109 @@
 import { create } from "zustand";
-import * as projectService from "../services/project";
+import {
+  createProject as createProjectService,
+  deleteProject as deleteProjectService,
+  getAllProjects,
+  getProjectById as getProjectByIdService,
+  updateProject as updateProjectService,
+} from "../services/project";
+import type {
+  CreateProjectPayload,
+  Project,
+  UpdateProjectPayload,
+} from "../types/project";
+import { emitMutation } from "../utils/eventBus";
 
-interface Project {
-  id: number;
-  name: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ProjectStore {
+interface ProjectState {
   projects: Project[];
   currentProject: Project | null;
-  loading: boolean;
-  error: string | null;
+  isLoading: boolean;
+  error: Error | null;
 
-  fetchAll: () => Promise<void>;
-  fetchById: (id: number) => Promise<void>;
-  create: (data: { name: string; description?: string }) => Promise<void>;
-  update: (
-    id: number,
-    data: { name?: string; description?: string },
-  ) => Promise<void>;
+  fetchAll: () => Promise<Project[]>;
+  fetchById: (id: number) => Promise<Project | undefined>;
+  create: (data: CreateProjectPayload) => Promise<Project>;
+  update: (id: number, data: UpdateProjectPayload) => Promise<Project>;
   remove: (id: number) => Promise<void>;
   reset: () => void;
 }
 
-export const useProjectStore = create<ProjectStore>((set, _get) => ({
+export const useProjectStore = create<ProjectState>()((set) => ({
   projects: [],
   currentProject: null,
-  loading: false,
+  isLoading: false,
   error: null,
 
   fetchAll: async () => {
-    set({ loading: true, error: null });
+    set({ isLoading: true, error: null });
     try {
-      const data = await projectService.getAllProjects();
-      set({ projects: data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+      const projects = await getAllProjects();
+      set({ projects, isLoading: false });
+      return projects;
+    } catch (error) {
+      set({ error: error as Error, isLoading: false });
+      throw error;
     }
   },
 
   fetchById: async (id) => {
-    set({ loading: true, error: null });
+    set({ isLoading: true, error: null });
     try {
-      const res = await projectService.getProjectById(id);
-      set({ currentProject: res.project, loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+      const currentProject = await getProjectByIdService(id);
+      set({ currentProject, isLoading: false });
+      return currentProject;
+    } catch (error) {
+      set({ error: error as Error, isLoading: false });
+      throw error;
     }
   },
 
   create: async (data) => {
-    set({ loading: true, error: null });
     try {
-      const res = await projectService.createProject(data);
-      set((state) => ({
-        projects: [res.project, ...state.projects],
-        loading: false,
-      }));
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+      const project = await createProjectService(data);
+      set((state) => ({ projects: [project, ...state.projects] }));
+      emitMutation();
+      return project;
+    } catch (error) {
+      set({ error: error as Error });
+      throw error;
     }
   },
 
   update: async (id, data) => {
-    set({ loading: true, error: null });
     try {
-      const res = await projectService.updateProject(id, data);
+      const project = await updateProjectService(id, data);
       set((state) => ({
-        projects: state.projects.map((p) => (p.id === id ? res.project : p)),
+        projects: state.projects.map((p) => (p.id === id ? project : p)),
         currentProject:
-          state.currentProject?.id === id ? res.project : state.currentProject,
-        loading: false,
+          state.currentProject?.id === id ? project : state.currentProject,
       }));
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+      emitMutation();
+      return project;
+    } catch (error) {
+      set({ error: error as Error });
+      throw error;
     }
   },
 
   remove: async (id) => {
-    set({ loading: true, error: null });
     try {
-      await projectService.deleteProject(id);
+      await deleteProjectService(id);
       set((state) => ({
         projects: state.projects.filter((p) => p.id !== id),
         currentProject:
           state.currentProject?.id === id ? null : state.currentProject,
-        loading: false,
       }));
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+      emitMutation();
+    } catch (error) {
+      set({ error: error as Error });
+      throw error;
     }
   },
 
-  reset: () =>
-    set({ projects: [], currentProject: null, loading: false, error: null }),
+  reset: () => {
+    set({ projects: [], currentProject: null, isLoading: false, error: null });
+  },
 }));
+
+export const getProject = (id: number): Project | undefined =>
+  useProjectStore.getState().projects.find((p) => p.id === id);

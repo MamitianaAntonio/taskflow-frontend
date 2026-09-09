@@ -1,0 +1,48 @@
+import { useState, type FormEvent } from "react";
+import toast from "react-hot-toast";
+import { updateUserPassword } from "../services/user";
+
+const MIN_LENGTH = 6;
+
+interface PasswordValue {
+  current: string;
+  next: string;
+  confirm: string;
+}
+
+type PasswordKey = keyof PasswordValue;
+
+export function usePasswordForm() {
+  const [password, setPassword] = useState<PasswordValue>({
+    current: "",
+    next: "",
+    confirm: "",
+  });
+  const [saving, setSaving] = useState(false);
+
+  const setField =
+    (key: PasswordKey) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setPassword((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!password.current) return toast.error("Current password is required");
+    if (password.next.length < MIN_LENGTH)
+      return toast.error(`New password must be at least ${MIN_LENGTH} characters`);
+    if (password.next !== password.confirm)
+      return toast.error("Passwords do not match");
+
+    setSaving(true);
+    try {
+      await updateUserPassword(password.current, password.next);
+      setPassword({ current: "", next: "", confirm: "" });
+      toast.success("Password updated");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Update failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return { password, setField, saving, submit };
+}

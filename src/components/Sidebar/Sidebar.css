@@ -23,16 +23,10 @@
   background-color: var(--overlay);
 }
 
-.sidebar-mobile-toggle,
 .sidebar-toggle-btn,
 .sidebar-close-btn {
   color: var(--text-primary);
   background-color: transparent;
-}
-
-.sidebar-mobile-toggle {
-  background-color: var(--bg-secondary);
-  border-color: var(--border-color);
 }
 
 .sidebar-brand__mark {
@@ -166,10 +160,6 @@
 }
 
 /* Mobile toggle */
-.sidebar-mobile-toggle:hover {
-  background-color: var(--color-highlight);
-}
-
 .sidebar-toggle-btn {
   width: 2rem;
   height: 2rem;
@@ -210,8 +200,7 @@
   .sidebar-nav-link,
   .sidebar-logout,
   .sidebar-toggle-btn,
-  .sidebar-close-btn,
-  .sidebar-mobile-toggle {
+  .sidebar-close-btn {
     transition: none !important;
   }
 }
