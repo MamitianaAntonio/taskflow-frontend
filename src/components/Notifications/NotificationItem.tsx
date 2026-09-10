@@ -45,17 +45,16 @@ export default function NotificationItem({
 
   return (
     <div
-      className={`group flex h-11 cursor-pointer items-center gap-3 border-l-4 border-b border-(--border-color) px-3 transition-colors hover:bg-(--bg-hover) ${config.accent} ${
-        notification.read ? "bg-(--bg-secondary)" : "bg-(--accent-bg)"
-      }`}
+      className={`group flex h-12 cursor-pointer items-center gap-3 border-l-4 border-b border-(--border-color) px-3 transition-colors hover:bg-(--bg-hover) ${config.accent} ${notification.read ? "bg-(--bg-secondary)" : "bg-(--accent-bg)"
+        }`}
       onClick={handleOpen}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >
       <span
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${config.bg} ${config.color}`}
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md ${config.bg} ${config.color}`}
       >
-        <FontAwesomeIcon icon={config.icon} size="xs" />
+        <FontAwesomeIcon icon={config.icon} size="2xs" />
       </span>
 
       <div className="min-w-0 flex-1">
