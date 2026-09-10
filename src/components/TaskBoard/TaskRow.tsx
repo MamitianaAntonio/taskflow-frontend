@@ -101,7 +101,8 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
 
   return (
     <div
-      className={`group flex cursor-pointer items-center justify-between gap-2 border-l-4 border-b border-(--border-color) bg-(--bg-secondary) px-3 py-2.5 transition-colors hover:bg-(--bg-hover) ${rowAccent[task.status]}`}
+      className={`group flex h-11 cursor-pointer items-center justify-between gap-2 border-l-4 border-b border-(--border-color) bg-(--bg-secondary)
+      px-3 transition-colors hover:bg-(--bg-hover) ${rowAccent[task.status]}`}
       onClick={() => onEdit(task)}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => {
@@ -156,11 +157,10 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
         <div className="flex min-w-0 flex-1 items-center gap-2.5">
           <button
             onClick={toggleStatus}
-            className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${
-              completed
-                ? "border-(--color-success) bg-(--color-success) text-(--text-white)"
-                : "border-(--text-muted) text-transparent hover:border-(--accent-color) hover:text-(--accent-color)"
-            }`}
+            className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${completed
+              ? "border-(--color-success) bg-(--color-success) text-(--text-white)"
+              : "border-(--text-muted) text-transparent hover:border-(--accent-color) hover:text-(--accent-color)"
+              }`}
             aria-label={completed ? "Mark as not done" : "Mark as done"}
           >
             <FontAwesomeIcon icon={faCheck} size="2xs" />
@@ -168,21 +168,19 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
 
           <div className="min-w-0 flex-1">
             <span
-              className={`block truncate text-sm ${
-                completed
-                  ? "text-(--text-muted) line-through"
-                  : "text-(--text-primary)"
-              }`}
+              className={`block truncate text-sm ${completed
+                ? "text-(--text-muted) line-through"
+                : "text-(--text-primary)"
+                }`}
             >
               {task.label}
             </span>
             {task.dueDate && (
               <span
-                className={`flex items-center gap-1 text-[11px] ${
-                  task.overdue && !completed
-                    ? "text-(--color-error)"
-                    : "text-(--text-muted)"
-                }`}
+                className={`flex items-center gap-1 text-[11px] ${task.overdue && !completed
+                  ? "text-(--color-error)"
+                  : "text-(--text-muted)"
+                  }`}
               >
                 <FontAwesomeIcon icon={faClockFour} size="xs" />
                 {formatDate(task.dueDate)}
@@ -198,7 +196,7 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
             <div className="relative" ref={flagRef}>
               <button
                 onClick={toggleFlag}
-                className="text-(--text-muted) transition-colors hover:text-(--accent-color)"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-(--text-muted) transition-colors hover:bg-(--bg-tertiary) hover:text-(--accent-color)"
                 aria-label="Change priority"
               >
                 <FontAwesomeIcon icon={faFlag} size="xs" />
@@ -242,7 +240,7 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
                 e.stopPropagation();
                 onEdit(task);
               }}
-              className="text-(--text-muted) transition-colors hover:text-(--accent-color)"
+              className="flex h-7 w-7 items-center justify-center rounded-md text-(--text-muted) transition-colors hover:bg-(--bg-tertiary) hover:text-(--accent-color)"
               aria-label="Edit task"
             >
               <FontAwesomeIcon icon={faPenToSquare} size="xs" />
@@ -253,7 +251,7 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
                   e.stopPropagation();
                   onDelete(task);
                 }}
-                className="text-(--text-muted) transition-colors hover:text-(--color-error)"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-(--text-muted) transition-colors hover:bg-(--bg-tertiary) hover:text-(--color-error)"
                 aria-label="Delete task"
               >
                 <FontAwesomeIcon icon={faTrashCan} size="xs" />
