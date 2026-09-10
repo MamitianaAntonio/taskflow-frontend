@@ -11,10 +11,10 @@ export type ReminderStage = "24h" | "30min" | "overdue";
 
 export interface AppNotification {
   id: number;
-  type: string;
+  type: NotificationType;
   message: string;
   read: boolean;
   createdAt: string;
   todoId?: number | null;
-  reminderStage?: string | null;
+  reminderStage?: ReminderStage | null;
 }
