@@ -8,7 +8,7 @@ import {
   faFolderMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import type { AppNotification, ReminderStage } from "../types/notification";
+import type { AppNotification, NotificationType, ReminderStage } from "../types/notification";
 
 interface NotificationMeta {
   label: string;
@@ -17,7 +17,7 @@ interface NotificationMeta {
   bg: string;
 }
 
-export const notificationTypeConfig: Record<string, NotificationMeta> = {
+export const notificationTypeConfig: Record<NotificationType, NotificationMeta> = {
   todo_created: {
     label: "Task created",
     icon: faSquarePlus,
@@ -70,8 +70,8 @@ export const fallbackNotificationConfig: NotificationMeta = {
 };
 
 export const reminderStageLabels: Record<ReminderStage, string> = {
-  "24h": "Due tomorrow",
-  "30min": "Due soon",
+  "24h": "Due in 24h",
+  "30min": "Due in 30 min",
   overdue: "Overdue",
 };
 
@@ -82,11 +82,11 @@ export function getNotificationConfig(
   if (
     notification.type === "todo_due_soon" &&
     notification.reminderStage &&
-    reminderStageLabels[notification.reminderStage as ReminderStage]
+    reminderStageLabels[notification.reminderStage]
   ) {
     return {
       ...base,
-      label: reminderStageLabels[notification.reminderStage as ReminderStage],
+      label: reminderStageLabels[notification.reminderStage],
     };
   }
   return base;
