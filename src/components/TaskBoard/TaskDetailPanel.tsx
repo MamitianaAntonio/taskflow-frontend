@@ -1,8 +1,13 @@
-import { faCircle, faFloppyDisk, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFloppyDisk,
+  faTrashCan,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Drawer from "../ui/Drawer";
 import TaskDetailFields from "./TaskDetailFields";
 import Button from "../ui/Button";
+import { statusConfig } from "../../constants/taskConfig";
 import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
 
 interface TaskDetailPanelProps {
@@ -45,6 +50,23 @@ export default function TaskDetailPanel({
       open
       onClose={onClose}
       title={task.label}
+      icon={statusConfig[localStatus].icon}
+      subtitle={
+        <span className="flex items-center gap-2">
+          <span
+            className={`inline-flex items-center gap-1.5 font-interface text-xs font-semibold ${statusConfig[localStatus].color}`}
+          >
+            <FontAwesomeIcon icon={statusConfig[localStatus].icon} className="text-[10px]" />
+            {statusConfig[localStatus].label}
+          </span>
+          {dueDateStr && (
+            <>
+              <span className="text-(--text-muted)">·</span>
+              <span>{dueDateStr}</span>
+            </>
+          )}
+        </span>
+      }
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
           {onDelete && (
@@ -64,7 +86,7 @@ export default function TaskDetailPanel({
               size="small"
               className="w-full sm:w-auto"
               onClick={onClose}
-              icon={<FontAwesomeIcon icon={faCircle} />}
+              icon={<FontAwesomeIcon icon={faXmark} />}
               text="Cancel"
               disabled={saving}
             />
