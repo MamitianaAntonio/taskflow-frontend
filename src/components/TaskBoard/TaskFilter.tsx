@@ -1,5 +1,6 @@
 import { faFire, faFlag, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SectionLabel from "../ui/SectionLabel";
 import { statusConfig } from "../../constants/taskConfig";
 import type { TodoStatus } from "../../types/todo";
 
@@ -20,10 +21,10 @@ const filters = [
 export default function TaskFilter({ selected, onChange }: TaskFilterProps) {
   return (
     <div>
-      <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-(--text-muted) font-interface">
+      <div className="mb-2 flex items-center gap-1.5">
         <FontAwesomeIcon icon={faListCheck} className="text-[10px] text-(--accent-color)" />
-        Filter
-      </p>
+        <SectionLabel>Filter</SectionLabel>
+      </div>
       <div className="flex flex-wrap gap-1.5">
         {filters.map((filter) => {
           const active = selected === filter.value;
