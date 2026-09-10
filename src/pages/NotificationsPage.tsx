@@ -32,16 +32,14 @@ export default function NotificationsPage() {
   const [tab, setTab] = useState<NotificationTab>("all");
 
   useEffect(() => {
-    fetchNotifications().catch(() => {
-      toast.error("Failed to load notifications");
-    });
-  }, [fetchNotifications]);
-
-  useEffect(() => {
     if (tab === "all") {
-      fetchNotifications().catch(() => {});
+      fetchNotifications().catch(() => {
+        toast.error("Failed to load notifications");
+      });
     } else {
-      fetchUnread().catch(() => {});
+      fetchUnread().catch(() => {
+        toast.error("Failed to load notifications");
+      });
     }
   }, [tab, fetchNotifications, fetchUnread]);
 
