@@ -15,6 +15,7 @@ interface NotificationMeta {
   icon: IconDefinition;
   color: string;
   bg: string;
+  accent: string;
 }
 
 export const notificationTypeConfig: Record<NotificationType, NotificationMeta> = {
@@ -23,42 +24,49 @@ export const notificationTypeConfig: Record<NotificationType, NotificationMeta> 
     icon: faSquarePlus,
     color: "text-(--color-success)",
     bg: "bg-(--color-success-soft)",
+    accent: "border-l-(--color-success)",
   },
   todo_updated: {
     label: "Task updated",
     icon: faPen,
     color: "text-(--color-info)",
     bg: "bg-(--color-info-soft)",
+    accent: "border-l-(--color-info)",
   },
   todo_deleted: {
     label: "Task deleted",
     icon: faTrash,
     color: "text-(--color-error)",
     bg: "bg-(--color-error-soft)",
+    accent: "border-l-(--color-error)",
   },
   todo_due_soon: {
     label: "Due soon",
     icon: faClock,
     color: "text-(--color-warning)",
     bg: "bg-(--color-warning-soft)",
+    accent: "border-l-(--color-warning)",
   },
   project_created: {
     label: "Project created",
     icon: faFolderPlus,
     color: "text-(--color-success)",
     bg: "bg-(--color-success-soft)",
+    accent: "border-l-(--color-success)",
   },
   project_updated: {
     label: "Project updated",
     icon: faFolderOpen,
     color: "text-(--color-info)",
     bg: "bg-(--color-info-soft)",
+    accent: "border-l-(--color-info)",
   },
   project_deleted: {
     label: "Project deleted",
     icon: faFolderMinus,
     color: "text-(--color-error)",
     bg: "bg-(--color-error-soft)",
+    accent: "border-l-(--color-error)",
   },
 };
 
@@ -67,6 +75,7 @@ export const fallbackNotificationConfig: NotificationMeta = {
   icon: faClock,
   color: "text-(--text-secondary)",
   bg: "bg-(--bg-tertiary)",
+  accent: "border-l-(--text-muted)",
 };
 
 export const reminderStageLabels: Record<ReminderStage, string> = {
