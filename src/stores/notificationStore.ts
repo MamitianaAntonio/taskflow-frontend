@@ -71,10 +71,16 @@ const useNotificationStore = create<NotificationState>()((set) => ({
   markRead: async (id) => {
     try {
       const updated = await markReadService(id);
-      set((state) => ({
-        notifications: state.notifications.map((n) => (n.id === id ? updated : n)),
-        unreadCount: state.unreadCount > 0 ? state.unreadCount - 1 : 0,
-      }));
+      set((state) => {
+        const target = state.notifications.find((n) => n.id === id);
+        return {
+          notifications: state.notifications.map((n) => (n.id === id ? updated : n)),
+          unreadCount:
+            target && !target.read
+              ? Math.max(0, state.unreadCount - 1)
+              : state.unreadCount,
+        };
+      });
     } catch (error) {
       set({ error: error as Error });
       throw error;
