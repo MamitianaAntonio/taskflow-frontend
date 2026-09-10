@@ -34,7 +34,7 @@ const variants: Record<ButtonVariant, string> = {
   outline:
     "border border-(--border-color) text-(--text-muted) font-semibold " +
     "hover:text-(--accent-color) hover:border-(--accent-color)",
-  text: "bg-transparent text-(--text-primary) hover:bg-(--bg-tertiary",
+  text: "bg-transparent text-(--text-primary) hover:bg-(--bg-tertiary)",
 };
 
 const sizes: Record<ButtonSize, string> = {

@@ -172,24 +172,28 @@ export default function ProjectDetailsPage() {
             value: stats.total,
             icon: faClipboardList,
             bg: "bg-(--accent-soft)",
+            color: "text-(--accent-color)",
           },
           {
             label: "To do",
             value: stats.todoCount,
             icon: faCircle,
             bg: "bg-(--color-warning-soft)",
+            color: "text-(--color-warning)",
           },
           {
             label: "In progress",
             value: stats.doingCount,
             icon: faCircleHalfStroke,
             bg: "bg-(--accent-bg)",
+            color: "text-(--accent-strong)",
           },
           {
             label: "Done",
             value: stats.doneCount,
             icon: faCheckCircle,
             bg: "bg-(--color-success-soft)",
+            color: "text-(--color-success)",
           },
         ]}
       />
