@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Drawer from "../ui/Drawer";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import Modal from "../ui/Modal";
 import TaskForm from "./TaskForm";
 import useTodoStore from "../../stores/todoStore";
 import type { CreateTodoPayload } from "../../types/todo";
@@ -27,8 +28,14 @@ export default function CustomTask({ onClose, projectId }: CustomTaskProps) {
   };
 
   return (
-    <Drawer open onClose={onClose} title="Custom task">
+    <Modal
+      open
+      onClose={onClose}
+      title="New task"
+      icon={faCirclePlus}
+      subtitle="Create a task from scratch"
+    >
       <TaskForm onSubmit={handleCreate} onCancel={onClose} loading={creating} />
-    </Drawer>
+    </Modal>
   );
 }
