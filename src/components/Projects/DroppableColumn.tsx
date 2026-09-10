@@ -24,11 +24,10 @@ export default function DroppableColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex h-140 min-w-0 flex-col rounded-xl border transition-colors ${
-        isOver
+      className={`flex h-110 min-w-0 flex-col rounded-xl border transition-colors ${isOver
           ? "border-(--accent-muted) bg-(--accent-bg)"
           : "border-(--border-color) bg-(--bg-secondary)"
-      }`}
+        }`}
     >
       <div
         className={`flex items-center justify-between rounded-t-xl border-b border-(--border-color) px-3 py-2.5 ${column.headerBg}`}
@@ -40,7 +39,7 @@ export default function DroppableColumn({
           </span>
         </div>
         <span
-          className={`px-2 py-0.5 text-[10px] font-semibold font-interface ${column.countBg} ${column.color}`}
+          className={`rounded-full border border-(--border-color) px-2 py-0.5 text-[10px] font-semibold font-interface ${column.countBg} ${column.color}`}
         >
           {tasks.length}
         </span>
