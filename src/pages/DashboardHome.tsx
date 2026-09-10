@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useTodoStore from "../stores/todoStore";
 import useUserStore from "../stores/userStore";
 import TaskStats from "../components/DashboardProfile/TaskStats";
+import ProgressReminder from "../components/DashboardProfile/ProgressReminder";
 import ProjectOverview from "../components/DashboardProfile/ProjectOverview";
 import DashboardGreeting from "../components/DashboardProfile/DashboardGreeting";
 import DashboardTasks from "../components/DashboardProfile/DashboardTasks";
@@ -53,6 +54,12 @@ export default function DashboardHome() {
         completed={completedCount}
         incomplete={incompleteCount}
         left={leftCount}
+        total={total}
+        isLoading={isLoading}
+      />
+
+      <ProgressReminder
+        completed={completedCount}
         total={total}
         isLoading={isLoading}
       />
