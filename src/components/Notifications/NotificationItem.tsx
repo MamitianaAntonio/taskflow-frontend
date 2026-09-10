@@ -6,7 +6,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { getNotificationConfig } from "../../constants/notificationConfig";
-import { getAllTodo } from "../../services/todo";
+import { getTodoById } from "../../stores/todoStore";
 import { formatTimeAgo } from "../../utils/date";
 import { ROUTES } from "../../constants/routes";
 import type { AppNotification } from "../../types/notification";
@@ -26,19 +26,14 @@ export default function NotificationItem({
   const config = getNotificationConfig(notification);
   const linkable = Boolean(notification.todoId);
 
-  const handleOpen = async () => {
-    if (!linkable) return;
-    try {
-      const todos = await getAllTodo();
-      const todo = todos.find((t) => t.id === notification.todoId);
-      if (todo?.projectId) {
-        navigate(ROUTES.projectDetails(todo.projectId));
-        return;
-      }
-    } catch {
-      /* fall through to tasks */
+  const handleOpen = () => {
+    if (!linkable || !notification.todoId) return;
+    const todo = getTodoById(notification.todoId);
+    if (todo?.projectId) {
+      navigate(ROUTES.projectDetails(todo.projectId));
+    } else {
+      navigate(ROUTES.tasks);
     }
-    navigate(ROUTES.tasks);
   };
 
   const content = (
