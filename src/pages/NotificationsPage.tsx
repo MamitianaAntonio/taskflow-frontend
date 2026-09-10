@@ -135,7 +135,7 @@ export default function NotificationsPage() {
           </span>
         </div>
 
-        {isLoading ? (
+        {isLoading && notifications.length === 0 ? (
           <Spinner className="py-16" />
         ) : (
           <NotificationsPanel
