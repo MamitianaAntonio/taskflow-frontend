@@ -1,5 +1,7 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTasks } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -102,7 +104,8 @@ export default function TaskStats({
 
   return (
     <div className="flex w-full flex-col gap-3 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm">
-      <p className="font-interface text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+      <p className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+        <FontAwesomeIcon icon={faTasks} className="text-(--accent-color)" />
         Task breakdown
       </p>
 
