@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
+import toast from "react-hot-toast";
 import useNotificationStore from "../../stores/notificationStore";
 import NotificationsPanel from "./NotificationsPanel";
 import Spinner from "../ui/Spinner";
@@ -52,7 +53,7 @@ export default function NotificationBell() {
     try {
       await markAllRead();
     } catch {
-      /* ignore */
+      toast.error("Failed to mark as read");
     }
   };
 
@@ -78,7 +79,7 @@ export default function NotificationBell() {
             <p className="text-sm font-semibold text-(--text-primary)">
               Notifications
             </p>
-            {unreadCount > 0 && (
+            {unreadCount > 0 ? (
               <button
                 onClick={handleMarkAllRead}
                 className="flex items-center gap-1.5 text-xs font-medium text-(--text-muted) transition-colors hover:text-(--color-success)"
@@ -86,6 +87,10 @@ export default function NotificationBell() {
                 <FontAwesomeIcon icon={faCheckDouble} />
                 Mark all read
               </button>
+            ) : (
+              <span className="text-xs font-medium text-(--color-success)">
+                All read
+              </span>
             )}
           </div>
 
