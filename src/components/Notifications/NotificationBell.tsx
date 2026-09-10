@@ -9,28 +9,32 @@ import Spinner from "../ui/Spinner";
 import { useUnreadNotifications } from "../../hooks/useUnreadNotifications";
 import { ROUTES } from "../../constants/routes";
 
+const BELL_PAGE_SIZE = 10;
+
 export default function NotificationBell() {
   const navigate = useNavigate();
   const {
     notifications,
     unreadCount,
+    total,
     isLoading,
     fetchNotifications,
     markRead,
     markAllRead,
     deleteOne,
+    reset,
   } = useNotificationStore();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const recent = notifications.slice(0, 5);
-  const hasMore = notifications.length > recent.length;
+  const recent = notifications.slice(0, BELL_PAGE_SIZE);
 
   useUnreadNotifications();
 
   useEffect(() => {
     if (!open) return;
 
+    reset();
     fetchNotifications().catch(() => {});
 
     const handleClick = (e: MouseEvent) => {
@@ -47,7 +51,7 @@ export default function NotificationBell() {
       document.removeEventListener("mousedown", handleClick);
       document.removeEventListener("keydown", handleKey);
     };
-  }, [open, fetchNotifications]);
+  }, [open, fetchNotifications, reset]);
 
   const handleMarkAllRead = async () => {
     try {
@@ -117,7 +121,7 @@ export default function NotificationBell() {
             >
               <span>View all notifications</span>
               <span className="rounded-full bg-(--accent-soft) px-2 py-0.5 font-interface text-[10px] font-bold text-(--accent-strong) tabular-nums">
-                {hasMore ? `${notifications.length}+` : notifications.length}
+                {total > BELL_PAGE_SIZE ? `${total}+` : total}
               </span>
             </button>
           </div>
