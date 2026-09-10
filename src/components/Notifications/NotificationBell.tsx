@@ -2,35 +2,47 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
+import toast from "react-hot-toast";
 import useNotificationStore from "../../stores/notificationStore";
+import { useProjectStore } from "../../stores/projectStore";
+import useTodoStore from "../../stores/todoStore";
 import NotificationsPanel from "./NotificationsPanel";
 import Spinner from "../ui/Spinner";
 import { useUnreadNotifications } from "../../hooks/useUnreadNotifications";
 import { ROUTES } from "../../constants/routes";
+
+const BELL_PAGE_SIZE = 10;
 
 export default function NotificationBell() {
   const navigate = useNavigate();
   const {
     notifications,
     unreadCount,
+    total,
     isLoading,
     fetchNotifications,
     markRead,
     markAllRead,
     deleteOne,
+    reset,
   } = useNotificationStore();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const recent = notifications.slice(0, 5);
-  const hasMore = notifications.length > recent.length;
+  const fetchTodos = useTodoStore((state) => state.fetchTodos);
+  const fetchProjects = useProjectStore((state) => state.fetchAll);
+
+  const recent = notifications.slice(0, BELL_PAGE_SIZE);
 
   useUnreadNotifications();
 
   useEffect(() => {
     if (!open) return;
 
+    reset();
     fetchNotifications().catch(() => {});
+    fetchTodos().catch(() => {});
+    fetchProjects().catch(() => {});
 
     const handleClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -46,13 +58,13 @@ export default function NotificationBell() {
       document.removeEventListener("mousedown", handleClick);
       document.removeEventListener("keydown", handleKey);
     };
-  }, [open, fetchNotifications]);
+  }, [open, fetchNotifications, fetchTodos, fetchProjects, reset]);
 
   const handleMarkAllRead = async () => {
     try {
       await markAllRead();
     } catch {
-      /* ignore */
+      toast.error("Failed to mark as read");
     }
   };
 
@@ -78,7 +90,7 @@ export default function NotificationBell() {
             <p className="text-sm font-semibold text-(--text-primary)">
               Notifications
             </p>
-            {unreadCount > 0 && (
+            {unreadCount > 0 ? (
               <button
                 onClick={handleMarkAllRead}
                 className="flex items-center gap-1.5 text-xs font-medium text-(--text-muted) transition-colors hover:text-(--color-success)"
@@ -86,6 +98,10 @@ export default function NotificationBell() {
                 <FontAwesomeIcon icon={faCheckDouble} />
                 Mark all read
               </button>
+            ) : (
+              <span className="text-xs font-medium text-(--color-success)">
+                All read
+              </span>
             )}
           </div>
 
@@ -112,7 +128,7 @@ export default function NotificationBell() {
             >
               <span>View all notifications</span>
               <span className="rounded-full bg-(--accent-soft) px-2 py-0.5 font-interface text-[10px] font-bold text-(--accent-strong) tabular-nums">
-                {hasMore ? `${notifications.length}+` : notifications.length}
+                {total > BELL_PAGE_SIZE ? `${total}+` : total}
               </span>
             </button>
           </div>

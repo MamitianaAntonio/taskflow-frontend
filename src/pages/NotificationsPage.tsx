@@ -7,6 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import useNotificationStore from "../stores/notificationStore";
+import { useProjectStore } from "../stores/projectStore";
+import useTodoStore from "../stores/todoStore";
 import NotificationsPanel from "../components/Notifications/NotificationsPanel";
 import Spinner from "../components/ui/Spinner";
 
@@ -21,29 +23,54 @@ export default function NotificationsPage() {
   const {
     notifications,
     unreadCount,
+    total,
+    hasMore,
     isLoading,
+    isLoadingMore,
     fetchNotifications,
     fetchUnread,
+    loadMore,
+    loadMoreUnread,
     markRead,
     markAllRead,
     deleteOne,
     deleteAll,
+    reset,
   } = useNotificationStore();
   const [tab, setTab] = useState<NotificationTab>("all");
 
-  useEffect(() => {
-    fetchNotifications().catch(() => {
-      toast.error("Failed to load notifications");
-    });
-  }, [fetchNotifications]);
+  const fetchTodos = useTodoStore((state) => state.fetchTodos);
+  const fetchProjects = useProjectStore((state) => state.fetchAll);
 
   useEffect(() => {
+    fetchTodos().catch(() => {});
+    fetchProjects().catch(() => {});
+  }, [fetchTodos, fetchProjects]);
+
+  useEffect(() => {
+    reset();
     if (tab === "all") {
-      fetchNotifications().catch(() => {});
+      fetchNotifications().catch(() => {
+        toast.error("Failed to load notifications");
+      });
     } else {
-      fetchUnread().catch(() => {});
+      fetchUnread().catch(() => {
+        toast.error("Failed to load notifications");
+      });
     }
-  }, [tab, fetchNotifications, fetchUnread]);
+  }, [tab, fetchNotifications, fetchUnread, reset]);
+
+  const handleLoadMore = async () => {
+    try {
+      if (tab === "all") {
+        await loadMore();
+      } else {
+        await loadMoreUnread();
+      }
+    } catch {
+      toast.error("Failed to load more notifications");
+    }
+  };
 
   const handleMarkAllRead = async () => {
     try {
@@ -133,18 +160,20 @@ export default function NotificationsPage() {
             ))}
           </div>
           <span className="rounded-full border border-(--border-color) px-2 py-0.5 font-interface text-[10px] font-medium text-(--text-muted)">
-            {tab === "unread" ? unreadCount : notifications.length}
+            {tab === "unread" ? `${unreadCount} / ${total}` : `${notifications.length} / ${total}`}
           </span>
         </div>
 
-        {isLoading ? (
+        {isLoading && notifications.length === 0 ? (
           <Spinner className="py-16" />
         ) : (
           <NotificationsPanel
             notifications={notifications}
             onMarkRead={handleMarkRead}
             onDelete={handleDelete}
-            listClassName="overflow-y-auto"
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            isLoadingMore={isLoadingMore}
             emptyTitle={
               tab === "unread"
                 ? "No unread notifications"
