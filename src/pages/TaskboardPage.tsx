@@ -64,7 +64,7 @@ export default function TaskboardPage() {
           <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
             Your flow
           </h1>
-          <p className="text-md mt-1.5 font-interface text-(--text-muted)">
+          <p className="mt-1.5 text-base font-interface text-(--text-muted)">
             Manage and track your daily tasks
           </p>
         </div>
