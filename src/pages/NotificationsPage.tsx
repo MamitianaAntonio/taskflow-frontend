@@ -21,17 +21,24 @@ export default function NotificationsPage() {
   const {
     notifications,
     unreadCount,
+    total,
+    hasMore,
     isLoading,
+    isLoadingMore,
     fetchNotifications,
     fetchUnread,
+    loadMore,
+    loadMoreUnread,
     markRead,
     markAllRead,
     deleteOne,
     deleteAll,
+    reset,
   } = useNotificationStore();
   const [tab, setTab] = useState<NotificationTab>("all");
 
   useEffect(() => {
+    reset();
     if (tab === "all") {
       fetchNotifications().catch(() => {
         toast.error("Failed to load notifications");
@@ -41,7 +48,19 @@ export default function NotificationsPage() {
         toast.error("Failed to load notifications");
       });
     }
-  }, [tab, fetchNotifications, fetchUnread]);
+  }, [tab, fetchNotifications, fetchUnread, reset]);
+
+  const handleLoadMore = async () => {
+    try {
+      if (tab === "all") {
+        await loadMore();
+      } else {
+        await loadMoreUnread();
+      }
+    } catch {
+      toast.error("Failed to load more notifications");
+    }
+  };
 
   const handleMarkAllRead = async () => {
     try {
@@ -131,7 +150,7 @@ export default function NotificationsPage() {
             ))}
           </div>
           <span className="rounded-full border border-(--border-color) px-2 py-0.5 font-interface text-[10px] font-medium text-(--text-muted)">
-            {tab === "unread" ? unreadCount : notifications.length}
+            {tab === "unread" ? `${unreadCount} / ${total}` : `${notifications.length} / ${total}`}
           </span>
         </div>
 
@@ -142,7 +161,9 @@ export default function NotificationsPage() {
             notifications={notifications}
             onMarkRead={handleMarkRead}
             onDelete={handleDelete}
-            listClassName="overflow-y-auto"
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            isLoadingMore={isLoadingMore}
             emptyTitle={
               tab === "unread"
                 ? "No unread notifications"
