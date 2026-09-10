@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import useNotificationStore from "../../stores/notificationStore";
+import { useProjectStore } from "../../stores/projectStore";
+import useTodoStore from "../../stores/todoStore";
 import NotificationsPanel from "./NotificationsPanel";
 import Spinner from "../ui/Spinner";
 import { useUnreadNotifications } from "../../hooks/useUnreadNotifications";
@@ -27,6 +29,9 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const fetchTodos = useTodoStore((state) => state.fetchTodos);
+  const fetchProjects = useProjectStore((state) => state.fetchAll);
+
   const recent = notifications.slice(0, BELL_PAGE_SIZE);
 
   useUnreadNotifications();
@@ -36,6 +41,8 @@ export default function NotificationBell() {
 
     reset();
     fetchNotifications().catch(() => {});
+    fetchTodos().catch(() => {});
+    fetchProjects().catch(() => {});
 
     const handleClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -51,7 +58,7 @@ export default function NotificationBell() {
       document.removeEventListener("mousedown", handleClick);
       document.removeEventListener("keydown", handleKey);
     };
-  }, [open, fetchNotifications, reset]);
+  }, [open, fetchNotifications, fetchTodos, fetchProjects, reset]);
 
   const handleMarkAllRead = async () => {
     try {

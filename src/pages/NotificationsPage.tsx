@@ -7,6 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import useNotificationStore from "../stores/notificationStore";
+import { useProjectStore } from "../stores/projectStore";
+import useTodoStore from "../stores/todoStore";
 import NotificationsPanel from "../components/Notifications/NotificationsPanel";
 import Spinner from "../components/ui/Spinner";
 
@@ -36,6 +38,14 @@ export default function NotificationsPage() {
     reset,
   } = useNotificationStore();
   const [tab, setTab] = useState<NotificationTab>("all");
+
+  const fetchTodos = useTodoStore((state) => state.fetchTodos);
+  const fetchProjects = useProjectStore((state) => state.fetchAll);
+
+  useEffect(() => {
+    fetchTodos().catch(() => {});
+    fetchProjects().catch(() => {});
+  }, [fetchTodos, fetchProjects]);
 
   useEffect(() => {
     reset();

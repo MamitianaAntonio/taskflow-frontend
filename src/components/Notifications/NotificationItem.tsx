@@ -5,10 +5,12 @@ import {
   faArrowUpRightFromSquare,
   faCheck,
   faCheckCircle,
+  faFolder,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { getNotificationConfig } from "../../constants/notificationConfig";
 import { getTodoById } from "../../stores/todoStore";
+import { getProject } from "../../stores/projectStore";
 import { formatTimeAgo } from "../../utils/date";
 import { ROUTES } from "../../constants/routes";
 import type { AppNotification } from "../../types/notification";
@@ -26,14 +28,16 @@ export default function NotificationItem({
 }: NotificationItemProps) {
   const navigate = useNavigate();
   const config = getNotificationConfig(notification);
-  const linkable = Boolean(notification.todoId);
   const [showActions, setShowActions] = useState(false);
+
+  const todo = notification.todoId ? getTodoById(notification.todoId) : undefined;
+  const project = todo?.projectId ? getProject(todo.projectId) : undefined;
+  const linkable = Boolean(notification.todoId);
 
   const handleOpen = () => {
     if (!linkable || !notification.todoId) return;
-    const todo = getTodoById(notification.todoId);
-    if (todo?.projectId) {
-      navigate(ROUTES.projectDetails(todo.projectId));
+    if (project) {
+      navigate(ROUTES.projectDetails(project.id));
     } else {
       navigate(ROUTES.tasks);
     }
@@ -60,7 +64,13 @@ export default function NotificationItem({
         </p>
         <span className="flex items-center gap-1.5 font-interface text-[11px] text-(--text-muted)">
           {!notification.read && (
-            <span className="h-1.5 w-1.5 rounded-full bg-(--accent-color)" />
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent-color)" />
+          )}
+          {project && (
+            <span className="inline-flex items-center gap-1 rounded-md border border-(--border-color) bg-(--bg-tertiary) px-1.5 py-0.5 text-[10px] font-medium text-(--text-secondary)">
+              <FontAwesomeIcon icon={faFolder} className="text-[8px] text-(--accent-color)" />
+              {project.name}
+            </span>
           )}
           <span className="truncate">{config.label}</span>
           <span>·</span>
