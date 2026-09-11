@@ -17,6 +17,8 @@ interface TaskDetailPanelProps {
   onDelete?: () => void;
   localTitle: string;
   setLocalTitle: (value: string) => void;
+  localDescription: string;
+  setLocalDescription: (value: string) => void;
   localStatus: TodoStatus;
   setLocalStatus: (value: TodoStatus) => void;
   localPriority: TodoPriority;
@@ -35,6 +37,8 @@ export default function TaskDetailPanel({
   onDelete,
   localTitle,
   setLocalTitle,
+  localDescription,
+  setLocalDescription,
   localStatus,
   setLocalStatus,
   localPriority,
@@ -107,6 +111,8 @@ export default function TaskDetailPanel({
       <TaskDetailFields
         localTitle={localTitle}
         setLocalTitle={setLocalTitle}
+        localDescription={localDescription}
+        setLocalDescription={setLocalDescription}
         localStatus={localStatus}
         setLocalStatus={setLocalStatus}
         localPriority={localPriority}

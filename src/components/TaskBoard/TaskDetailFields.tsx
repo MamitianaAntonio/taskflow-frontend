@@ -1,4 +1,5 @@
 import {
+  faAlignLeft,
   faCalendarDays,
   faCircleHalfStroke,
   faFlag,
@@ -12,6 +13,8 @@ import type { TodoPriority, TodoStatus } from "../../types/todo";
 interface TaskDetailFieldsProps {
   localTitle: string;
   setLocalTitle: (value: string) => void;
+  localDescription: string;
+  setLocalDescription: (value: string) => void;
   localStatus: TodoStatus;
   setLocalStatus: (value: TodoStatus) => void;
   localPriority: TodoPriority;
@@ -25,12 +28,17 @@ interface TaskDetailFieldsProps {
 const inputClass =
   "w-full rounded-lg border border-(--border-color) bg-(--bg-primary) py-2 pl-10 text-sm text-(--text-primary) outline-none transition-colors focus:border-(--accent-color) disabled:opacity-50";
 
+const textareaClass =
+  "w-full resize-none rounded-lg border border-(--border-color) bg-(--bg-primary) px-3.5 py-2.5 text-sm leading-relaxed text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-(--accent-color) disabled:opacity-50";
+
 const fieldLabelClass =
   "mb-1.5 flex items-center gap-1.5 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-secondary)";
 
 export default function TaskDetailFields({
   localTitle,
   setLocalTitle,
+  localDescription,
+  setLocalDescription,
   localStatus,
   setLocalStatus,
   localPriority,
@@ -60,6 +68,21 @@ export default function TaskDetailFields({
             className={inputClass}
           />
         </div>
+      </div>
+
+      <div>
+        <label className={fieldLabelClass}>
+          <FontAwesomeIcon icon={faAlignLeft} className="text-[10px] text-(--accent-color)" />
+          Description
+        </label>
+        <textarea
+          rows={3}
+          placeholder="Add a description for this task..."
+          value={localDescription}
+          onChange={(e) => setLocalDescription(e.target.value)}
+          disabled={saving}
+          className={textareaClass}
+        />
       </div>
 
       <OptionChips
