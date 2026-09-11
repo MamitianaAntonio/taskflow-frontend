@@ -36,6 +36,7 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
   return {
     id: todo.id,
     title: todo.title,
+    description: todo.description,
     status: todo.status,
     dueDate: todo.dueDate,
     priority: todo.priority,
@@ -109,6 +110,7 @@ export default function ProjectDetailsPage() {
       setSelectedTask({
         id: original.id,
         label: original.title,
+        description: original.description,
         status: original.status || "todo",
         dueDate: original.dueDate,
         priority: original.priority || "medium",

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  faAlignLeft,
   faCalendarDays,
   faCircleHalfStroke,
   faFlag,
@@ -22,6 +23,7 @@ interface TaskFormProps {
 
 const defaultValues: CreateTodoPayload = {
   title: "",
+  description: "",
   status: "todo",
   dueDate: toLocalDatetime(new Date()),
   priority: "medium",
@@ -34,6 +36,10 @@ const fieldLabelClass =
 
 const inputClass = (hasError?: string) =>
   `w-full rounded-lg border bg-(--bg-primary) py-2 pl-10 text-sm text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
+  }`;
+
+const textareaClass = (hasError?: string) =>
+  `w-full resize-none rounded-lg border bg-(--bg-primary) px-3.5 py-2.5 text-sm leading-relaxed text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
   }`;
 
 export default function TaskForm({ onSubmit, onCancel, loading = false }: TaskFormProps) {
@@ -53,6 +59,7 @@ export default function TaskForm({ onSubmit, onCancel, loading = false }: TaskFo
 
     onSubmit({
       title: form.title!.trim(),
+      description: form.description?.trim() || undefined,
       status: form.status as TodoStatus,
       dueDate: new Date(form.dueDate!).toISOString(),
       priority: form.priority as TodoPriority,
@@ -86,6 +93,21 @@ export default function TaskForm({ onSubmit, onCancel, loading = false }: TaskFo
           />
         </div>
         {errors.title && <p className="mt-1 text-xs text-(--color-error)">{errors.title}</p>}
+      </div>
+
+      <div>
+        <label className={fieldLabelClass}>
+          <FontAwesomeIcon icon={faAlignLeft} className="text-[10px] text-(--accent-color)" />
+          Description
+        </label>
+        <textarea
+          rows={3}
+          placeholder="Add a description for this task..."
+          value={form.description ?? ""}
+          onChange={(e) => set("description", e.target.value)}
+          disabled={loading}
+          className={textareaClass(errors.description)}
+        />
       </div>
 
       <OptionChips

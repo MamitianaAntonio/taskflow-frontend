@@ -58,15 +58,20 @@ export default function TaskCard({
         <FontAwesomeIcon icon={cfg.icon} />
       </span>
 
-      <p
-        className={`min-w-0 flex-1 truncate text-sm font-medium transition-colors ${
-          task.status === "done"
-            ? "text-(--text-secondary) line-through"
-            : "text-(--text-primary)"
-        }`}
-      >
-        {task.title}
-      </p>
+      <div className="min-w-0 flex-1">
+        <p
+          className={`truncate text-sm font-medium transition-colors ${
+            task.status === "done"
+              ? "text-(--text-secondary) line-through"
+              : "text-(--text-primary)"
+          }`}
+        >
+          {task.title}
+        </p>
+        {task.description && (
+          <p className="mt-0.5 truncate text-xs text-(--text-muted)">{task.description}</p>
+        )}
+      </div>
 
       {dateLabel && (
         <span className="hidden w-20 shrink-0 items-center gap-1 text-[11px] font-interface text-(--text-muted) sm:inline-flex">

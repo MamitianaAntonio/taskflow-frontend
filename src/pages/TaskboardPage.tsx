@@ -38,6 +38,7 @@ export default function TaskboardPage() {
         .map((todo) => ({
           id: todo.id,
           label: todo.title,
+          description: todo.description,
           status: todo.status || "todo",
           dueDate: todo.dueDate,
           priority: todo.priority || "medium",
