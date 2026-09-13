@@ -8,17 +8,17 @@ export interface PaginatedNotifications {
 
 export const getAllNotifications = (limit = 20, offset = 0): Promise<PaginatedNotifications> =>
   axiosClient
-    .get<{ notifications: AppNotification[]; total: number }>("/api/notifications", {
+    .get<{ notifications: AppNotification[]; total?: number }>("/api/notifications", {
       params: { limit, offset },
     })
-    .then((r) => ({ notifications: r.data.notifications, total: r.data.total }));
+    .then((r) => ({ notifications: r.data.notifications, total: r.data.total ?? r.data.notifications.length }));
 
 export const getUnreadNotifications = (limit = 20, offset = 0): Promise<PaginatedNotifications> =>
   axiosClient
-    .get<{ notifications: AppNotification[]; total: number }>("/api/notifications/unread", {
+    .get<{ notifications: AppNotification[]; total?: number }>("/api/notifications/unread", {
       params: { limit, offset },
     })
-    .then((r) => ({ notifications: r.data.notifications, total: r.data.total }));
+    .then((r) => ({ notifications: r.data.notifications, total: r.data.total ?? r.data.notifications.length }));
 
 export const getUnreadCount = (): Promise<number> =>
   axiosClient.get<{ count: number }>("/api/notifications/unread/count").then((r) => r.data.count);
