@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotificationItem from "./NotificationItem";
 import EmptyState from "../ui/EmptyState";
@@ -15,6 +15,7 @@ interface NotificationsPanelProps {
   emptyTitle?: string;
   emptyText?: string;
   listClassName?: string;
+  compact?: boolean;
 }
 
 export default function NotificationsPanel({
@@ -26,49 +27,52 @@ export default function NotificationsPanel({
   isLoadingMore = false,
   emptyTitle = "No notifications yet",
   emptyText = "Things you do in TaskFlow will show up here.",
-  listClassName = "max-h-96 overflow-y-auto xl:max-h-[30rem]",
+  listClassName = "max-h-96 overflow-y-auto xl:max-h-[30rem] p-1",
+  compact = false,
 }: NotificationsPanelProps) {
   if (notifications.length === 0) {
     return <EmptyState title={emptyTitle} text={emptyText} />;
   }
 
   return (
-    <div className={listClassName}>
+    <div className={`divide-y divide-(--border-color) ${listClassName}`}>
       <AnimatePresence initial={false}>
         {notifications.map((notification) => (
           <motion.div
             key={notification.id}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
             <NotificationItem
               notification={notification}
               onMarkRead={onMarkRead}
               onDelete={onDelete}
+              compact={compact}
             />
           </motion.div>
         ))}
       </AnimatePresence>
 
       {hasMore && (
-        <div className="border-t border-(--border-color)">
-          <button
-            onClick={onLoadMore}
-            disabled={isLoadingMore}
-            className="flex w-full items-center justify-center gap-2 py-2.5 font-interface text-xs font-medium text-(--accent-color) transition-colors hover:bg-(--bg-hover) disabled:opacity-50"
-          >
-            {isLoadingMore ? (
-              <>
-                <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
-                Loading...
-              </>
-            ) : (
-              "Load more"
-            )}
-          </button>
-        </div>
+        <button
+          onClick={onLoadMore}
+          disabled={isLoadingMore}
+          className="flex w-full items-center justify-center gap-2 py-3 font-interface text-xs font-semibold text-(--accent-color) transition-colors hover:bg-(--bg-hover) disabled:opacity-50"
+        >
+          {isLoadingMore ? (
+            <>
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+              Loading...
+            </>
+          ) : (
+            <>
+              <FontAwesomeIcon icon={faChevronDown} size="xs" />
+              Load more
+            </>
+          )}
+        </button>
       )}
     </div>
   );
