@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell,
   faCheckDouble,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
@@ -106,15 +105,16 @@ export default function NotificationsPage() {
     }
   };
 
+  const activeCount = tab === "unread" ? unreadCount : total;
+
   return (
-    <div className="mx-auto flex flex-col gap-4 p-4 sm:gap-5 sm:p-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="tracking-tight">
+    <div className="mx-auto flex flex-col gap-5 p-4 sm:p-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
           <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
             Notifications
           </h1>
-          <p className="mt-1.5 flex items-center gap-2 font-interface text-sm text-(--text-muted)">
-            <FontAwesomeIcon icon={faBell} className="text-xs" />
+          <p className="mt-1.5 font-interface text-sm text-(--text-muted)">
             {unreadCount > 0
               ? `You have ${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}`
               : "You're all caught up"}
@@ -126,16 +126,16 @@ export default function NotificationsPage() {
             <button
               onClick={handleMarkAllRead}
               disabled={unreadCount === 0}
-              className="flex items-center gap-1.5 rounded-lg border border-(--border-color) px-3 py-1.5 text-xs font-semibold text-(--text-muted) transition-colors hover:border-(--color-success) hover:text-(--color-success) disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg border border-(--border-color) px-3 py-1.5 text-xs font-semibold text-(--text-muted) transition-colors hover:border-(--color-success) hover:bg-(--color-success-soft) hover:text-(--color-success) disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <FontAwesomeIcon icon={faCheckDouble} />
+              <FontAwesomeIcon icon={faCheckDouble} size="xs" />
               Mark all read
             </button>
             <button
               onClick={handleDeleteAll}
-              className="flex items-center gap-1.5 rounded-lg border border-(--border-color) px-3 py-1.5 text-xs font-semibold text-(--text-muted) transition-colors hover:border-(--color-error) hover:text-(--color-error)"
+              className="flex items-center gap-1.5 rounded-lg border border-(--border-color) px-3 py-1.5 text-xs font-semibold text-(--text-muted) transition-colors hover:border-(--color-error) hover:bg-(--color-error-soft) hover:text-(--color-error)"
             >
-              <FontAwesomeIcon icon={faTrashCan} />
+              <FontAwesomeIcon icon={faTrashCan} size="xs" />
               Delete all
             </button>
           </div>
@@ -144,28 +144,39 @@ export default function NotificationsPage() {
 
       <div className="flex flex-col overflow-hidden rounded-xl border border-(--border-color) bg-(--bg-primary) shadow-sm">
         <div className="flex items-center justify-between gap-3 border-b border-(--border-color) bg-(--bg-secondary) px-3 py-2">
-          <div className="flex gap-1">
+          <div className="flex rounded-lg bg-(--bg-tertiary) p-0.5">
             {TABS.map((t) => (
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                   tab === t.key
-                    ? "bg-(--accent-soft) text-(--accent-strong)"
+                    ? "bg-(--bg-primary) text-(--text-primary) shadow-sm"
                     : "text-(--text-muted) hover:text-(--text-primary)"
                 }`}
               >
                 {t.label}
+                <span
+                  className={`rounded-full px-1.5 py-0.5 font-interface text-[10px] font-bold tabular-nums transition-colors ${
+                    tab === t.key
+                      ? "bg-(--accent-soft) text-(--accent-strong)"
+                      : "bg-(--bg-hover) text-(--text-muted)"
+                  }`}
+                >
+                  {t.key === "unread" ? unreadCount : total}
+                </span>
               </button>
             ))}
           </div>
-          <span className="rounded-full border border-(--border-color) px-2 py-0.5 font-interface text-[10px] font-medium text-(--text-muted)">
-            {tab === "unread" ? `${unreadCount} / ${total}` : `${notifications.length} / ${total}`}
-          </span>
+          {activeCount > 0 && (
+            <span className="hidden rounded-full border border-(--border-color) px-2 py-0.5 font-interface text-[10px] font-medium text-(--text-muted) sm:block">
+              Showing {notifications.length} of {activeCount}
+            </span>
+          )}
         </div>
 
         {isLoading && notifications.length === 0 ? (
-          <Spinner className="py-16" />
+          <Spinner className="py-24" />
         ) : (
           <NotificationsPanel
             notifications={notifications}
@@ -174,6 +185,7 @@ export default function NotificationsPage() {
             onLoadMore={handleLoadMore}
             hasMore={hasMore}
             isLoadingMore={isLoadingMore}
+            compact
             emptyTitle={
               tab === "unread"
                 ? "No unread notifications"
@@ -184,6 +196,7 @@ export default function NotificationsPage() {
                 ? "Everything is read. Nice work."
                 : "Things you do in TaskFlow will show up here."
             }
+            listClassName="max-h-[36rem] overflow-y-auto p-0"
           />
         )}
       </div>
