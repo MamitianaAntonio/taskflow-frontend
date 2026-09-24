@@ -2,13 +2,11 @@ import { useDraggable } from "@dnd-kit/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBolt,
-  faCalendarDay,
-  faCircle,
   faFlag,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { priorityConfig, statusConfig } from "../../constants/taskConfig";
+import { priorityConfig, statusCardColor } from "../../constants/taskConfig";
 import { formatRelativeDate } from "../../utils/date";
-import CloseButton from "../ui/CloseButton";
 import type { KanbanTask } from "../../types/todo";
 
 interface TaskCardProps {
@@ -18,92 +16,114 @@ interface TaskCardProps {
   onDelete: (taskId: number) => void;
 }
 
-export default function TaskCard({
+interface TaskCardViewProps {
+  task: KanbanTask;
+  overlay?: boolean;
+  onClick?: () => void;
+  onDelete?: (taskId: number) => void;
+}
+
+const priorityIcon = {
+  medium: faFlag,
+  high: faBolt,
+};
+
+export function TaskCardView({
   task,
-  draggable = true,
+  overlay = false,
   onClick,
   onDelete,
-}: TaskCardProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: task.id,
-    data: { task },
-    disabled: !draggable,
-  });
-
-  const style = transform
-    ? { transform: `translate(${transform.x}px, ${transform.y}px)` }
-    : undefined;
-
-  const cfg = statusConfig[task.status] || statusConfig.todo;
+}: TaskCardViewProps) {
   const prioCfg = priorityConfig[task.priority] || priorityConfig.medium;
   const dateLabel = formatRelativeDate(task.dueDate);
+  const isDone = task.status === "done";
+  const tint = statusCardColor[task.status];
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick?.(task);
-      }}
-      className={`group flex cursor-pointer items-center gap-3 rounded-lg border border-(--border-color) bg-(--bg-primary) px-3 py-2 shadow-sm transition-colors hover:border-(--accent-muted) hover:bg-(--bg-tertiary) ${
-        draggable ? "cursor-grab active:cursor-grabbing" : ""
-      } ${
-        isDragging ? "z-50 opacity-70 shadow-lg ring-2 ring-(--accent-soft)" : ""
+      onClick={onClick}
+      className={`group relative flex flex-col gap-0.5 rounded-lg px-2.5 py-1.5 ${tint.bg} ${
+        overlay
+          ? "border border-(--accent-muted) shadow-lg"
+          : `border border-transparent transition-colors ${tint.hover}`
       }`}
     >
-      <span className={`shrink-0 text-sm ${cfg.color}`}>
-        <FontAwesomeIcon icon={cfg.icon} />
-      </span>
-
-      <div className="min-w-0 flex-1">
+      <div className="flex items-center gap-1.5">
         <p
-          className={`truncate text-sm font-medium transition-colors ${
-            task.status === "done"
+          className={`min-w-0 flex-1 truncate rounded font-sans text-[13px] font-semibold leading-snug ${
+            isDone
               ? "text-(--text-secondary) line-through"
               : "text-(--text-primary)"
           }`}
         >
           {task.title}
         </p>
-        {task.description && (
-          <p className="mt-0.5 truncate text-xs text-(--text-muted)">{task.description}</p>
-        )}
+
+        <span className="shrink-0 md:opacity-0 md:transition-opacity md:group-hover:opacity-100">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(task.id);
+            }}
+            className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--color-error) hover:text-(--text-white)"
+            aria-label="Delete task"
+            title="Delete task"
+          >
+            <FontAwesomeIcon icon={faTrashCan} size="2xs" />
+          </button>
+        </span>
       </div>
 
-      {dateLabel && (
-        <span className="hidden w-20 shrink-0 items-center gap-1 text-[11px] font-interface text-(--text-muted) sm:inline-flex">
-          <FontAwesomeIcon icon={faCalendarDay} className="text-[10px]" />
-          {dateLabel}
-        </span>
+      {task.description && (
+        <p className="line-clamp-1 text-[11px] leading-relaxed text-(--text-secondary)">
+          {task.description}
+        </p>
       )}
 
-      <span className="hidden w-20 shrink-0 items-center sm:flex">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-interface text-[10px] font-medium text-(--text-muted)">
+          {dateLabel || "No date"}
+        </span>
+
         {task.priority && task.priority !== "low" && (
           <span
-            className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold font-interface ${prioCfg.bg} ${prioCfg.color}`}
+            className={`inline-flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
           >
             <FontAwesomeIcon
-              icon={task.priority === "high" ? faBolt : faFlag}
-              className="text-[9px]"
+              icon={priorityIcon[task.priority] ?? faFlag}
+              size="2xs"
             />
-            {task.priority}
           </span>
         )}
-      </span>
+      </div>
+    </div>
+  );
+}
 
-      <span className="shrink-0 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
-        <CloseButton
-          icon={faCircle}
-          size="xs"
-          onClose={(e) => {
-            e.stopPropagation();
-            onDelete?.(task.id);
-          }}
-        />
-      </span>
+export default function TaskCard({
+  task,
+  draggable = true,
+  onClick,
+  onDelete,
+}: TaskCardProps) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: task.id,
+    data: { task },
+    disabled: !draggable,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(task);
+      }}
+      className={`transition-opacity ${isDragging ? "opacity-60" : ""}`}
+    >
+      <TaskCardView task={task} onDelete={onDelete} />
     </div>
   );
 }

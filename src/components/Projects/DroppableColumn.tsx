@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInbox } from "@fortawesome/free-solid-svg-icons";
 import TaskCard from "./TaskCard";
 import type { ColumnConfig } from "../../constants/taskConfig";
 import type { KanbanTask } from "../../types/todo";
@@ -24,31 +25,29 @@ export default function DroppableColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex h-110 min-w-0 flex-col rounded-xl border transition-colors ${isOver
-          ? "border-(--accent-muted) bg-(--accent-bg)"
-          : "border-(--border-color) bg-(--bg-secondary)"
-        }`}
+      className={`flex h-96 min-w-0 flex-col transition-colors ${
+        isOver ? "bg-(--accent-bg)" : ""
+      }`}
     >
-      <div
-        className={`flex items-center justify-between rounded-t-xl border-b border-(--border-color) px-3 py-2.5 ${column.headerBg}`}
-      >
-        <div className="flex items-center gap-2">
-          <FontAwesomeIcon icon={column.icon} className={`text-xs ${column.color}`} />
-          <span className="text-xs font-semibold font-interface text-(--text-primary)">
+      <div className="flex items-center justify-between gap-3 px-3 py-2">
+        <span className="flex min-w-0 items-center gap-2">
+          <span
+            className={`h-1.5 w-1.5 shrink-0 rounded-full ${column.color}`}
+          />
+          <span className="truncate font-interface text-[11px] font-semibold uppercase tracking-widest text-(--text-secondary)">
             {column.label}
           </span>
-        </div>
-        <span
-          className={`rounded-full border border-(--border-color) px-2 py-0.5 text-[10px] font-semibold font-interface ${column.countBg} ${column.color}`}
-        >
+        </span>
+        <span className="shrink-0 font-interface text-[11px] font-medium tabular-nums text-(--text-muted)">
           {tasks.length}
         </span>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-x-hidden overflow-y-auto p-2">
+      <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2 pb-2">
         {tasks.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center py-6 text-[11px] font-interface text-(--text-muted)">
-            No tasks
+          <div className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-(--border-color) py-2.5 text-(--text-muted)">
+            <FontAwesomeIcon icon={faInbox} size="2xs" className="opacity-60" />
+            <span className="font-interface text-[10px]">No tasks here</span>
           </div>
         ) : (
           tasks.map((task) => (
