@@ -22,7 +22,7 @@ export default function TaskSection({
   const overdueCount = tasks.filter((t) => t.overdue).length;
 
   return (
-    <div className="group flex items-center gap-3 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm transition-colors duration-200 hover:border-(--accent-muted)">
+    <div className="group flex items-center gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm transition-colors duration-200 hover:border-(--accent-muted)">
       <div
         className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${chip}`}
       >
@@ -40,7 +40,9 @@ export default function TaskSection({
           )}
         </div>
         <div className="mt-1 flex items-baseline gap-2">
-          <p className={`font-mono text-lg leading-none font-bold ${color} tabular-nums`}>
+          <p
+            className={`font-mono text-lg leading-none font-bold ${color} tabular-nums`}
+          >
             {count}
           </p>
           {count === 0 && (

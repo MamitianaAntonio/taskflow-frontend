@@ -6,7 +6,6 @@ import {
   faCheckCircle,
   faCircle,
   faCircleHalfStroke,
-  faCircleInfo,
   faClipboardList,
   faInbox,
   faPlus,
@@ -47,7 +46,12 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
 export default function ProjectDetailsPage() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const { currentProject, isLoading, fetchById, remove: deleteProject } = useProjectStore();
+  const {
+    currentProject,
+    isLoading,
+    fetchById,
+    remove: deleteProject,
+  } = useProjectStore();
   const todos = useTodoStore((state) => state.todos);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const updateTodo = useTodoStore((state) => state.updateTodo);
@@ -71,7 +75,10 @@ export default function ProjectDetailsPage() {
       todos
         .filter((t) => t.projectId === id)
         .map(mapTodoForBoard)
-        .sort((a, b) => Date.parse(a.updatedAt ?? "") - Date.parse(b.updatedAt ?? "")),
+        .sort(
+          (a, b) =>
+            Date.parse(a.updatedAt ?? "") - Date.parse(b.updatedAt ?? ""),
+        ),
     [todos, id],
   );
 
@@ -91,7 +98,10 @@ export default function ProjectDetailsPage() {
     setSelectedTask((prev) => (prev?.id === taskId ? null : prev));
   };
 
-  const handleTaskUpdate = async (taskId: number, changes: UpdateTodoPayload) => {
+  const handleTaskUpdate = async (
+    taskId: number,
+    changes: UpdateTodoPayload,
+  ) => {
     await updateTodo(taskId, changes);
     setSelectedTask((prev) => {
       if (!prev || prev.id !== taskId) return prev;
@@ -200,24 +210,27 @@ export default function ProjectDetailsPage() {
         ]}
       />
 
-      <div className="flex items-center justify-between gap-3">
-        <p className="hidden items-center gap-2 font-interface text-xs text-(--text-muted) md:inline-flex">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-sm" />
-          Drag tasks between columns to change their status
-        </p>
-        <p className="flex items-center gap-2 font-interface text-xs text-(--text-muted) md:hidden">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-sm" />
-          Tap a task to change its status
-        </p>
-
-        <Button variant="primary" size="medium" onClick={() => setShowCreate(true)}>
-          <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
-          New task
-        </Button>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--border-color) pb-3">
+        <h2 className="font-interface text-xs font-bold uppercase tracking-widest text-(--text-secondary)">
+          Board
+        </h2>
+        <div className="flex items-center gap-3">
+          <p className="hidden items-center gap-2 font-interface text-[11px] text-(--text-muted) md:inline-flex">
+            Drag tasks between columns to change their status
+          </p>
+          <Button
+            variant="primary"
+            size="small"
+            onClick={() => setShowCreate(true)}
+          >
+            <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+            New task
+          </Button>
+        </div>
       </div>
 
       {projectTodos.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-(--border-color) py-16">
+        <div className="rounded-2xl border border-dashed border-(--border-color) py-16">
           <EmptyState
             icon={faInbox}
             title="No tasks in this project yet."
@@ -245,7 +258,11 @@ export default function ProjectDetailsPage() {
 
       <AnimatePresence>
         {showCreate && (
-          <CustomTask key="create-task" onClose={() => setShowCreate(false)} projectId={id} />
+          <CustomTask
+            key="create-task"
+            onClose={() => setShowCreate(false)}
+            projectId={id}
+          />
         )}
       </AnimatePresence>
 
@@ -261,15 +278,21 @@ export default function ProjectDetailsPage() {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-(--border-color) pt-4">
+      <div
+        className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border
+        border-(--border-color) bg-(--bg-secondary) px-4 py-3.5"
+      >
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faTriangleExclamation} className="text-(--color-error)" />
-            <h3 className="font-sans text-sm font-bold text-(--color-error)">
+            <FontAwesomeIcon
+              icon={faTriangleExclamation}
+              className="text-xs text-(--color-error)"
+            />
+            <h3 className="font-sans text-xs font-bold uppercase tracking-wide text-(--color-error)">
               Danger zone
             </h3>
           </div>
-          <p className="font-sans text-(--text-muted)">
+          <p className="font-interface text-xs text-(--text-muted)">
             This action permanently deletes the project and its tasks.
           </p>
         </div>

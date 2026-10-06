@@ -16,13 +16,28 @@ export interface NavItem {
 }
 
 export const primaryNav: NavItem[] = [
-  { key: "dashboard", label: "Dashboard", icon: faChartLine, path: ROUTES.dashboard },
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: faChartLine,
+    path: ROUTES.dashboard,
+  },
   { key: "tasks", label: "Tasks", icon: faListCheck, path: ROUTES.tasks },
-  { key: "projects", label: "Projects", icon: faFolderOpen, path: ROUTES.projects },
+  {
+    key: "projects",
+    label: "Projects",
+    icon: faFolderOpen,
+    path: ROUTES.projects,
+  },
 ];
 
 export const systemNav: NavItem[] = [
-  { key: "notifications", label: "Notifications", icon: faBell, path: ROUTES.notifications },
+  {
+    key: "notifications",
+    label: "Notifications",
+    icon: faBell,
+    path: ROUTES.notifications,
+  },
   { key: "settings", label: "Settings", icon: faCog, path: ROUTES.settings },
 ];
 

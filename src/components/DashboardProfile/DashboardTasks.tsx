@@ -22,7 +22,9 @@ export default function DashboardTasks({
           (t) => !t.completed && (isToday(t.dueDate) || isOverdue(t.dueDate)),
         )
         .map((t) => ({ ...t, overdue: isOverdue(t.dueDate) }))
-        .sort((a, b) => Date.parse(a.dueDate ?? "") - Date.parse(b.dueDate ?? "")),
+        .sort(
+          (a, b) => Date.parse(a.dueDate ?? "") - Date.parse(b.dueDate ?? ""),
+        ),
     [tasks],
   );
 
@@ -30,7 +32,9 @@ export default function DashboardTasks({
     () =>
       tasks
         .filter((t) => !t.completed && isUpcoming(t.dueDate))
-        .sort((a, b) => Date.parse(a.dueDate ?? "") - Date.parse(b.dueDate ?? "")),
+        .sort(
+          (a, b) => Date.parse(a.dueDate ?? "") - Date.parse(b.dueDate ?? ""),
+        ),
     [tasks],
   );
 
@@ -51,7 +55,7 @@ export default function DashboardTasks({
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="flex flex-1 items-center gap-3 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm"
+            className="flex flex-1 items-center gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm"
           >
             <div className="h-8 w-8 shrink-0 animate-pulse rounded-lg bg-(--border-color)" />
             <div className="min-w-0 flex-1">

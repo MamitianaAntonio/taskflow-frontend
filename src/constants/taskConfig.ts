@@ -125,3 +125,21 @@ export const priorityColor: Record<TodoPriority, string> = {
     "text-(--color-warning) border-(--color-warning-soft) bg-(--color-warning-soft)",
   high: "text-(--color-error) border-(--color-error-soft) bg-(--color-error-soft)",
 };
+
+export const statusCardColor: Record<
+  TodoStatus,
+  { bg: string; hover: string }
+> = {
+  todo: {
+    bg: "bg-(--color-warning-soft)",
+    hover: "hover:border-(--color-warning-hover)",
+  },
+  doing: {
+    bg: "bg-(--accent-soft)",
+    hover: "hover:border-(--accent-muted)",
+  },
+  done: {
+    bg: "bg-(--color-success-soft)",
+    hover: "hover:border-(--color-success-hover)",
+  },
+};
