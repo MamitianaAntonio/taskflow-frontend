@@ -7,6 +7,7 @@ import "./Sidebar.css";
 import useNotificationStore from "../../stores/notificationStore";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { useLogout } from "../../hooks/useLogout";
+import Button from "../ui/Button";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -21,42 +22,51 @@ export default function Sidebar() {
   const iconOnly = !showLabels;
   const isRail = !isDesktop || collapsed;
 
+  const LINK_BASE =
+    "flex w-full items-center gap-3 rounded-lg py-2 font-interface text-sm font-medium transition-colors";
+
+  const LINK_ACTIVE = "bg-(--accent-soft) text-(--accent-strong)";
+
+  const LINK_IDLE =
+    "text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-primary)";
+
   const navItemClassName =
-    (iconOnlyState: boolean) =>
-      ({ isActive }: { isActive: boolean }) =>
-        `sidebar-nav-link group relative flex w-full items-center gap-3 rounded-lg py-2.5 font-interface text-sm transition-colors duration-150
-          ${iconOnlyState ? "justify-center px-0" : "px-3"
-        } ${isActive
-          ? `is-active bg-(--accent-soft) font-semibold text-(--accent-strong)${iconOnlyState
-            ? ""
-            : " before:absolute before:top-1/2 before:left-0.5 before:h-5 before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-(--accent-color)"
-          }`
-          : "text-(--text-secondary) hover:bg-(--bg-hover) hover:text-(--text-primary)"
-        }`;
+    (iconOnly: boolean) =>
+    ({ isActive }: { isActive: boolean }) =>
+      [
+        LINK_BASE,
+        iconOnly ? "justify-center px-0" : "px-3",
+        isActive ? LINK_ACTIVE : LINK_IDLE,
+      ].join(" ");
 
   return (
     <aside
-      className={`sidebar relative flex flex-col transition-all duration-300 ease-in-out ${isRail ? "w-20 is-collapsed" : "w-64"
-        }`}
+      className={`sidebar relative flex flex-col transition-all duration-300 ease-in-out ${
+        isRail ? "w-20 is-collapsed" : "w-64"
+      }`}
       role="navigation"
       aria-label="Navigation"
     >
       {isDesktop && (
         <div
-          className={`flex items-center px-3 py-3 ${showLabels ? "justify-end" : "justify-center"
-            }`}
+          className={`flex items-center px-3 py-3 ${
+            showLabels ? "justify-end" : "justify-center"
+          }`}
         >
           <button
             onClick={() => setCollapsed((prev) => !prev)}
             className="sidebar-toggle-btn rounded-lg font-bold transition-all"
-            aria-label={collapsed ? "Expand the navigation" : "Reduce the navigation"}
+            aria-label={
+              collapsed ? "Expand the navigation" : "Reduce the navigation"
+            }
             title="Toggle navigation"
             type="button"
           >
             <FontAwesomeIcon
               icon={faBars}
-              className={`sidebar-toggle-icon ${collapsed ? "sidebar-toggle-icon--collapsed" : ""
-                }`}
+              className={`sidebar-toggle-icon ${
+                collapsed ? "sidebar-toggle-icon--collapsed" : ""
+              }`}
             />
           </button>
         </div>
@@ -113,10 +123,11 @@ export default function Sidebar() {
                 {showLabels && <span className="truncate">{item.label}</span>}
                 {item.key === "notifications" && unreadCount > 0 && (
                   <span
-                    className={`sidebar-unread flex shrink-0 items-center justify-center rounded-full bg-(--color-error) px-1.5 font-interface text-[10px] font-bold leading-none text-(--text-white) ${showLabels
-                      ? "ml-auto h-4 min-w-4"
-                      : "absolute top-0.5 right-1 h-4 min-w-4"
-                      }`}
+                    className={`sidebar-unread flex shrink-0 items-center justify-center rounded-full bg-(--color-error) px-1.5 font-interface text-[10px] font-bold leading-none text-(--text-white) ${
+                      showLabels
+                        ? "ml-auto h-4 min-w-4"
+                        : "absolute top-0.5 right-1 h-4 min-w-4"
+                    }`}
                   >
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
@@ -126,19 +137,15 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="mt-4 border-t border-(--border-color) pt-3">
-          <button
-            type="button"
-            onClick={logout}
-            className={`sidebar-logout flex w-full items-center gap-3 rounded-lg py-2.5 font-interface text-sm text-(--text-muted)
-            transition-colors duration-150 hover:bg-(--bg-hover) hover:text-(--color-error) ${showLabels ? "px-3" : "justify-center px-0"
-              }`}
-            title="Logout"
-          >
-            <FontAwesomeIcon icon={faPowerOff} className="shrink-0" />
-            {showLabels && <span>Logout</span>}
-          </button>
-        </div>
+        <Button
+          className="w-full justify-center"
+          variant="outline"
+          title="Logout"
+          onClick={logout}
+        >
+          <FontAwesomeIcon icon={faPowerOff} className="shrink-0" />
+          {!collapsed ? <span>Logout</span> : ""}
+        </Button>
       </div>
     </aside>
   );
