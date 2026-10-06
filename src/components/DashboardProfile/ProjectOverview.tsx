@@ -41,7 +41,8 @@ export default function ProjectOverview() {
     };
   }, [projects, todos]);
 
-  const pctWith = stats.total > 0 ? Math.round((stats.withTasks / stats.total) * 100) : 0;
+  const pctWith =
+    stats.total > 0 ? Math.round((stats.withTasks / stats.total) * 100) : 0;
   const pctWithout =
     stats.total > 0 ? Math.round((stats.withoutTasks / stats.total) * 100) : 0;
   const pctLinked =
@@ -81,7 +82,7 @@ export default function ProjectOverview() {
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="flex flex-col gap-2.5 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm"
+            className="flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm"
           >
             <div className="h-9 w-9 animate-pulse rounded-lg bg-(--border-color)" />
             <div className="h-6 w-10 animate-pulse rounded-full bg-(--border-color)" />
@@ -94,9 +95,12 @@ export default function ProjectOverview() {
 
   if (!isLoading && stats.total === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-(--border-color) bg-(--bg-secondary) px-4 py-8 text-center">
+      <div className="flex flex-col items-center justify-center gap-3 rounded-lg bg-(--bg-secondary) px-4 py-8 text-center">
         <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-(--accent-soft)">
-          <FontAwesomeIcon icon={faFolderPlus} className="text-(--accent-color)" />
+          <FontAwesomeIcon
+            icon={faFolderPlus}
+            className="text-(--accent-color)"
+          />
         </span>
         <div>
           <p className="font-interface text-sm font-semibold text-(--text-primary)">
@@ -124,14 +128,17 @@ export default function ProjectOverview() {
         <div
           key={label}
           onClick={link ? () => navigate(ROUTES.projects) : undefined}
-          className={`group flex flex-col gap-2.5 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm transition-all duration-200 ${
+          className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm transition-all duration-200 ${
             link
               ? "cursor-pointer hover:-translate-y-0.5 hover:border-(--accent-muted) hover:shadow-md"
               : ""
           }`}
         >
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-(--accent-soft)">
-            <FontAwesomeIcon icon={icon} className="text-sm text-(--accent-color)" />
+            <FontAwesomeIcon
+              icon={icon}
+              className="text-sm text-(--accent-color)"
+            />
           </span>
           <p
             className={`font-mono text-2xl leading-none font-bold tabular-nums ${

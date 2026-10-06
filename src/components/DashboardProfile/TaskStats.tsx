@@ -29,7 +29,8 @@ function readThemeColors(): ChartColors {
   const s = getComputedStyle(document.documentElement);
   return {
     success: s.getPropertyValue("--color-success").trim() || FALLBACK.success,
-    highlight: s.getPropertyValue("--color-highlight").trim() || FALLBACK.highlight,
+    highlight:
+      s.getPropertyValue("--color-highlight").trim() || FALLBACK.highlight,
     warning: s.getPropertyValue("--color-warning").trim() || FALLBACK.warning,
   };
 }
@@ -51,7 +52,11 @@ export default function TaskStats({
     datasets: [
       {
         data: [completed, incompleteValue, leftValue],
-        backgroundColor: [chartColors.success, chartColors.highlight, chartColors.warning],
+        backgroundColor: [
+          chartColors.success,
+          chartColors.highlight,
+          chartColors.warning,
+        ],
       },
     ],
   };
@@ -85,7 +90,7 @@ export default function TaskStats({
 
   if (isLoading) {
     return (
-      <div className="flex w-full flex-col gap-3 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm">
+      <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm">
         <div className="h-3 w-28 animate-pulse rounded-full bg-(--border-color)" />
         <div className="flex items-center gap-3">
           <div className="h-28 w-28 shrink-0 animate-pulse rounded-full bg-(--border-color)" />
@@ -103,7 +108,7 @@ export default function TaskStats({
   }
 
   return (
-    <div className="flex w-full flex-col gap-3 rounded-lg border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm">
+    <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm">
       <p className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
         <FontAwesomeIcon icon={faTasks} className="text-(--accent-color)" />
         Task breakdown
