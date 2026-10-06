@@ -28,7 +28,8 @@ export default function ProjectGrid({
           <div
             key={project.id}
             onClick={() => onSelect(project.id)}
-            className="group relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border border-(--border-color) bg-(--bg-secondary) p-4 pb-5 shadow-sm transition-all hover:border-(--accent-muted) hover:shadow-md"
+            className="group relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl
+            bg-(--bg-secondary) p-4 pb-5 shadow-sm transition-all hover:border-(--accent-muted) hover:shadow-md"
           >
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-(--text-primary)">

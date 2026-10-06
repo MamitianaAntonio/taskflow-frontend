@@ -21,7 +21,7 @@ export default function ProjectCreation({
   return (
     <form
       onSubmit={handleCreate}
-      className="rounded-xl border border-(--border-color) bg-(--bg-secondary) px-4 py-3 transition-all focus-within:border-(--accent-muted)"
+      className="rounded-xl bg-(--bg-secondary) shadow-sm px-4 py-3 transition-all focus-within:border-(--accent-muted)"
     >
       <div className="flex items-center gap-2.5">
         <FontAwesomeIcon
