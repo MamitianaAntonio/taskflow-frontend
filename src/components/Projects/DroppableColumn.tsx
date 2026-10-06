@@ -6,6 +6,7 @@ import type { ColumnConfig } from "../../constants/taskConfig";
 import type { KanbanTask } from "../../types/todo";
 
 interface DroppableColumnProps {
+  isMobile: boolean;
   column: ColumnConfig;
   tasks: KanbanTask[];
   draggable?: boolean;
@@ -14,6 +15,7 @@ interface DroppableColumnProps {
 }
 
 export default function DroppableColumn({
+  isMobile,
   column,
   tasks,
   draggable = true,
@@ -25,10 +27,11 @@ export default function DroppableColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex h-96 min-w-0 flex-col transition-colors ${
+      className={`flex h-96 py-2 min-w-0 flex-col transition-colors ${
         isOver ? "bg-(--accent-bg)" : ""
       }`}
     >
+      { !isMobile ? (
       <div className="flex items-center justify-between gap-3 px-3 py-2">
         <span className="flex min-w-0 items-center gap-2">
           <span
@@ -42,6 +45,7 @@ export default function DroppableColumn({
           {tasks.length}
         </span>
       </div>
+       ) : ("")}
 
       <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2 pb-2">
         {tasks.length === 0 ? (

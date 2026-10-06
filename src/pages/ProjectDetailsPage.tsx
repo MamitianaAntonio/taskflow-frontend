@@ -210,7 +210,7 @@ export default function ProjectDetailsPage() {
         ]}
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--border-color) pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-interface text-xs font-bold uppercase tracking-widest text-(--text-secondary)">
           Board
         </h2>
@@ -278,10 +278,7 @@ export default function ProjectDetailsPage() {
         )}
       </AnimatePresence>
 
-      <div
-        className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border
-        border-(--border-color) bg-(--bg-secondary) px-4 py-3.5"
-      >
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl shadow-sm bg-(--bg-secondary) px-4 py-3.5">
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2">
             <FontAwesomeIcon
