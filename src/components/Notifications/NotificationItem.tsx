@@ -1,6 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faFolder, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { getNotificationConfig } from "../../constants/notificationConfig";
 import { getTodoById } from "../../stores/todoStore";
 import { getProject } from "../../stores/projectStore";
@@ -12,25 +10,35 @@ interface NotificationItemProps {
   notification: AppNotification;
   onMarkRead?: (id: number) => Promise<void> | void;
   onDelete?: (id: number) => Promise<void> | void;
-  compact?: boolean;
 }
+
+const ACTION =
+  "text-(--text-muted) transition-colors hover:text-(--text-primary)";
 
 export default function NotificationItem({
   notification,
   onMarkRead,
   onDelete,
-  compact = false,
 }: NotificationItemProps) {
   const navigate = useNavigate();
   const config = getNotificationConfig(notification);
 
-  const todo = notification.todoId ? getTodoById(notification.todoId) : undefined;
+  const todo = notification.todoId
+    ? getTodoById(notification.todoId)
+    : undefined;
   const project = todo?.projectId ? getProject(todo.projectId) : undefined;
   const linkable = Boolean(notification.todoId);
+  const unread = !notification.read;
 
   const handleOpen = () => {
-    if (!linkable || !notification.todoId) return;
-    navigate(project ? ROUTES.projectDetails(project.id) : ROUTES.tasks);
+    if (linkable)
+      navigate(project ? ROUTES.projectDetails(project.id) : ROUTES.tasks);
+  };
+
+  // Keeps the click from also opening the notification.
+  const act = (fn?: (id: number) => unknown) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    fn?.(notification.id);
   };
 
   return (
@@ -38,77 +46,53 @@ export default function NotificationItem({
       role="button"
       tabIndex={linkable ? 0 : -1}
       onClick={handleOpen}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" && linkable) handleOpen();
-      }}
-      className={`group relative flex cursor-pointer items-center gap-3 px-4 py-3 outline-none transition-colors hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) ${
-        notification.read ? "" : "bg-(--accent-bg)"
-      } ${compact ? "gap-2.5 px-3.5 py-2.5" : ""}`}
+      onKeyDown={(e) => e.key === "Enter" && handleOpen()}
+      className={`group flex items-start gap-3 rounded-lg px-2 py-2.5 outline-none transition-colors hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) ${
+        linkable ? "cursor-pointer" : "cursor-default"
+      }`}
     >
-      {!notification.read && (
-        <span className="absolute inset-y-2 left-0 w-0.5 rounded-r-full bg-(--accent-color)" />
-      )}
-
+      {/* Type color dot: solid when unread, faded once read */}
       <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${config.bg} ${config.color} ${
-          compact ? "h-8 w-8 rounded-lg" : ""
+        aria-hidden
+        className={`mt-1.5 size-1.5 shrink-0 rounded-full bg-current ${config.color} ${
+          unread ? "" : "opacity-25"
         }`}
-      >
-        <FontAwesomeIcon icon={config.icon} size="sm" />
-      </span>
+      />
 
-      <div className="min-w-0 flex-1 py-0.5">
+      <div className="min-w-0 flex-1">
         <p
-          className={`truncate text-sm font-medium leading-snug text-(--text-primary) ${
-            compact ? "text-[13px]" : ""
+          className={`truncate text-[13px] leading-snug ${
+            unread
+              ? "font-medium text-(--text-primary)"
+              : "text-(--text-secondary)"
           }`}
         >
           {notification.message}
         </p>
-        <div
-          className={`mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-interface text-xs text-(--text-muted) ${
-            compact ? "text-[11px]" : ""
-          }`}
-        >
-          <span className={notification.read ? "font-medium" : "font-semibold text-(--accent-strong)"}>
-            {config.label}
-          </span>
-          {project && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-(--bg-tertiary) px-1.5 py-0.5 text-[10px] font-medium text-(--text-secondary)">
-              <FontAwesomeIcon icon={faFolder} size="2xs" className="text-(--accent-color)" />
-              {project.name}
-            </span>
-          )}
-          <span>·</span>
-          <span className="shrink-0">{formatTimeAgo(notification.createdAt)}</span>
-        </div>
+        <p className="mt-0.5 flex items-center gap-3 truncate font-interface text-[11px] text-(--text-muted)">
+          <span className={unread ? config.color : ""}>{config.label}</span>
+          {project && <span className="truncate">{project.name}</span>}
+        </p>
       </div>
 
-      <div className="flex shrink-0 items-center gap-0.5">
-        {!notification.read && (
+      {/* Time by default; on desktop hover it swaps for the actions */}
+      <div className="flex shrink-0 flex-col items-end gap-1 font-interface text-[11px] md:min-w-32 md:flex-row md:justify-end">
+        <span className="tabular-nums text-(--text-muted) md:group-hover:hidden md:group-focus-within:hidden">
+          {formatTimeAgo(notification.createdAt)}
+        </span>
+        <span className="flex gap-3 md:hidden md:group-hover:flex md:group-focus-within:flex">
+          {unread && (
+            <button onClick={act(onMarkRead)} className={ACTION}>
+              Mark read
+            </button>
+          )}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onMarkRead?.(notification.id);
-            }}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--color-success-soft) hover:text-(--color-success) md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-            aria-label="Mark as read"
-            title="Mark as read"
+            onClick={act(onDelete)}
+            className={`${ACTION} hover:text-(--color-error)!`}
           >
-            <FontAwesomeIcon icon={faCheck} size="xs" />
+            Delete
           </button>
-        )}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete?.(notification.id);
-          }}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-(--color-error-soft) hover:text-(--color-error) md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-          aria-label="Delete notification"
-          title="Delete"
-        >
-          <FontAwesomeIcon icon={faTrashCan} size="xs" />
-        </button>
+        </span>
       </div>
     </div>
   );
