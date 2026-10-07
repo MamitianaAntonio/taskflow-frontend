@@ -117,11 +117,22 @@ export default function TaskCard({
       ref={setNodeRef}
       {...listeners}
       {...attributes}
+      role="button"
+      tabIndex={0}
       onClick={(e) => {
         e.stopPropagation();
         onClick?.(task);
       }}
-      className={`transition-opacity ${isDragging ? "opacity-60" : ""}`}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.(task);
+        }
+      }}
+      className={`transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color) ${
+        isDragging ? "opacity-60" : ""
+      }`}
     >
       <TaskCardView task={task} onDelete={onDelete} />
     </div>

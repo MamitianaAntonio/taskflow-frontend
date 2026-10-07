@@ -124,39 +124,51 @@ export default function ProjectOverview() {
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {cards.map(({ label, value, context, icon, link }) => (
-        <div
-          key={label}
-          onClick={link ? () => navigate(ROUTES.projects) : undefined}
-          className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm transition-all duration-200 ${
-            link
-              ? "cursor-pointer hover:-translate-y-0.5 hover:border-(--accent-muted) hover:shadow-md"
-              : ""
-          }`}
-        >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-(--accent-soft)">
-            <FontAwesomeIcon
-              icon={icon}
-              className="text-sm text-(--accent-color)"
-            />
-          </span>
-          <p
-            className={`font-mono text-2xl leading-none font-bold tabular-nums ${
-              link ? "text-(--accent-color)" : "text-(--text-primary)"
+      {cards.map(({ label, value, context, icon, link }) => {
+        const open = link ? () => navigate(ROUTES.projects) : undefined;
+        return (
+          <div
+            key={label}
+            role={open ? "button" : undefined}
+            tabIndex={open ? 0 : -1}
+            onClick={open}
+            onKeyDown={(e) => {
+              if (!open || e.target !== e.currentTarget) return;
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                open();
+              }
+            }}
+            className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm transition-all duration-200 ${
+              link
+                ? "cursor-pointer hover:-translate-y-0.5 hover:border-(--accent-muted) hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)"
+                : ""
             }`}
           >
-            {value}
-          </p>
-          <div>
-            <p className="font-interface text-[10px] font-bold uppercase tracking-widest text-(--text-secondary)">
-              {label}
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-(--accent-soft)">
+              <FontAwesomeIcon
+                icon={icon}
+                className="text-sm text-(--accent-color)"
+              />
+            </span>
+            <p
+              className={`font-mono text-2xl leading-none font-bold tabular-nums ${
+                link ? "text-(--accent-color)" : "text-(--text-primary)"
+              }`}
+            >
+              {value}
             </p>
-            <p className="mt-0.5 font-interface text-[10px] text-(--text-muted)">
-              {context}
-            </p>
+            <div>
+              <p className="font-interface text-[10px] font-bold uppercase tracking-widest text-(--text-secondary)">
+                {label}
+              </p>
+              <p className="mt-0.5 font-interface text-[10px] text-(--text-muted)">
+                {context}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

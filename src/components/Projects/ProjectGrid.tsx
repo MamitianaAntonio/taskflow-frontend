@@ -27,9 +27,18 @@ export default function ProjectGrid({
         return (
           <div
             key={project.id}
+            role="button"
+            tabIndex={0}
             onClick={() => onSelect(project.id)}
+            onKeyDown={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect(project.id);
+              }
+            }}
             className="group relative flex cursor-pointer flex-col gap-3 overflow-hidden rounded-xl
-            bg-(--bg-secondary) p-4 pb-5 shadow-sm transition-all hover:border-(--accent-muted) hover:shadow-md"
+            bg-(--bg-secondary) p-4 pb-5 shadow-sm transition-all hover:border-(--accent-muted) hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)"
           >
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-(--text-primary)">

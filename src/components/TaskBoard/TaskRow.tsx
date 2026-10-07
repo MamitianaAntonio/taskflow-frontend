@@ -36,7 +36,6 @@ const priorityIndicator = {
 };
 
 export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowProps) {
-  const [showActions, setShowActions] = useState(false);
   const [flagOpen, setFlagOpen] = useState(false);
   const [title, setTitle] = useState(task.label);
   const [completed, setCompleted] = useState(task.status === "done");
@@ -57,14 +56,12 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
     e.stopPropagation();
     const next = completed ? "doing" : "done";
     setCompleted(next === "done");
-    setShowActions(false);
     await onUpdate({ ...task, status: next });
   };
 
   const saveTitle = async () => {
     const clean = title.trim();
     setIsEditing(false);
-    setShowActions(false);
     if (!clean || clean === task.label) {
       setTitle(task.label);
       return;
@@ -97,13 +94,18 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
 
   return (
     <div
-      className={`group cursor-pointer rounded-lg border border-transparent px-2.5 py-1.5 transition-colors ${tint.bg} ${tint.hover}`}
+      role="button"
+      tabIndex={0}
+      className={`group cursor-pointer rounded-lg border border-transparent px-2.5 py-1.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color) ${tint.bg} ${tint.hover}`}
       onClick={() => onEdit(task)}
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => {
-        setShowActions(false);
-        setFlagOpen(false);
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onEdit(task);
+        }
       }}
+      onMouseLeave={() => setFlagOpen(false)}
     >
       <div className="flex min-h-5 items-center gap-1.5">
         {isEditing ? (
@@ -136,7 +138,7 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
               className="min-w-0 flex-1 rounded-md border border-(--accent-color) bg-(--bg-primary) px-2 py-0.5 text-[13px] font-semibold text-(--text-primary) outline-none"
             />
             <span
-              className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100"
+              className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -179,74 +181,71 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
               {task.label}
             </p>
 
-            {showActions && (
-              <span className="flex shrink-0 items-center gap-0.5">
-                <div className="relative" ref={flagRef}>
-                  <button
-                    onClick={toggleFlag}
-                    className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
-                    aria-label="Change priority"
-                  >
-                    <FontAwesomeIcon icon={faFlag} size="xs" />
-                  </button>
-                  {flagOpen && (
-                    <div className="absolute right-0 top-full z-10 mt-1 w-28 rounded-lg border border-(--border-color) bg-(--bg-primary) p-1">
-                      {(["low", "medium", "high"] as const).map((priority) => (
-                        <button
-                          key={priority}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setFlagOpen(false);
-                            setShowActions(false);
-                            onUpdate({ ...task, priority });
-                          }}
-                          className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-secondary) font-interface hover:bg-(--bg-hover)"
-                        >
-                          <FontAwesomeIcon
-                            icon={priorityIcons[priority]}
-                            size="2xs"
-                          />
-                          {priorityConfig[priority].label}
-                        </button>
-                      ))}
-                      <div className="my-1 border-t border-(--border-color)" />
+            <span className="flex shrink-0 items-center gap-0.5 transition-opacity md:invisible md:opacity-0 md:group-hover:visible md:group-hover:opacity-100 md:group-focus-within:visible md:group-focus-within:opacity-100">
+              <div className="relative" ref={flagRef}>
+                <button
+                  onClick={toggleFlag}
+                  className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
+                  aria-label="Change priority"
+                >
+                  <FontAwesomeIcon icon={faFlag} size="xs" />
+                </button>
+                {flagOpen && (
+                  <div className="absolute right-0 top-full z-10 mt-1 w-28 rounded-lg border border-(--border-color) bg-(--bg-primary) p-1">
+                    {(["low", "medium", "high"] as const).map((priority) => (
                       <button
+                        key={priority}
                         onClick={(e) => {
                           e.stopPropagation();
-                          cyclePriority();
+                          setFlagOpen(false);
+                          onUpdate({ ...task, priority });
                         }}
-                        className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-muted) font-interface hover:bg-(--bg-hover)"
+                        className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-secondary) font-interface hover:bg-(--bg-hover)"
                       >
-                        <FontAwesomeIcon icon={faFlag} size="2xs" />
-                        Cycle
+                        <FontAwesomeIcon
+                          icon={priorityIcons[priority]}
+                          size="2xs"
+                        />
+                        {priorityConfig[priority].label}
                       </button>
-                    </div>
-                  )}
-                </div>
+                    ))}
+                    <div className="my-1 border-t border-(--border-color)" />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        cyclePriority();
+                      }}
+                      className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-muted) font-interface hover:bg-(--bg-hover)"
+                    >
+                      <FontAwesomeIcon icon={faFlag} size="2xs" />
+                      Cycle
+                    </button>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(task);
+                }}
+                className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
+                aria-label="Edit task"
+              >
+                <FontAwesomeIcon icon={faPenToSquare} size="xs" />
+              </button>
+              {onDelete && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onEdit(task);
+                    onDelete(task);
                   }}
-                  className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
-                  aria-label="Edit task"
+                  className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--color-error) hover:text-(--text-white)"
+                  aria-label="Delete task"
                 >
-                  <FontAwesomeIcon icon={faPenToSquare} size="xs" />
+                  <FontAwesomeIcon icon={faTrashCan} size="xs" />
                 </button>
-                {onDelete && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete(task);
-                    }}
-                    className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--color-error) hover:text-(--text-white)"
-                    aria-label="Delete task"
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} size="xs" />
-                  </button>
-                )}
-              </span>
-            )}
+              )}
+            </span>
           </>
         )}
       </div>
