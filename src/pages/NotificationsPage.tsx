@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import useNotificationStore from "../stores/notificationStore";
 import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
 import NotificationsPanel from "../components/Notifications/NotificationsPanel";
+import ChipTabs, { type ChipTabItem } from "../components/ui/ChipTabs";
 import Spinner from "../components/ui/Spinner";
 
 type NotificationTab = "all" | "unread";
 
-const TABS: { key: NotificationTab; label: string; icon: IconDefinition }[] = [
-  { key: "all", label: "All", icon: faInbox },
-  { key: "unread", label: "Unread", icon: faEnvelope },
+const TABS: ChipTabItem<NotificationTab>[] = [
+  { id: "all", label: "All", icon: faInbox },
+  { id: "unread", label: "Unread", icon: faEnvelope },
 ];
 
 const textButton =
@@ -114,32 +113,22 @@ export default function NotificationsPage() {
           )}
         </div>
 
-        <div
+        <ChipTabs
+          items={TABS}
+          value={tab}
+          onChange={setTab}
           role="tablist"
-          aria-label="Notifications filter"
-          className="mt-4 flex gap-1.5 overflow-x-auto pb-3"
-        >
-          {TABS.map((t) => (
-            <button
-              key={t.key}
-              role="tab"
-              aria-selected={tab === t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 font-interface text-xs font-semibold transition-colors
-                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color) ${
-                  tab === t.key
-                    ? "border-(--accent-color) bg-(--accent-soft) text-(--accent-strong)"
-                    : "border-(--border-color) bg-(--bg-primary) text-(--text-muted) hover:border-(--accent-color) hover:text-(--accent-color)"
-                }`}
-            >
-              <FontAwesomeIcon icon={t.icon} size="xs" />
-              {t.label}
-            </button>
-          ))}
-        </div>
+          ariaLabel="Notifications filter"
+          className="mt-4 pb-3"
+        />
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto pt-4">
+      <div
+        role="tabpanel"
+        id={`panel-${tab}`}
+        aria-labelledby={`tab-${tab}`}
+        className="min-h-0 flex-1 overflow-y-auto pt-4"
+      >
         {isLoading && notifications.length === 0 ? (
           <Spinner className="py-24" />
         ) : (

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import TaskRow from "./TaskRow";
-import TaskFilter from "./TaskFilter";
+import TaskFilter, { type TaskFilterValue } from "./TaskFilter";
 import EmptyState from "../ui/EmptyState";
 import { isOverdue } from "../../utils/date";
-import type { BoardTask, TodoStatus } from "../../types/todo";
-
-type BoardFilter = "all" | TodoStatus | "overdue" | "priority";
+import type { BoardTask } from "../../types/todo";
 
 interface TaskListProps {
   tasks: BoardTask[];
@@ -16,7 +14,7 @@ interface TaskListProps {
 }
 
 export default function TaskList({ tasks, onUpdate, onEdit, onDelete }: TaskListProps) {
-  const [filter, setFilter] = useState<BoardFilter>("all");
+  const [filter, setFilter] = useState<TaskFilterValue>("all");
 
   const filtered = tasks.filter((task) => {
     if (filter === "overdue") return isOverdue(task.dueDate) && task.status !== "done";
