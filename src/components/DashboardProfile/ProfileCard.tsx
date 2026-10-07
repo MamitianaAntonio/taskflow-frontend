@@ -9,7 +9,10 @@ export default function ProfileCard({ user }: { user: User | null }) {
   const navigate = useNavigate();
 
   return (
-    <div className="group relative flex shrink-0 items-center gap-4 overflow-hidden rounded-xl bg-(--accent-color) p-3 transition-all duration-200 hover:shadow-md sm:p-4">
+    <div
+      className="group relative flex shrink-0 items-center gap-4 overflow-hidden rounded-xl
+      brightness-95 bg-(--accent-color) p-3 transition-all duration-200 hover:shadow-md sm:p-4"
+    >
       <div
         className="absolute -right-6 -top-8 h-28 w-28 rounded-full blur-sm"
         style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
