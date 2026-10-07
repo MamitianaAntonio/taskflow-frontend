@@ -58,9 +58,11 @@ export default function Drawer({
     return main?.getBoundingClientRect().left ?? 0;
   }, []);
 
+  if (!open) return null;
+
   const overlay = isMobile ? (
     <motion.div
-      className="fixed inset-0 z-40 bg-(--overlay)"
+      className="fixed inset-0 z-50 bg-(--overlay)"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -69,7 +71,7 @@ export default function Drawer({
     />
   ) : (
     <motion.div
-      className="fixed right-0 bottom-0 z-40 bg-(--overlay)"
+      className="fixed right-0 bottom-0 z-50 bg-(--overlay)"
       style={{ top: mainTop, left: mainLeft }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

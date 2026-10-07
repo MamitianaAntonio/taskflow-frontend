@@ -46,9 +46,11 @@ export default function Modal({
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
+  if (!open) return null;
+
   const overlay = (
     <motion.div
-      className="fixed inset-0 z-40 bg-(--overlay)"
+      className="fixed inset-0 z-50 bg-(--overlay)"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
