@@ -1,33 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faRotate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckDouble,
+  faKey,
+  faLock,
+  faRotate,
+} from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 import SettingsSection from "./SettingsSection";
 import FieldList, { type FieldConfig } from "./FieldList";
 import { usePasswordForm } from "../../hooks/usePasswordForm";
 
-const FIELDS: FieldConfig[] = [
+const FIELDS = [
   {
-    label: "Current",
+    label: "Current password",
     icon: faLock,
     key: "current",
     placeholder: "Your current password",
     autoComplete: "current-password",
   },
   {
-    label: "New",
-    icon: faLock,
+    label: "New password",
+    icon: faKey,
     key: "next",
     placeholder: "At least 6 characters",
     autoComplete: "new-password",
   },
   {
-    label: "Confirm",
-    icon: faLock,
+    label: "Confirm password",
+    icon: faCheckDouble,
     key: "confirm",
     placeholder: "Repeat new password",
     autoComplete: "new-password",
   },
-];
+] satisfies readonly FieldConfig[];
 
 export default function PasswordForm() {
   const { password, setField, saving, submit } = usePasswordForm();

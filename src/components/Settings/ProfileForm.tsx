@@ -5,28 +5,35 @@ import FieldList, { type FieldConfig } from "./FieldList";
 import { useProfileForm } from "../../hooks/useProfileForm";
 import Button from "../ui/Button";
 
-const FIELDS: FieldConfig[] = [
-  { label: "Name", icon: faUser, key: "name", placeholder: "Your name" },
+const FIELDS = [
+  {
+    label: "Name",
+    icon: faUser,
+    key: "name",
+    placeholder: "Your name",
+    autoComplete: "name",
+  },
   {
     label: "Email",
     icon: faEnvelope,
     key: "email",
     placeholder: "you@example.com",
     type: "email",
+    autoComplete: "email",
   },
-];
+] satisfies readonly FieldConfig[];
 
 export default function ProfileForm() {
   const { profile, setField, saving, submit } = useProfileForm();
 
   return (
-    <form onSubmit={submit} className="flex flex-col">
+    <form onSubmit={submit}>
       <SettingsSection
         title="Profile"
         description="Update your name and email. These show up across your account."
         footer={
           <Button type="submit" variant="primary" loading={saving}>
-            <FontAwesomeIcon icon={faSave} size="1x" /> Save
+            <FontAwesomeIcon icon={faSave} /> Save
           </Button>
         }
       >
