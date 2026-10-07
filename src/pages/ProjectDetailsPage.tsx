@@ -298,6 +298,8 @@ export default function ProjectDetailsPage() {
           size="small"
           className="hover:border-(--color-error) hover:text-(--color-error)"
           onClick={() => {
+            if (!window.confirm("Delete this project and its tasks permanently?"))
+              return;
             deleteProject(id);
             navigate(ROUTES.projects);
           }}
