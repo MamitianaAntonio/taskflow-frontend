@@ -285,7 +285,7 @@ export default function ProjectDetailsPage() {
               icon={faTriangleExclamation}
               className="text-xs text-(--color-error)"
             />
-            <h3 className="font-sans text-xs font-bold uppercase tracking-wide text-(--color-error)">
+            <h3 className="text-xs font-bold uppercase tracking-wide text-(--color-error)">
               Danger zone
             </h3>
           </div>

@@ -106,7 +106,7 @@ export default function Drawer({
               />
             )}
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-sans text-sm font-bold text-(--text-primary)">
+              <h3 className="truncate text-sm font-bold text-(--text-primary)">
                 {title}
               </h3>
               {subtitle && (
@@ -142,7 +142,7 @@ export default function Drawer({
               />
             )}
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-sans text-sm font-bold text-(--text-primary)">
+              <h3 className="truncate text-sm font-bold text-(--text-primary)">
                 {title}
               </h3>
               {subtitle && (

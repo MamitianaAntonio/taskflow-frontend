@@ -50,7 +50,7 @@ export function TaskCardView({
     >
       <div className="flex items-center gap-1.5">
         <p
-          className={`min-w-0 flex-1 truncate rounded font-sans text-[13px] font-semibold leading-snug ${
+          className={`min-w-0 flex-1 truncate rounded text-[13px] font-semibold leading-snug ${
             isDone
               ? "text-(--text-secondary) line-through"
               : "text-(--text-primary)"

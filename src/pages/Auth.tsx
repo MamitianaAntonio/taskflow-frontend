@@ -70,7 +70,7 @@ function Auth() {
         </div>
       </div>
 
-      <h3 className="font-sans absolute bottom-0 mb-4 w-full text-center text-xs font-light text-(--text-primary) sm:text-sm">
+      <h3 className="absolute bottom-0 mb-4 w-full text-center text-xs font-light text-(--text-primary) sm:text-sm">
         © Copyright 2026 TaskFlow
       </h3>
     </div>

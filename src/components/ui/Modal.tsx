@@ -71,7 +71,7 @@ export default function Modal({
         />
       )}
       <div className="min-w-0 flex-1">
-        <h3 className="truncate font-sans text-sm font-bold text-(--text-primary)">{title}</h3>
+        <h3 className="truncate text-sm font-bold text-(--text-primary)">{title}</h3>
         {subtitle && <div className="truncate text-xs text-(--text-muted)">{subtitle}</div>}
       </div>
       <CloseButton onClose={onClose} />
