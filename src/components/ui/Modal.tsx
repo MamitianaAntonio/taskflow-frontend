@@ -46,9 +46,11 @@ export default function Modal({
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
+  if (!open) return null;
+
   const overlay = (
     <motion.div
-      className="fixed inset-0 z-40 bg-(--overlay)"
+      className="fixed inset-0 z-50 bg-(--overlay)"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -71,7 +73,7 @@ export default function Modal({
         />
       )}
       <div className="min-w-0 flex-1">
-        <h3 className="truncate font-sans text-sm font-bold text-(--text-primary)">{title}</h3>
+        <h3 className="truncate text-sm font-bold text-(--text-primary)">{title}</h3>
         {subtitle && <div className="truncate text-xs text-(--text-muted)">{subtitle}</div>}
       </div>
       <CloseButton onClose={onClose} />

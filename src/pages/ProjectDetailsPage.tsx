@@ -285,7 +285,7 @@ export default function ProjectDetailsPage() {
               icon={faTriangleExclamation}
               className="text-xs text-(--color-error)"
             />
-            <h3 className="font-sans text-xs font-bold uppercase tracking-wide text-(--color-error)">
+            <h3 className="text-xs font-bold uppercase tracking-wide text-(--color-error)">
               Danger zone
             </h3>
           </div>
@@ -298,6 +298,8 @@ export default function ProjectDetailsPage() {
           size="small"
           className="hover:border-(--color-error) hover:text-(--color-error)"
           onClick={() => {
+            if (!window.confirm("Delete this project and its tasks permanently?"))
+              return;
             deleteProject(id);
             navigate(ROUTES.projects);
           }}

@@ -38,7 +38,7 @@ export default function ProgressReminder({
   return (
     <div className={card}>
       <div className="flex items-baseline justify-between gap-3">
-        <p className="font-sans text-sm font-medium text-(--text-primary)">
+        <p className="text-sm font-medium text-(--text-primary)">
           {active.message}
         </p>
         <span className="font-mono text-sm font-semibold text-(--accent-strong) tabular-nums">

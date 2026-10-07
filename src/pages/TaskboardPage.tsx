@@ -15,6 +15,8 @@ import CustomTask from "../components/TaskBoard/CustomTask";
 import TaskList from "../components/TaskBoard/TaskList";
 import TaskboardStats from "../components/TaskBoard/TaskboardStats";
 import Button from "../components/ui/Button";
+import ErrorState from "../components/ui/ErrorState";
+import Spinner from "../components/ui/Spinner";
 import useTodoStore from "../stores/todoStore";
 import { statusConfig } from "../constants/taskConfig";
 import type { BoardTask, Todo, UpdateTodoPayload } from "../types/todo";
@@ -30,6 +32,8 @@ const toBoardTask = (todo: Todo): BoardTask => ({
 
 export default function TaskboardPage() {
   const todos = useTodoStore((state) => state.todos);
+  const isLoading = useTodoStore((state) => state.isLoading);
+  const error = useTodoStore((state) => state.error);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
   const updateTodo = useTodoStore((state) => state.updateTodo);
@@ -169,23 +173,40 @@ export default function TaskboardPage() {
         ))}
       </div>
 
-      <TaskList
-        tasks={tasks}
-        onUpdate={async (task) => {
-          await updateTodo(task.id, {
-            title: task.label,
-            status: task.status,
-            dueDate: task.dueDate,
-            priority: task.priority,
-          });
-        }}
-        onEdit={setOpenTask}
-        onDelete={(task) => {
-          if (paramTaskId === task.id) setSearchParams({}, { replace: true });
-          setOpenTask((prev) => (prev?.id === task.id ? null : prev));
-          deleteTodo(task.id);
-        }}
-      />
+      {error ? (
+        <ErrorState
+          message="Your tasks could not be loaded."
+          action={
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => fetchTodos().catch(() => {})}
+            >
+              Retry
+            </Button>
+          }
+        />
+      ) : isLoading && tasks.length === 0 ? (
+        <Spinner className="py-10" />
+      ) : (
+        <TaskList
+          tasks={tasks}
+          onUpdate={async (task) => {
+            await updateTodo(task.id, {
+              title: task.label,
+              status: task.status,
+              dueDate: task.dueDate,
+              priority: task.priority,
+            });
+          }}
+          onEdit={setOpenTask}
+          onDelete={(task) => {
+            if (paramTaskId === task.id) setSearchParams({}, { replace: true });
+            setOpenTask((prev) => (prev?.id === task.id ? null : prev));
+            deleteTodo(task.id);
+          }}
+        />
+      )}
     </div>
   );
 }

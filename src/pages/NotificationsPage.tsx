@@ -6,6 +6,8 @@ import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
 import NotificationsPanel from "../components/Notifications/NotificationsPanel";
 import ChipTabs, { type ChipTabItem } from "../components/ui/ChipTabs";
+import Button from "../components/ui/Button";
+import ErrorState from "../components/ui/ErrorState";
 import Spinner from "../components/ui/Spinner";
 
 type NotificationTab = "all" | "unread";
@@ -39,6 +41,7 @@ export default function NotificationsPage() {
     hasMore,
     isLoading,
     isLoadingMore,
+    error,
     fetchNotifications,
     fetchUnread,
     loadMore,
@@ -64,6 +67,12 @@ export default function NotificationsPage() {
     const load = tab === "all" ? fetchNotifications : fetchUnread;
     load().catch(() => toast.error("Failed to load notifications"));
   }, [tab, fetchNotifications, fetchUnread, reset]);
+
+  const retry = () => {
+    (tab === "all" ? fetchNotifications : fetchUnread)().catch(() =>
+      toast.error("Failed to load notifications"),
+    );
+  };
 
   return (
     // The page fills its parent: the header stays put, only the list scrolls.
@@ -131,6 +140,15 @@ export default function NotificationsPage() {
       >
         {isLoading && notifications.length === 0 ? (
           <Spinner className="py-24" />
+        ) : error && notifications.length === 0 ? (
+          <ErrorState
+            message="Your notifications could not be loaded."
+            action={
+              <Button variant="outline" size="small" onClick={retry}>
+                Retry
+              </Button>
+            }
+          />
         ) : (
           <NotificationsPanel
             notifications={notifications}

@@ -36,13 +36,13 @@ function Home() {
           src="/home-photo.png"
           alt="TaskFlow home"
         />
-        <h1 className="font-sans text-4xl font-bold">
+        <h1 className="text-4xl font-bold">
           <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">
             Task
           </span>
           <span className="text-(--text-primary)">Flow</span>
         </h1>
-        <h3 className="font-sans text-[1.7vh] text-(--text-secondary) max-sm:text-base">
+        <h3 className="text-[1.7vh] text-(--text-secondary) max-sm:text-base">
           "Organize your task, keep your flow"
         </h3>
         <Button
@@ -53,7 +53,7 @@ function Home() {
         />
       </div>
 
-      <h3 className="mb-4 font-sans font-light text-(--text-primary)">
+      <h3 className="mb-4 font-light text-(--text-primary)">
         © Copyright 2026 Taskflow
       </h3>
     </div>

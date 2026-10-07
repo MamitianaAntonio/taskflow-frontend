@@ -6,10 +6,12 @@ import ProjectCreation from "../components/Projects/ProjectCreation";
 import ProjectSearch from "../components/Projects/ProjectSearch";
 import ProjectGrid from "../components/Projects/ProjectGrid";
 import { EmptyState, LoadingState, NoResults } from "../components/Projects/ProjectStates";
+import Button from "../components/ui/Button";
+import ErrorState from "../components/ui/ErrorState";
 import { ROUTES } from "../constants/routes";
 
 export default function ProjectsPage() {
-  const { projects, isLoading, fetchAll, create } = useProjectStore();
+  const { projects, isLoading, error, fetchAll, create } = useProjectStore();
   const todos = useTodoStore((state) => state.todos);
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const navigate = useNavigate();
@@ -77,21 +79,36 @@ export default function ProjectsPage() {
         All projects
       </p>
 
-      {isLoading && <LoadingState />}
+      {error && (
+        <ErrorState
+          message="Your projects could not be loaded."
+          action={
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => fetchAll().catch(() => {})}
+            >
+              Retry
+            </Button>
+          }
+        />
+      )}
 
-      {!isLoading && projects.length === 0 && <EmptyState />}
+      {!error && isLoading && <LoadingState />}
 
-      {!isLoading && projects.length > 0 && filtered.length === 0 && search && (
+      {!error && !isLoading && projects.length === 0 && <EmptyState />}
+
+      {!error && !isLoading && projects.length > 0 && filtered.length === 0 && search && (
         <NoResults search={search} />
       )}
 
-      {!isLoading && projects.length > 0 && filtered.length === 0 && !search && (
+      {!error && !isLoading && projects.length > 0 && filtered.length === 0 && !search && (
         <p className="-mt-3 font-interface text-xs text-(--text-muted)">
           Click on a project to view its board and manage tasks.
         </p>
       )}
 
-      {!isLoading && projects.length > 0 && filtered.length > 0 && (
+      {!error && !isLoading && projects.length > 0 && filtered.length > 0 && (
         <ProjectGrid
           projects={filtered}
           progress={progress}
