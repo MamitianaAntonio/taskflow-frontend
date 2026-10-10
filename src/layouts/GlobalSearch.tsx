@@ -217,7 +217,7 @@ export default function GlobalSearch({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute inset-x-0 top-full z-50 mt-2 origin-top overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-primary) shadow-sm"
+            className="absolute inset-x-0 top-full z-50 mt-5 overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-primary) shadow-sm"
           >
             <div className="flex items-center justify-between gap-2 border-b border-(--border-color) bg-(--bg-secondary) px-4 py-3">
               <p className="flex items-center gap-2 text-sm font-semibold text-(--text-primary)">
