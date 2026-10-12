@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  faListUl,
-  faPlus,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faListUl, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CheckBox from "../ui/CheckBox";
 import type { ChecklistItem } from "../../types/todo";
@@ -26,14 +22,14 @@ export default function ChecklistSection({
   onToggle,
   onDelete,
 }: ChecklistSectionProps) {
+  const [adding, setAdding] = useState(false);
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
 
   const done = items.filter((i) => i.done).length;
   const total = items.length;
-  const percent = total ? Math.round((done / total) * 100) : 0;
 
-  const submit = async () => {
+  const add = async () => {
     const text = value.trim();
     if (!text || busy) return;
     setBusy(true);
@@ -46,7 +42,7 @@ export default function ChecklistSection({
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <span className={fieldLabelClass}>
           <FontAwesomeIcon
@@ -56,27 +52,18 @@ export default function ChecklistSection({
           Checklist
         </span>
         {total > 0 && (
-          <span className="font-interface text-xs font-semibold text-(--text-muted)">
-            {done}/{total}
+          <span className="font-interface text-[11px] font-medium text-(--text-muted)">
+            {done}/{total} done
           </span>
         )}
       </div>
 
       {total > 0 && (
-        <div className="h-1 w-full overflow-hidden rounded-full bg-(--bg-tertiary)">
-          <div
-            className="h-full rounded-full bg-(--color-success) transition-[width] duration-300"
-            style={{ width: `${percent}%` }}
-          />
-        </div>
-      )}
-
-      {total > 0 && (
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col">
           {items.map((item) => (
             <div
               key={item.id}
-              className="group flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-(--bg-secondary)"
+              className="group flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-(--bg-hover)"
             >
               <CheckBox
                 checked={item.done}
@@ -85,7 +72,7 @@ export default function ChecklistSection({
                 onToggle={() => onToggle(item.id, !item.done)}
               />
               <span
-                className={`flex-1 truncate text-sm ${
+                className={`min-w-0 flex-1 truncate text-sm ${
                   item.done
                     ? "text-(--text-muted) line-through"
                     : "text-(--text-primary)"
@@ -97,31 +84,53 @@ export default function ChecklistSection({
                 type="button"
                 aria-label="Delete checklist item"
                 onClick={() => onDelete(item.id)}
-                className="text-(--text-muted) opacity-0 transition-all hover:text-(--color-error) group-hover:opacity-100 focus-visible:opacity-100"
+                className="shrink-0 text-(--text-muted) opacity-0 transition-opacity hover:text-(--color-error) group-hover:opacity-100 focus-visible:opacity-100"
               >
-                <FontAwesomeIcon icon={faTrashCan} className="text-xs" />
+                <FontAwesomeIcon icon={faTrashCan} size="xs" />
               </button>
             </div>
           ))}
         </div>
       )}
 
-      <div className="flex items-center gap-2 rounded-lg border border-(--border-color) bg-(--bg-primary) px-3 py-2 transition-colors focus-within:border-(--accent-color)">
-        <FontAwesomeIcon icon={faPlus} className="text-xs text-(--text-muted)" />
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              void submit();
-            }
-          }}
-          placeholder="Add a checklist item..."
-          disabled={disabled || busy}
-          className="w-full bg-transparent text-sm text-(--text-primary) outline-none placeholder:text-(--text-muted) disabled:opacity-50"
-        />
-      </div>
+      {adding ? (
+        <div className="flex items-center gap-2.5 rounded-lg bg-(--bg-primary) px-2 py-1.5">
+          <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-md border border-(--border-color) text-(--text-muted)">
+            <FontAwesomeIcon icon={faPlus} size="2xs" />
+          </span>
+          <input
+            autoFocus
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                void add();
+              } else if (e.key === "Escape") {
+                setValue("");
+                setAdding(false);
+              }
+            }}
+            onBlur={() => {
+              if (value.trim()) void add();
+              setAdding(false);
+            }}
+            placeholder="Add an item..."
+            disabled={disabled || busy}
+            className="w-full bg-transparent text-sm text-(--text-primary) outline-none placeholder:text-(--text-muted) disabled:opacity-50"
+          />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          disabled={disabled}
+          className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left font-interface text-xs font-medium text-(--text-muted) transition-colors hover:bg-(--bg-hover) hover:text-(--accent-strong) disabled:opacity-50"
+        >
+          <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+          Add checklist item
+        </button>
+      )}
     </div>
   );
 }

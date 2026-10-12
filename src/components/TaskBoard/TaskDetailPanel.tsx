@@ -139,7 +139,7 @@ export default function TaskDetailPanel({
         />
 
         {onAddSubtask && onToggleSubtask && onDeleteSubtask && (
-          <div className="border-t border-(--border-color) px-4 py-4 sm:px-5">
+          <div className="border-t border-(--border-color) px-4 py-4 sm:px-5 sm:py-5">
             <SubtaskList
               subtasks={task.subtasks ?? []}
               disabled={saving}
@@ -153,7 +153,7 @@ export default function TaskDetailPanel({
         {onAddChecklistItem &&
           onToggleChecklistItem &&
           onDeleteChecklistItem && (
-            <div className="border-t border-(--border-color) px-4 py-4 sm:px-5">
+            <div className="border-t border-(--border-color) px-4 py-4 sm:px-5 sm:py-5">
               <ChecklistSection
                 items={task.checklist ?? []}
                 disabled={saving}
