@@ -9,9 +9,26 @@ interface TaskDetailProps {
   onClose: () => void;
   onUpdate: (id: string, changes: UpdateTodoPayload) => Promise<void>;
   onDelete?: (id: string) => void | Promise<void>;
+  onAddSubtask?: (title: string) => Promise<void>;
+  onToggleSubtask?: (id: string, done: boolean) => Promise<void>;
+  onDeleteSubtask?: (id: string) => Promise<void>;
+  onAddChecklistItem?: (text: string) => Promise<void>;
+  onToggleChecklistItem?: (id: string, done: boolean) => Promise<void>;
+  onDeleteChecklistItem?: (id: string) => Promise<void>;
 }
 
-export default function TaskDetail({ task, onClose, onUpdate, onDelete }: TaskDetailProps) {
+export default function TaskDetail({
+  task,
+  onClose,
+  onUpdate,
+  onDelete,
+  onAddSubtask,
+  onToggleSubtask,
+  onDeleteSubtask,
+  onAddChecklistItem,
+  onToggleChecklistItem,
+  onDeleteChecklistItem,
+}: TaskDetailProps) {
   const [localTitle, setLocalTitle] = useState(task.label);
   const [localDescription, setLocalDescription] = useState(task.description ?? "");
   const [localStatus, setLocalStatus] = useState(task.status);
@@ -78,6 +95,12 @@ export default function TaskDetail({ task, onClose, onUpdate, onDelete }: TaskDe
       dueDateStr={formatDate(task.dueDate)}
       saving={saving}
       dirty={dirty}
+      onAddSubtask={onAddSubtask}
+      onToggleSubtask={onToggleSubtask}
+      onDeleteSubtask={onDeleteSubtask}
+      onAddChecklistItem={onAddChecklistItem}
+      onToggleChecklistItem={onToggleChecklistItem}
+      onDeleteChecklistItem={onDeleteChecklistItem}
     />
   );
 }

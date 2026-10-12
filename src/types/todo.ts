@@ -2,6 +2,14 @@ export type TodoStatus = "todo" | "doing" | "done";
 
 export type TodoPriority = "low" | "medium" | "high";
 
+export interface ChecklistItem {
+  id: string;
+  text: string;
+  done: boolean;
+  position: number;
+  createdAt?: string;
+}
+
 export interface Todo {
   id: string;
   title: string;
@@ -10,6 +18,9 @@ export interface Todo {
   dueDate: string | null;
   priority: TodoPriority;
   projectId?: string | null;
+  parentId?: string | null;
+  subtasks?: Todo[];
+  checklist?: ChecklistItem[];
   completedAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -22,6 +33,7 @@ export interface CreateTodoPayload {
   dueDate?: string | null;
   priority?: TodoPriority;
   projectId?: string | null;
+  parentId?: string | null;
 }
 
 export interface UpdateTodoPayload {
@@ -42,6 +54,8 @@ export interface BoardTask {
   priority: TodoPriority;
   updatedAt?: string;
   overdue?: boolean;
+  subtasks?: Todo[];
+  checklist?: ChecklistItem[];
 }
 
 export interface KanbanTask {
@@ -52,6 +66,8 @@ export interface KanbanTask {
   dueDate: string | null;
   priority: TodoPriority;
   updatedAt?: string;
+  subtasks?: Todo[];
+  checklist?: ChecklistItem[];
 }
 
 export type DashboardTask = Todo & {

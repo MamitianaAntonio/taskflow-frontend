@@ -6,6 +6,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Drawer from "../ui/Drawer";
 import TaskDetailFields from "./TaskDetailFields";
+import SubtaskList from "./SubtaskList";
+import ChecklistSection from "./ChecklistSection";
 import Button from "../ui/Button";
 import { statusConfig } from "../../constants/taskConfig";
 import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
@@ -28,6 +30,12 @@ interface TaskDetailPanelProps {
   dueDateStr?: string;
   saving: boolean;
   dirty: boolean;
+  onAddSubtask?: (title: string) => Promise<void>;
+  onToggleSubtask?: (id: string, done: boolean) => Promise<void>;
+  onDeleteSubtask?: (id: string) => Promise<void>;
+  onAddChecklistItem?: (text: string) => Promise<void>;
+  onToggleChecklistItem?: (id: string, done: boolean) => Promise<void>;
+  onDeleteChecklistItem?: (id: string) => Promise<void>;
 }
 
 export default function TaskDetailPanel({
@@ -48,6 +56,12 @@ export default function TaskDetailPanel({
   dueDateStr,
   saving,
   dirty,
+  onAddSubtask,
+  onToggleSubtask,
+  onDeleteSubtask,
+  onAddChecklistItem,
+  onToggleChecklistItem,
+  onDeleteChecklistItem,
 }: TaskDetailPanelProps) {
   return (
     <Drawer
@@ -108,20 +122,48 @@ export default function TaskDetailPanel({
         </div>
       }
     >
-      <TaskDetailFields
-        localTitle={localTitle}
-        setLocalTitle={setLocalTitle}
-        localDescription={localDescription}
-        setLocalDescription={setLocalDescription}
-        localStatus={localStatus}
-        setLocalStatus={setLocalStatus}
-        localPriority={localPriority}
-        setLocalPriority={setLocalPriority}
-        localDueDate={localDueDate}
-        setLocalDueDate={setLocalDueDate}
-        dueDateStr={dueDateStr}
-        saving={saving}
-      />
+      <div className="flex flex-col">
+        <TaskDetailFields
+          localTitle={localTitle}
+          setLocalTitle={setLocalTitle}
+          localDescription={localDescription}
+          setLocalDescription={setLocalDescription}
+          localStatus={localStatus}
+          setLocalStatus={setLocalStatus}
+          localPriority={localPriority}
+          setLocalPriority={setLocalPriority}
+          localDueDate={localDueDate}
+          setLocalDueDate={setLocalDueDate}
+          dueDateStr={dueDateStr}
+          saving={saving}
+        />
+
+        {onAddSubtask && onToggleSubtask && onDeleteSubtask && (
+          <div className="border-t border-(--border-color) px-4 py-4 sm:px-5">
+            <SubtaskList
+              subtasks={task.subtasks ?? []}
+              disabled={saving}
+              onAdd={onAddSubtask}
+              onToggle={onToggleSubtask}
+              onDelete={onDeleteSubtask}
+            />
+          </div>
+        )}
+
+        {onAddChecklistItem &&
+          onToggleChecklistItem &&
+          onDeleteChecklistItem && (
+            <div className="border-t border-(--border-color) px-4 py-4 sm:px-5">
+              <ChecklistSection
+                items={task.checklist ?? []}
+                disabled={saving}
+                onAdd={onAddChecklistItem}
+                onToggle={onToggleChecklistItem}
+                onDelete={onDeleteChecklistItem}
+              />
+            </div>
+          )}
+      </div>
     </Drawer>
   );
 }

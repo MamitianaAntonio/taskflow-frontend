@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { formatDate } from "../../utils/date";
 import { priorityConfig, statusCardColor } from "../../constants/taskConfig";
+import TaskProgressBadge from "./TaskProgressBadge";
 import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
 
 interface TaskRowProps {
@@ -273,16 +274,23 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
             </span>
           )}
 
-          {task.priority && task.priority !== "low" && (
-            <span
-              className={`flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
-            >
-              <FontAwesomeIcon
-                icon={priorityIndicator[task.priority] ?? faFlag}
-                size="2xs"
-              />
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            <TaskProgressBadge
+              subtasks={task.subtasks}
+              checklist={task.checklist}
+            />
+
+            {task.priority && task.priority !== "low" && (
+              <span
+                className={`flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
+              >
+                <FontAwesomeIcon
+                  icon={priorityIndicator[task.priority] ?? faFlag}
+                  size="2xs"
+                />
+              </span>
+            )}
+          </div>
         </div>
       )}
     </div>
