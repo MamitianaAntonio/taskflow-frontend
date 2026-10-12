@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { priorityConfig, statusCardColor } from "../../constants/taskConfig";
 import { formatRelativeDate } from "../../utils/date";
+import TaskProgressBadge from "../TaskBoard/TaskProgressBadge";
 import type { KanbanTask } from "../../types/todo";
 
 interface TaskCardProps {
@@ -85,16 +86,20 @@ export function TaskCardView({
           {dateLabel || "No date"}
         </span>
 
-        {task.priority && task.priority !== "low" && (
-          <span
-            className={`inline-flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
-          >
-            <FontAwesomeIcon
-              icon={priorityIcon[task.priority] ?? faFlag}
-              size="2xs"
-            />
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          <TaskProgressBadge subtasks={task.subtasks} />
+
+          {task.priority && task.priority !== "low" && (
+            <span
+              className={`inline-flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
+            >
+              <FontAwesomeIcon
+                icon={priorityIcon[task.priority] ?? faFlag}
+                size="2xs"
+              />
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

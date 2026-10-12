@@ -40,6 +40,19 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
     dueDate: todo.dueDate,
     priority: todo.priority,
     updatedAt: todo.updatedAt,
+    subtasks: todo.subtasks ?? [],
+  };
+}
+
+function toBoardTask(todo: Todo): BoardTask {
+  return {
+    id: todo.id,
+    label: todo.title,
+    description: todo.description,
+    status: todo.status || "todo",
+    dueDate: todo.dueDate,
+    priority: todo.priority || "medium",
+    subtasks: todo.subtasks ?? [],
   };
 }
 
@@ -56,9 +69,12 @@ export default function ProjectDetailsPage() {
   const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const updateTodo = useTodoStore((state) => state.updateTodo);
   const deleteTodo = useTodoStore((state) => state.deleteTodo);
+  const addSubtask = useTodoStore((state) => state.addSubtask);
+  const updateSubtask = useTodoStore((state) => state.updateSubtask);
+  const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
 
   const [showCreate, setShowCreate] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<BoardTask | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     if (projectId) fetchById(projectId);
@@ -69,6 +85,16 @@ export default function ProjectDetailsPage() {
   }, [fetchTodos]);
 
   const id = projectId;
+
+  // The opened task is derived from the store so subtask mutations are
+  // reflected immediately without a local snapshot to keep in sync.
+  const selectedTask = useMemo<BoardTask | null>(() => {
+    if (!selectedTaskId) return null;
+    const todo = (Array.isArray(todos) ? todos : []).find(
+      (t) => t.id === selectedTaskId,
+    );
+    return todo ? toBoardTask(todo) : null;
+  }, [selectedTaskId, todos]);
 
   const projectTodos = useMemo<KanbanTask[]>(
     () =>
@@ -95,7 +121,7 @@ export default function ProjectDetailsPage() {
 
   const handleDelete = (taskId: string) => {
     deleteTodo(taskId);
-    setSelectedTask((prev) => (prev?.id === taskId ? null : prev));
+    setSelectedTaskId((prev) => (prev === taskId ? null : prev));
   };
 
   const handleTaskUpdate = async (
@@ -103,29 +129,10 @@ export default function ProjectDetailsPage() {
     changes: UpdateTodoPayload,
   ) => {
     await updateTodo(taskId, changes);
-    setSelectedTask((prev) => {
-      if (!prev || prev.id !== taskId) return prev;
-      const next: UpdateTodoPayload & { label?: string } = { ...changes };
-      if (next.title !== undefined) {
-        next.label = next.title;
-        delete next.title;
-      }
-      return { ...prev, ...next };
-    });
   };
 
   const handleTaskClick = (task: KanbanTask) => {
-    const original = todos.find((t) => t.id === task.id);
-    if (original) {
-      setSelectedTask({
-        id: original.id,
-        label: original.title,
-        description: original.description,
-        status: original.status || "todo",
-        dueDate: original.dueDate,
-        priority: original.priority || "medium",
-      });
-    }
+    setSelectedTaskId(task.id);
   };
 
   if (isLoading) {
@@ -271,9 +278,20 @@ export default function ProjectDetailsPage() {
           <TaskDetail
             key="task-detail"
             task={selectedTask}
-            onClose={() => setSelectedTask(null)}
+            onClose={() => setSelectedTaskId(null)}
             onUpdate={handleTaskUpdate}
             onDelete={handleDelete}
+            onAddSubtask={async (title) => {
+              await addSubtask(selectedTask.id, title);
+            }}
+            onToggleSubtask={async (subtaskId, done) => {
+              await updateSubtask(selectedTask.id, subtaskId, {
+                status: done ? "done" : "todo",
+              });
+            }}
+            onDeleteSubtask={async (subtaskId) => {
+              await deleteSubtask(selectedTask.id, subtaskId);
+            }}
           />
         )}
       </AnimatePresence>

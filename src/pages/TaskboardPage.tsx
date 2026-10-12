@@ -28,6 +28,7 @@ const toBoardTask = (todo: Todo): BoardTask => ({
   status: todo.status || "todo",
   dueDate: todo.dueDate,
   priority: todo.priority || "medium",
+  subtasks: todo.subtasks ?? [],
 });
 
 export default function TaskboardPage() {
@@ -38,8 +39,11 @@ export default function TaskboardPage() {
   const addTodo = useTodoStore((state) => state.addTodo);
   const updateTodo = useTodoStore((state) => state.updateTodo);
   const deleteTodo = useTodoStore((state) => state.deleteTodo);
+  const addSubtask = useTodoStore((state) => state.addSubtask);
+  const updateSubtask = useTodoStore((state) => state.updateSubtask);
+  const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
 
-  const [openTask, setOpenTask] = useState<BoardTask | null>(null);
+  const [openTaskId, setOpenTaskId] = useState<string | null>(null);
   const [showCustom, setShowCustom] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -47,21 +51,21 @@ export default function TaskboardPage() {
     fetchTodos();
   }, [fetchTodos]);
 
-  // Task opened via ?task=<id> (global search): derived from the URL,
-  // so it always reflects the latest store data.
+  // Task opened via ?task=<id> (global search) or by clicking a row. It is
+  // derived from the store, so it always reflects the latest data — including
+  // subtask mutations.
   const paramTaskId = searchParams.get("task")?.trim() || null;
   const selectedTask = useMemo<BoardTask | null>(() => {
-    if (paramTaskId) {
-      const todo = (Array.isArray(todos) ? todos : []).find(
-        (t) => t.id === paramTaskId && !t.projectId,
-      );
-      if (todo) return toBoardTask(todo);
-    }
-    return openTask;
-  }, [paramTaskId, todos, openTask]);
+    const id = paramTaskId ?? openTaskId;
+    if (!id) return null;
+    const todo = (Array.isArray(todos) ? todos : []).find(
+      (t) => t.id === id && !t.projectId,
+    );
+    return todo ? toBoardTask(todo) : null;
+  }, [paramTaskId, openTaskId, todos]);
 
   const closeDetail = () => {
-    setOpenTask(null);
+    setOpenTaskId(null);
     if (searchParams.has("task")) setSearchParams({}, { replace: true });
   };
 
@@ -71,15 +75,6 @@ export default function TaskboardPage() {
 
   const updateTask = async (id: string, changes: UpdateTodoPayload) => {
     await updateTodo(id, changes);
-    setOpenTask((prev) => {
-      if (!prev || prev.id !== id) return prev;
-      const next: UpdateTodoPayload & { label?: string } = { ...changes };
-      if (next.title !== undefined) {
-        next.label = next.title;
-        delete next.title;
-      }
-      return { ...prev, ...next };
-    });
   };
 
   return (
@@ -159,7 +154,20 @@ export default function TaskboardPage() {
             task={selectedTask}
             onClose={closeDetail}
             onUpdate={updateTask}
-            onDelete={(id) => deleteTodo(id)}
+            onDelete={async (id) => {
+              await deleteTodo(id);
+            }}
+            onAddSubtask={async (title) => {
+              await addSubtask(selectedTask.id, title);
+            }}
+            onToggleSubtask={async (id, done) => {
+              await updateSubtask(selectedTask.id, id, {
+                status: done ? "done" : "todo",
+              });
+            }}
+            onDeleteSubtask={async (id) => {
+              await deleteSubtask(selectedTask.id, id);
+            }}
           />
         )}
       </AnimatePresence>
@@ -199,10 +207,10 @@ export default function TaskboardPage() {
               priority: task.priority,
             });
           }}
-          onEdit={setOpenTask}
+          onEdit={(task) => setOpenTaskId(task.id)}
           onDelete={(task) => {
             if (paramTaskId === task.id) setSearchParams({}, { replace: true });
-            setOpenTask((prev) => (prev?.id === task.id ? null : prev));
+            setOpenTaskId((prev) => (prev === task.id ? null : prev));
             deleteTodo(task.id);
           }}
         />

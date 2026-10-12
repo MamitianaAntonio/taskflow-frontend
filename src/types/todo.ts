@@ -10,6 +10,8 @@ export interface Todo {
   dueDate: string | null;
   priority: TodoPriority;
   projectId?: string | null;
+  parentId?: string | null;
+  subtasks?: Todo[];
   completedAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -22,6 +24,7 @@ export interface CreateTodoPayload {
   dueDate?: string | null;
   priority?: TodoPriority;
   projectId?: string | null;
+  parentId?: string | null;
 }
 
 export interface UpdateTodoPayload {
@@ -42,6 +45,7 @@ export interface BoardTask {
   priority: TodoPriority;
   updatedAt?: string;
   overdue?: boolean;
+  subtasks?: Todo[];
 }
 
 export interface KanbanTask {
@@ -52,6 +56,7 @@ export interface KanbanTask {
   dueDate: string | null;
   priority: TodoPriority;
   updatedAt?: string;
+  subtasks?: Todo[];
 }
 
 export type DashboardTask = Todo & {
