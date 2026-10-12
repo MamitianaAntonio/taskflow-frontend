@@ -1,5 +1,5 @@
 import axiosClient, { getErrorMessage } from "../api/axios";
-import type { User } from "../types/user";
+import type { Gender, User } from "../types/user";
 
 export const updateUserName = async (name: string): Promise<User> => {
   try {
@@ -16,6 +16,30 @@ export const updateUserEmail = async (email: string): Promise<User> => {
     return response.data.user;
   } catch (error) {
     throw new Error(getErrorMessage(error, "Failed to update email"));
+  }
+};
+
+export const updateUserGender = async (gender: Gender): Promise<User> => {
+  try {
+    const response = await axiosClient.put<{ user: User }>(
+      "/api/users/update-gender",
+      { gender },
+    );
+    return response.data.user;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update gender"));
+  }
+};
+
+export const updateUserAvatar = async (avatarId: number): Promise<User> => {
+  try {
+    const response = await axiosClient.put<{ user: User }>(
+      "/api/users/update-avatar",
+      { avatarId },
+    );
+    return response.data.user;
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Failed to update avatar"));
   }
 };
 
