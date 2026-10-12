@@ -87,10 +87,7 @@ export function TaskCardView({
         </span>
 
         <div className="flex items-center gap-2">
-          <TaskProgressBadge
-            subtasks={task.subtasks}
-            checklist={task.checklist}
-          />
+          <TaskProgressBadge subtasks={task.subtasks} />
 
           {task.priority && task.priority !== "low" && (
             <span

@@ -41,7 +41,6 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
     priority: todo.priority,
     updatedAt: todo.updatedAt,
     subtasks: todo.subtasks ?? [],
-    checklist: todo.checklist ?? [],
   };
 }
 
@@ -54,7 +53,6 @@ function toBoardTask(todo: Todo): BoardTask {
     dueDate: todo.dueDate,
     priority: todo.priority || "medium",
     subtasks: todo.subtasks ?? [],
-    checklist: todo.checklist ?? [],
   };
 }
 
@@ -74,13 +72,6 @@ export default function ProjectDetailsPage() {
   const addSubtask = useTodoStore((state) => state.addSubtask);
   const updateSubtask = useTodoStore((state) => state.updateSubtask);
   const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
-  const addChecklistItem = useTodoStore((state) => state.addChecklistItem);
-  const updateChecklistItem = useTodoStore(
-    (state) => state.updateChecklistItem,
-  );
-  const deleteChecklistItem = useTodoStore(
-    (state) => state.deleteChecklistItem,
-  );
 
   const [showCreate, setShowCreate] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
@@ -95,8 +86,8 @@ export default function ProjectDetailsPage() {
 
   const id = projectId;
 
-  // The opened task is derived from the store so subtask/checklist mutations
-  // are reflected immediately without a local snapshot to keep in sync.
+  // The opened task is derived from the store so subtask mutations are
+  // reflected immediately without a local snapshot to keep in sync.
   const selectedTask = useMemo<BoardTask | null>(() => {
     if (!selectedTaskId) return null;
     const todo = (Array.isArray(todos) ? todos : []).find(
@@ -300,15 +291,6 @@ export default function ProjectDetailsPage() {
             }}
             onDeleteSubtask={async (subtaskId) => {
               await deleteSubtask(selectedTask.id, subtaskId);
-            }}
-            onAddChecklistItem={async (text) => {
-              await addChecklistItem(selectedTask.id, text);
-            }}
-            onToggleChecklistItem={async (itemId, done) => {
-              await updateChecklistItem(selectedTask.id, itemId, { done });
-            }}
-            onDeleteChecklistItem={async (itemId) => {
-              await deleteChecklistItem(selectedTask.id, itemId);
             }}
           />
         )}

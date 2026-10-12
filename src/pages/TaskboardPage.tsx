@@ -29,7 +29,6 @@ const toBoardTask = (todo: Todo): BoardTask => ({
   dueDate: todo.dueDate,
   priority: todo.priority || "medium",
   subtasks: todo.subtasks ?? [],
-  checklist: todo.checklist ?? [],
 });
 
 export default function TaskboardPage() {
@@ -43,13 +42,6 @@ export default function TaskboardPage() {
   const addSubtask = useTodoStore((state) => state.addSubtask);
   const updateSubtask = useTodoStore((state) => state.updateSubtask);
   const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
-  const addChecklistItem = useTodoStore((state) => state.addChecklistItem);
-  const updateChecklistItem = useTodoStore(
-    (state) => state.updateChecklistItem,
-  );
-  const deleteChecklistItem = useTodoStore(
-    (state) => state.deleteChecklistItem,
-  );
 
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
   const [showCustom, setShowCustom] = useState(false);
@@ -61,7 +53,7 @@ export default function TaskboardPage() {
 
   // Task opened via ?task=<id> (global search) or by clicking a row. It is
   // derived from the store, so it always reflects the latest data — including
-  // subtask and checklist mutations.
+  // subtask mutations.
   const paramTaskId = searchParams.get("task")?.trim() || null;
   const selectedTask = useMemo<BoardTask | null>(() => {
     const id = paramTaskId ?? openTaskId;
@@ -175,15 +167,6 @@ export default function TaskboardPage() {
             }}
             onDeleteSubtask={async (id) => {
               await deleteSubtask(selectedTask.id, id);
-            }}
-            onAddChecklistItem={async (text) => {
-              await addChecklistItem(selectedTask.id, text);
-            }}
-            onToggleChecklistItem={async (id, done) => {
-              await updateChecklistItem(selectedTask.id, id, { done });
-            }}
-            onDeleteChecklistItem={async (id) => {
-              await deleteChecklistItem(selectedTask.id, id);
             }}
           />
         )}

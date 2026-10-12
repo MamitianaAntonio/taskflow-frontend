@@ -12,9 +12,6 @@ interface TaskDetailProps {
   onAddSubtask?: (title: string) => Promise<void>;
   onToggleSubtask?: (id: string, done: boolean) => Promise<void>;
   onDeleteSubtask?: (id: string) => Promise<void>;
-  onAddChecklistItem?: (text: string) => Promise<void>;
-  onToggleChecklistItem?: (id: string, done: boolean) => Promise<void>;
-  onDeleteChecklistItem?: (id: string) => Promise<void>;
 }
 
 export default function TaskDetail({
@@ -25,9 +22,6 @@ export default function TaskDetail({
   onAddSubtask,
   onToggleSubtask,
   onDeleteSubtask,
-  onAddChecklistItem,
-  onToggleChecklistItem,
-  onDeleteChecklistItem,
 }: TaskDetailProps) {
   const [localTitle, setLocalTitle] = useState(task.label);
   const [localDescription, setLocalDescription] = useState(task.description ?? "");
@@ -98,9 +92,6 @@ export default function TaskDetail({
       onAddSubtask={onAddSubtask}
       onToggleSubtask={onToggleSubtask}
       onDeleteSubtask={onDeleteSubtask}
-      onAddChecklistItem={onAddChecklistItem}
-      onToggleChecklistItem={onToggleChecklistItem}
-      onDeleteChecklistItem={onDeleteChecklistItem}
     />
   );
 }

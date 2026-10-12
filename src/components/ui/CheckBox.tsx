@@ -9,7 +9,7 @@ interface CheckBoxProps {
 }
 
 /**
- * Small, handcrafted-looking checkbox used by subtasks and checklist items.
+ * Small, handcrafted-looking checkbox used by subtask rows.
  * Neutral surface at rest, fills with the success tone when checked.
  */
 export default function CheckBox({
