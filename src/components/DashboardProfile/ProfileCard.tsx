@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { ROUTES } from "../../constants/routes";
-import { getInitials } from "../../utils/format";
+import UserAvatar from "../ui/UserAvatar";
 import type { User } from "../../types/user";
 
 export default function ProfileCard({ user }: { user: User | null }) {
@@ -19,9 +19,11 @@ export default function ProfileCard({ user }: { user: User | null }) {
       />
 
       <div className="relative z-10 shrink-0">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(255,255,255,0.5)] bg-(--text-white) text-xl font-bold text-(--accent-strong) shadow-sm backdrop-blur-md transition-transform duration-200 select-none group-hover:scale-105 sm:h-12 sm:w-12">
-          {getInitials(user?.name) || "U"}
-        </div>
+        <UserAvatar
+          user={user}
+          shape="rounded"
+          className="h-10 w-10 border border-[rgba(255,255,255,0.5)] shadow-sm transition-transform duration-200 select-none group-hover:scale-105 sm:h-12 sm:w-12"
+        />
         <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-(--gradient-from) bg-(--color-success)" />
       </div>
 

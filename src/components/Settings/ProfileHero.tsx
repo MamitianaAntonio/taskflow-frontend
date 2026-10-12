@@ -4,7 +4,7 @@ import {
   faShieldHalved,
   type IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-import { getInitials } from "../../utils/format";
+import UserAvatar from "../ui/UserAvatar";
 import type { User } from "../../types/user";
 
 function Badge({
@@ -26,7 +26,6 @@ function Badge({
 }
 
 export default function ProfileHero({ user }: { user: User | null }) {
-  const initials = getInitials(user?.name) || "U";
   const name = user?.name ?? "Guest user";
   const email = user?.email ?? "No email address";
 
@@ -50,13 +49,11 @@ export default function ProfileHero({ user }: { user: User | null }) {
       />
 
       {/* Avatar */}
-      <div
-        aria-hidden="true"
-        className="relative flex size-12 shrink-0 items-center justify-center rounded-xl bg-(--text-white)/95 text-lg
-        font-bold text-(--accent-strong) shadow-md shadow-(color:--shadow)"
-      >
-        {initials}
-      </div>
+      <UserAvatar
+        user={user}
+        shape="rounded"
+        className="relative size-12 shrink-0 shadow-md shadow-(color:--shadow)"
+      />
 
       {/* Infos */}
       <div className="relative min-w-0">
