@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import GoogleAuthButton from "../components/auth/GoogleAuthButton";
 import { login as loginRequest } from "../services/auth";
 import useUserStore from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
@@ -96,6 +97,8 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
         loading={loading}
         disabled={loading}
       />
+
+      <GoogleAuthButton disabled={loading} text="signin_with" />
 
       <p
         onClick={!loading ? onSwitch : undefined}

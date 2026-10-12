@@ -12,7 +12,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         text-sm rounded-md sm:rounded-xl
         bg-(--bg-primary) text-(--text-primary)
         placeholder:text-(--text-muted)
-        border border-(--border-color) shadow-sm outline-none
+        border border-(--border-color) outline-none
         transition duration-200
         hover:border-(--accent-muted)
         focus:border-(--accent-color) focus:ring-4 focus:ring-(--accent-soft)

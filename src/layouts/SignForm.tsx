@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import GoogleAuthButton from "../components/auth/GoogleAuthButton";
 import { signUp } from "../services/auth";
 import useUserStore from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
@@ -144,6 +145,8 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
       </div>
 
       <Button type="submit" text="Sign Up" variant="primary" loading={loading} disabled={loading} />
+
+      <GoogleAuthButton disabled={loading} text="signup_with" />
 
       <p
         onClick={loading ? undefined : onSwitch}

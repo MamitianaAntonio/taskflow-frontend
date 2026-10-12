@@ -19,7 +19,14 @@ export interface AuthResult {
 }
 
 export const signUp = (data: SignUpData): Promise<AuthResult> =>
-  axiosClient.post("/api/users/register", data).then((response) => response.data);
+  axiosClient
+    .post("/api/users/register", data)
+    .then((response) => response.data);
 
 export const login = (data: LoginData): Promise<AuthResult> =>
   axiosClient.post("/api/users/login", data).then((response) => response.data);
+
+export const googleLogin = (credential: string): Promise<AuthResult> =>
+  axiosClient
+    .post("/api/auth/google", { credential })
+    .then((response) => response.data);
