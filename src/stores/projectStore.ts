@@ -20,10 +20,10 @@ interface ProjectState {
   error: Error | null;
 
   fetchAll: () => Promise<Project[]>;
-  fetchById: (id: number) => Promise<Project | undefined>;
+  fetchById: (id: string) => Promise<Project | undefined>;
   create: (data: CreateProjectPayload) => Promise<Project>;
-  update: (id: number, data: UpdateProjectPayload) => Promise<Project>;
-  remove: (id: number) => Promise<void>;
+  update: (id: string, data: UpdateProjectPayload) => Promise<Project>;
+  remove: (id: string) => Promise<void>;
   reset: () => void;
 }
 
@@ -105,5 +105,5 @@ export const useProjectStore = create<ProjectState>()((set) => ({
   },
 }));
 
-export const getProject = (id: number): Project | undefined =>
+export const getProject = (id: string): Project | undefined =>
   useProjectStore.getState().projects.find((p) => p.id === id);

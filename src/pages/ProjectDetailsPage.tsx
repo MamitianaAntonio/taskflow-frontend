@@ -61,14 +61,14 @@ export default function ProjectDetailsPage() {
   const [selectedTask, setSelectedTask] = useState<BoardTask | null>(null);
 
   useEffect(() => {
-    if (projectId) fetchById(Number(projectId));
+    if (projectId) fetchById(projectId);
   }, [projectId, fetchById]);
 
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
 
-  const id = Number(projectId);
+  const id = projectId;
 
   const projectTodos = useMemo<KanbanTask[]>(
     () =>
@@ -89,17 +89,17 @@ export default function ProjectDetailsPage() {
     return { todoCount, doingCount, doneCount, total: projectTodos.length };
   }, [projectTodos]);
 
-  const handleStatusChange = (taskId: number, status: TodoStatus) => {
+  const handleStatusChange = (taskId: string, status: TodoStatus) => {
     updateTodo(taskId, { status });
   };
 
-  const handleDelete = (taskId: number) => {
+  const handleDelete = (taskId: string) => {
     deleteTodo(taskId);
     setSelectedTask((prev) => (prev?.id === taskId ? null : prev));
   };
 
   const handleTaskUpdate = async (
-    taskId: number,
+    taskId: string,
     changes: UpdateTodoPayload,
   ) => {
     await updateTodo(taskId, changes);
@@ -298,6 +298,7 @@ export default function ProjectDetailsPage() {
           size="small"
           className="hover:border-(--color-error) hover:text-(--color-error)"
           onClick={() => {
+            if (!id) return;
             if (!window.confirm("Delete this project and its tasks permanently?"))
               return;
             deleteProject(id);

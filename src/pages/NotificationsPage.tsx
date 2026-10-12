@@ -152,10 +152,10 @@ export default function NotificationsPage() {
         ) : (
           <NotificationsPanel
             notifications={notifications}
-            onMarkRead={(id: number) =>
+            onMarkRead={(id: string) =>
               run(() => markRead(id), "Failed to mark notification as read")
             }
-            onDelete={(id: number) =>
+            onDelete={(id: string) =>
               run(() => deleteOne(id), "Failed to delete notification")
             }
             onLoadMore={() =>

@@ -5,8 +5,8 @@ import type { AppNotification } from "../../types/notification";
 
 interface NotificationsPanelProps {
   notifications: AppNotification[];
-  onMarkRead?: (id: number) => Promise<void> | void;
-  onDelete?: (id: number) => Promise<void> | void;
+  onMarkRead?: (id: string) => Promise<void> | void;
+  onDelete?: (id: string) => Promise<void> | void;
   onLoadMore?: () => Promise<void> | void;
   hasMore?: boolean;
   isLoadingMore?: boolean;

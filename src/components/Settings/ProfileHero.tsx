@@ -72,7 +72,9 @@ export default function ProfileHero({ user }: { user: User | null }) {
 
       {/* Badges */}
       <div className="relative ml-auto flex shrink-0 items-center gap-1.5">
-        {user?.id && <Badge icon={faIdCard}>ID #{user.id}</Badge>}
+        {user?.id && (
+          <Badge icon={faIdCard}>ID #{user.id.slice(0, 8).toUpperCase()}</Badge>
+        )}
         <Badge icon={faShieldHalved}>Account</Badge>
       </div>
     </div>

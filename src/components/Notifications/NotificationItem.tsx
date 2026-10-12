@@ -8,8 +8,8 @@ import type { AppNotification } from "../../types/notification";
 
 interface NotificationItemProps {
   notification: AppNotification;
-  onMarkRead?: (id: number) => Promise<void> | void;
-  onDelete?: (id: number) => Promise<void> | void;
+  onMarkRead?: (id: string) => Promise<void> | void;
+  onDelete?: (id: string) => Promise<void> | void;
 }
 
 const ACTION =
@@ -36,7 +36,7 @@ export default function NotificationItem({
   };
 
   // Keeps the click from also opening the notification.
-  const act = (fn?: (id: number) => unknown) => (e: React.MouseEvent) => {
+  const act = (fn?: (id: string) => unknown) => (e: React.MouseEvent) => {
     e.stopPropagation();
     fn?.(notification.id);
   };

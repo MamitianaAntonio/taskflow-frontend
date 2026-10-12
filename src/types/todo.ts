@@ -3,13 +3,13 @@ export type TodoStatus = "todo" | "doing" | "done";
 export type TodoPriority = "low" | "medium" | "high";
 
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   status: TodoStatus;
   dueDate: string | null;
   priority: TodoPriority;
-  projectId?: number | null;
+  projectId?: string | null;
   completedAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -21,7 +21,7 @@ export interface CreateTodoPayload {
   status?: TodoStatus;
   dueDate?: string | null;
   priority?: TodoPriority;
-  projectId?: number | null;
+  projectId?: string | null;
 }
 
 export interface UpdateTodoPayload {
@@ -30,11 +30,11 @@ export interface UpdateTodoPayload {
   status?: TodoStatus;
   dueDate?: string | null;
   priority?: TodoPriority;
-  projectId?: number | null;
+  projectId?: string | null;
 }
 
 export interface BoardTask {
-  id: number;
+  id: string;
   label: string;
   description?: string | null;
   status: TodoStatus;
@@ -45,7 +45,7 @@ export interface BoardTask {
 }
 
 export interface KanbanTask {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   status: TodoStatus;

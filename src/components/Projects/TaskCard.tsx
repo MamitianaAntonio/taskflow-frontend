@@ -13,14 +13,14 @@ interface TaskCardProps {
   task: KanbanTask;
   draggable?: boolean;
   onClick: (task: KanbanTask) => void;
-  onDelete: (taskId: number) => void;
+  onDelete: (taskId: string) => void;
 }
 
 interface TaskCardViewProps {
   task: KanbanTask;
   overlay?: boolean;
   onClick?: () => void;
-  onDelete?: (taskId: number) => void;
+  onDelete?: (taskId: string) => void;
 }
 
 const priorityIcon = {

@@ -7,8 +7,8 @@ import type { UpdateTodoPayload } from "../../types/todo";
 interface TaskDetailProps {
   task: BoardTask;
   onClose: () => void;
-  onUpdate: (id: number, changes: UpdateTodoPayload) => Promise<void>;
-  onDelete?: (id: number) => void | Promise<void>;
+  onUpdate: (id: string, changes: UpdateTodoPayload) => Promise<void>;
+  onDelete?: (id: string) => void | Promise<void>;
 }
 
 export default function TaskDetail({ task, onClose, onUpdate, onDelete }: TaskDetailProps) {

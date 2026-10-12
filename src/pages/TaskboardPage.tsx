@@ -49,7 +49,7 @@ export default function TaskboardPage() {
 
   // Task opened via ?task=<id> (global search): derived from the URL,
   // so it always reflects the latest store data.
-  const paramTaskId = Number(searchParams.get("task")) || null;
+  const paramTaskId = searchParams.get("task")?.trim() || null;
   const selectedTask = useMemo<BoardTask | null>(() => {
     if (paramTaskId) {
       const todo = (Array.isArray(todos) ? todos : []).find(
@@ -69,7 +69,7 @@ export default function TaskboardPage() {
     ? todos.filter((todo) => !todo.projectId).map(toBoardTask)
     : [];
 
-  const updateTask = async (id: number, changes: UpdateTodoPayload) => {
+  const updateTask = async (id: string, changes: UpdateTodoPayload) => {
     await updateTodo(id, changes);
     setOpenTask((prev) => {
       if (!prev || prev.id !== id) return prev;

@@ -7,9 +7,9 @@ export const getAllTodo = (): Promise<Todo[]> =>
 export const createTodo = (data: CreateTodoPayload): Promise<Todo> =>
   axiosClient.post<{ todo: Todo }>("/api/todos", data).then((r) => r.data.todo);
 
-export const updateTodo = (id: number, data: UpdateTodoPayload): Promise<Todo> =>
+export const updateTodo = (id: string, data: UpdateTodoPayload): Promise<Todo> =>
   axiosClient.put<{ todo: Todo }>(`/api/todos/${id}`, data).then((r) => r.data.todo);
 
-export const deleteTodo = async (id: number): Promise<void> => {
+export const deleteTodo = async (id: string): Promise<void> => {
   await axiosClient.delete(`/api/todos/${id}`);
 };

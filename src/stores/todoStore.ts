@@ -15,8 +15,8 @@ interface TodoState {
 
   fetchTodos: () => Promise<Todo[]>;
   addTodo: (data: CreateTodoPayload) => Promise<Todo>;
-  updateTodo: (id: number, updates: UpdateTodoPayload) => Promise<Todo>;
-  deleteTodo: (id: number) => Promise<void>;
+  updateTodo: (id: string, updates: UpdateTodoPayload) => Promise<Todo>;
+  deleteTodo: (id: string) => Promise<void>;
 }
 
 const useTodoStore = create<TodoState>()((set) => ({
@@ -76,5 +76,5 @@ const useTodoStore = create<TodoState>()((set) => ({
 
 export default useTodoStore;
 
-export const getTodoById = (id: number): Todo | undefined =>
+export const getTodoById = (id: string): Todo | undefined =>
   useTodoStore.getState().todos.find((t) => t.id === id);
