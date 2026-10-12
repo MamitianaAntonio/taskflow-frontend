@@ -4,7 +4,7 @@ import type { CreateProjectPayload, Project, UpdateProjectPayload } from "../typ
 export const getAllProjects = (): Promise<Project[]> =>
   axiosClient.get<Project[]>("/api/projects").then((r) => r.data);
 
-export const getProjectById = async (id: number): Promise<Project> => {
+export const getProjectById = async (id: string): Promise<Project> => {
   try {
     const response = await axiosClient.get<{ project: Project }>(`/api/projects/${id}`);
     return response.data.project;
@@ -23,7 +23,7 @@ export const createProject = async (data: CreateProjectPayload): Promise<Project
 };
 
 export const updateProject = async (
-  id: number,
+  id: string,
   data: UpdateProjectPayload,
 ): Promise<Project> => {
   try {
@@ -34,7 +34,7 @@ export const updateProject = async (
   }
 };
 
-export const deleteProject = async (id: number): Promise<void> => {
+export const deleteProject = async (id: string): Promise<void> => {
   try {
     await axiosClient.delete(`/api/projects/${id}`);
   } catch (error) {

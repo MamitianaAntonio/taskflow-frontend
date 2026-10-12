@@ -28,9 +28,9 @@ interface NotificationState {
   loadMore: () => Promise<void>;
   loadMoreUnread: () => Promise<void>;
   fetchUnreadCount: () => Promise<number>;
-  markRead: (id: number) => Promise<void>;
+  markRead: (id: string) => Promise<void>;
   markAllRead: () => Promise<void>;
-  deleteOne: (id: number) => Promise<void>;
+  deleteOne: (id: string) => Promise<void>;
   deleteAll: () => Promise<void>;
   reset: () => void;
 }

@@ -44,7 +44,7 @@ export default function ProjectsPage() {
   );
 
   const progress = useMemo(() => {
-    const map: Record<number, { total: number; done: number }> = {};
+    const map: Record<string, { total: number; done: number }> = {};
     for (const p of projects) {
       const projectTodos = todos.filter((t) => t.projectId === p.id);
       map[p.id] = {

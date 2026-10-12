@@ -11,7 +11,7 @@ interface DroppableColumnProps {
   tasks: KanbanTask[];
   draggable?: boolean;
   onTaskClick: (task: KanbanTask) => void;
-  onDelete: (taskId: number) => void;
+  onDelete: (taskId: string) => void;
 }
 
 export default function DroppableColumn({

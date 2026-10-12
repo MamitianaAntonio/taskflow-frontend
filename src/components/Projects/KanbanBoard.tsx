@@ -17,8 +17,8 @@ import type { KanbanTask, TodoStatus } from "../../types/todo";
 interface KanbanBoardProps {
   tasks: KanbanTask[];
   onTaskClick: (task: KanbanTask) => void;
-  onStatusChange: (taskId: number, status: TodoStatus) => void;
-  onDeleteTask: (taskId: number) => void;
+  onStatusChange: (taskId: string, status: TodoStatus) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
 const STATUSES: TodoStatus[] = ["todo", "doing", "done"];
@@ -42,19 +42,19 @@ export default function KanbanBoard({
   ) as Record<TodoStatus, KanbanTask[]>;
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveTask(tasks.find((t) => t.id === Number(event.active.id)) ?? null);
+    setActiveTask(tasks.find((t) => t.id === String(event.active.id)) ?? null);
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setActiveTask(null);
     if (!over) return;
 
-    const taskId = Number(active.id);
+    const taskId = String(active.id);
     const overId = String(over.id);
 
     const newStatus = STATUSES.includes(overId as TodoStatus)
       ? (overId as TodoStatus)
-      : tasks.find((t) => t.id === Number(overId))?.status;
+      : tasks.find((t) => t.id === overId)?.status;
 
     const task = tasks.find((t) => t.id === taskId);
     if (!newStatus || !task || task.status === newStatus) return;

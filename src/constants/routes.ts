@@ -4,7 +4,7 @@ export const ROUTES = {
   dashboard: "/dashboard",
   tasks: "/dashboard/tasks",
   projects: "/dashboard/projects",
-  projectDetails: (projectId: number | string) =>
+  projectDetails: (projectId: string) =>
     `/dashboard/projects/${projectId}`,
   notifications: "/dashboard/notifications",
   settings: "/dashboard/settings",

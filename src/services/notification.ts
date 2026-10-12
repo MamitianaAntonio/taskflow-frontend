@@ -23,7 +23,7 @@ export const getUnreadNotifications = (limit = 20, offset = 0): Promise<Paginate
 export const getUnreadCount = (): Promise<number> =>
   axiosClient.get<{ count: number }>("/api/notifications/unread/count").then((r) => r.data.count);
 
-export const markAsRead = (id: number): Promise<AppNotification> =>
+export const markAsRead = (id: string): Promise<AppNotification> =>
   axiosClient
     .patch<{ notification: AppNotification }>(`/api/notifications/${id}/read`)
     .then((r) => r.data.notification);
@@ -32,7 +32,7 @@ export const markAllAsRead = async (): Promise<void> => {
   await axiosClient.patch("/api/notifications/read-all");
 };
 
-export const deleteNotification = async (id: number): Promise<void> => {
+export const deleteNotification = async (id: string): Promise<void> => {
   await axiosClient.delete(`/api/notifications/${id}`);
 };
 

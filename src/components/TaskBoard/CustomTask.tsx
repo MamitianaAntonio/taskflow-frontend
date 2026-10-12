@@ -7,7 +7,7 @@ import type { CreateTodoPayload } from "../../types/todo";
 
 interface CustomTaskProps {
   onClose: () => void;
-  projectId?: number;
+  projectId?: string;
 }
 
 export default function CustomTask({ onClose, projectId }: CustomTaskProps) {

@@ -5,13 +5,14 @@ import type { AppNotification } from "../../types/notification";
 
 interface NotificationsPanelProps {
   notifications: AppNotification[];
-  onMarkRead?: (id: number) => Promise<void> | void;
-  onDelete?: (id: number) => Promise<void> | void;
+  onMarkRead?: (id: string) => Promise<void> | void;
+  onDelete?: (id: string) => Promise<void> | void;
   onLoadMore?: () => Promise<void> | void;
   hasMore?: boolean;
   isLoadingMore?: boolean;
   emptyTitle?: string;
   emptyText?: string;
+  listClassName?: string;
 }
 
 const DAY = 86_400_000;
@@ -53,13 +54,14 @@ export default function NotificationsPanel({
   isLoadingMore = false,
   emptyTitle = "No notifications yet",
   emptyText = "Things you do in TaskFlow will show up here.",
+  listClassName,
 }: NotificationsPanelProps) {
   if (notifications.length === 0) {
     return <EmptyState title={emptyTitle} text={emptyText} />;
   }
 
   return (
-    <div className="flex flex-col gap-6 p-2">
+    <div className={`flex flex-col gap-6 p-2 ${listClassName ?? ""}`}>
       {groupByDay(notifications).map((group) => (
         <section key={group.label}>
           <h2 className="mb-1 flex items-center gap-3 px-2 font-interface text-xs font-medium text-(--text-muted)">

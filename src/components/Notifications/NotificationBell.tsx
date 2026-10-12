@@ -87,7 +87,7 @@ export default function NotificationBell() {
     }
   };
 
-  const handleMarkRead = async (id: number) => {
+  const handleMarkRead = async (id: string) => {
     try {
       await markRead(id);
       refreshBadge();
@@ -96,7 +96,7 @@ export default function NotificationBell() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await deleteOne(id);
       refreshBadge();

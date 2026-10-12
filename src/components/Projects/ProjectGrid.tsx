@@ -9,8 +9,8 @@ interface ProjectProgress {
 
 interface ProjectGridProps {
   projects: Project[];
-  progress: Record<number, ProjectProgress>;
-  onSelect: (id: number) => void;
+  progress: Record<string, ProjectProgress>;
+  onSelect: (id: string) => void;
 }
 
 export default function ProjectGrid({
