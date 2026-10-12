@@ -5,10 +5,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Drawer from "../ui/Drawer";
+import ProjectBadge from "../ui/ProjectBadge";
 import TaskDetailFields from "./TaskDetailFields";
 import SubtaskList from "./SubtaskList";
 import Button from "../ui/Button";
 import { statusConfig } from "../../constants/taskConfig";
+import type { Project } from "../../types/project";
 import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
 
 interface TaskDetailPanelProps {
@@ -26,6 +28,10 @@ interface TaskDetailPanelProps {
   setLocalPriority: (value: TodoPriority) => void;
   localDueDate: string;
   setLocalDueDate: (value: string) => void;
+  localProjectId: string | null;
+  setLocalProjectId: (value: string | null) => void;
+  projects: Project[];
+  projectName?: string | null;
   dueDateStr?: string;
   saving: boolean;
   dirty: boolean;
@@ -49,6 +55,10 @@ export default function TaskDetailPanel({
   setLocalPriority,
   localDueDate,
   setLocalDueDate,
+  localProjectId,
+  setLocalProjectId,
+  projects,
+  projectName,
   dueDateStr,
   saving,
   dirty,
@@ -63,7 +73,7 @@ export default function TaskDetailPanel({
       title={task.label}
       icon={statusConfig[localStatus].icon}
       subtitle={
-        <span className="flex items-center gap-2">
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
             className={`inline-flex items-center gap-1.5 font-interface text-xs font-semibold ${statusConfig[localStatus].color}`}
           >
@@ -74,6 +84,12 @@ export default function TaskDetailPanel({
             <>
               <span className="text-(--text-muted)">·</span>
               <span>{dueDateStr}</span>
+            </>
+          )}
+          {projectName && (
+            <>
+              <span className="text-(--text-muted)">·</span>
+              <ProjectBadge name={projectName} />
             </>
           )}
         </span>
@@ -127,6 +143,9 @@ export default function TaskDetailPanel({
           setLocalPriority={setLocalPriority}
           localDueDate={localDueDate}
           setLocalDueDate={setLocalDueDate}
+          localProjectId={localProjectId}
+          setLocalProjectId={setLocalProjectId}
+          projects={projects}
           dueDateStr={dueDateStr}
           saving={saving}
         />

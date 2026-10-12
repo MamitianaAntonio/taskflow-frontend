@@ -52,6 +52,7 @@ function toBoardTask(todo: Todo): BoardTask {
     status: todo.status || "todo",
     dueDate: todo.dueDate,
     priority: todo.priority || "medium",
+    projectId: todo.projectId,
     subtasks: todo.subtasks ?? [],
   };
 }

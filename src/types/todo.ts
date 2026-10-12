@@ -45,6 +45,7 @@ export interface BoardTask {
   priority: TodoPriority;
   updatedAt?: string;
   overdue?: boolean;
+  projectId?: string | null;
   subtasks?: Todo[];
 }
 

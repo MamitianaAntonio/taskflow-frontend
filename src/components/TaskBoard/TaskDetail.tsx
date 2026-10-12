@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TaskDetailPanel from "./TaskDetailPanel";
 import { formatDate, toLocalDatetime } from "../../utils/date";
+import { useProjectStore } from "../../stores/projectStore";
 import type { BoardTask } from "../../types/todo";
 import type { UpdateTodoPayload } from "../../types/todo";
 
@@ -23,12 +24,30 @@ export default function TaskDetail({
   onToggleSubtask,
   onDeleteSubtask,
 }: TaskDetailProps) {
+  const projects = useProjectStore((state) => state.projects);
+  const fetchProjects = useProjectStore((state) => state.fetchAll);
+
   const [localTitle, setLocalTitle] = useState(task.label);
   const [localDescription, setLocalDescription] = useState(task.description ?? "");
   const [localStatus, setLocalStatus] = useState(task.status);
   const [localPriority, setLocalPriority] = useState(task.priority);
   const [localDueDate, setLocalDueDate] = useState(() => toLocalDatetime(task.dueDate));
+  const [localProjectId, setLocalProjectId] = useState<string | null>(
+    task.projectId ?? null,
+  );
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (projects.length === 0) fetchProjects().catch(() => {});
+  }, [projects.length, fetchProjects]);
+
+  const projectName = useMemo(
+    () =>
+      task.projectId
+        ? (projects.find((p) => p.id === task.projectId)?.name ?? null)
+        : null,
+    [task.projectId, projects],
+  );
 
   const dirty = useMemo(() => {
     return (
@@ -36,9 +55,10 @@ export default function TaskDetail({
       localDescription !== (task.description ?? "") ||
       localStatus !== task.status ||
       localPriority !== task.priority ||
-      toLocalDatetime(task.dueDate) !== localDueDate
+      toLocalDatetime(task.dueDate) !== localDueDate ||
+      (task.projectId ?? null) !== localProjectId
     );
-  }, [localTitle, localDescription, localStatus, localPriority, localDueDate, task]);
+  }, [localTitle, localDescription, localStatus, localPriority, localDueDate, localProjectId, task]);
 
   const handleSave = async () => {
     const changes: UpdateTodoPayload = {};
@@ -48,6 +68,9 @@ export default function TaskDetail({
     if (localPriority !== task.priority) changes.priority = localPriority;
     if (toLocalDatetime(task.dueDate) !== localDueDate) {
       changes.dueDate = localDueDate ? new Date(localDueDate).toISOString() : null;
+    }
+    if ((task.projectId ?? null) !== localProjectId) {
+      changes.projectId = localProjectId;
     }
     if (Object.keys(changes).length === 0) return;
 
@@ -86,6 +109,10 @@ export default function TaskDetail({
       setLocalPriority={setLocalPriority}
       localDueDate={localDueDate}
       setLocalDueDate={setLocalDueDate}
+      localProjectId={localProjectId}
+      setLocalProjectId={setLocalProjectId}
+      projects={projects}
+      projectName={projectName}
       dueDateStr={formatDate(task.dueDate)}
       saving={saving}
       dirty={dirty}

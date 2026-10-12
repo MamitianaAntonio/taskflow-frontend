@@ -28,6 +28,7 @@ const toBoardTask = (todo: Todo): BoardTask => ({
   status: todo.status || "todo",
   dueDate: todo.dueDate,
   priority: todo.priority || "medium",
+  projectId: todo.projectId,
   subtasks: todo.subtasks ?? [],
 });
 
@@ -59,7 +60,7 @@ export default function TaskboardPage() {
     const id = paramTaskId ?? openTaskId;
     if (!id) return null;
     const todo = (Array.isArray(todos) ? todos : []).find(
-      (t) => t.id === id && !t.projectId,
+      (t) => t.id === id,
     );
     return todo ? toBoardTask(todo) : null;
   }, [paramTaskId, openTaskId, todos]);
@@ -85,11 +86,11 @@ export default function TaskboardPage() {
             Your flow
           </h1>
           <p className="mt-1.5 text-base font-interface text-(--text-muted)">
-            Manage and track your daily tasks
+            Your inbox — quick tasks not tied to a project
           </p>
         </div>
         <span className="rounded-full bg-(--bg-tertiary) px-3 py-1.5 font-interface text-xs font-semibold text-(--text-secondary)">
-          {tasks.length} task{tasks.length !== 1 ? "s" : ""}
+          {tasks.length} task{tasks.length !== 1 ? "s" : ""} in inbox
         </span>
       </div>
 
@@ -197,23 +198,28 @@ export default function TaskboardPage() {
       ) : isLoading && tasks.length === 0 ? (
         <Spinner className="py-10" />
       ) : (
-        <TaskList
-          tasks={tasks}
-          onUpdate={async (task) => {
-            await updateTodo(task.id, {
-              title: task.label,
-              status: task.status,
-              dueDate: task.dueDate,
-              priority: task.priority,
-            });
-          }}
-          onEdit={(task) => setOpenTaskId(task.id)}
-          onDelete={(task) => {
-            if (paramTaskId === task.id) setSearchParams({}, { replace: true });
-            setOpenTaskId((prev) => (prev === task.id ? null : prev));
-            deleteTodo(task.id);
-          }}
-        />
+        <>
+          <TaskList
+            tasks={tasks}
+            onUpdate={async (task) => {
+              await updateTodo(task.id, {
+                title: task.label,
+                status: task.status,
+                dueDate: task.dueDate,
+                priority: task.priority,
+              });
+            }}
+            onEdit={(task) => setOpenTaskId(task.id)}
+            onDelete={(task) => {
+              if (paramTaskId === task.id) setSearchParams({}, { replace: true });
+              setOpenTaskId((prev) => (prev === task.id ? null : prev));
+              deleteTodo(task.id);
+            }}
+          />
+          <p className="font-interface text-xs text-(--text-muted)">
+            Tasks tied to a project live on its board — open Projects to see them.
+          </p>
+        </>
       )}
     </div>
   );
