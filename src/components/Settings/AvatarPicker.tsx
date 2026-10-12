@@ -1,5 +1,5 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMars,
@@ -22,11 +22,6 @@ const GENDER_OPTIONS: OptionChip<Gender>[] = [
   { value: "female", label: "Female", icon: faVenus },
 ];
 
-const GENDER_SELECTED: Record<Gender, string> = {
-  male: "border-(--accent-color) bg-(--accent-soft) text-(--accent-color)",
-  female: "border-(--accent-color) bg-(--accent-soft) text-(--accent-color)",
-};
-
 const VARIANTS = Array.from({ length: AVATAR_VARIANT_COUNT }, (_, i) => i);
 
 export default function AvatarPicker() {
@@ -47,10 +42,10 @@ export default function AvatarPicker() {
     try {
       const updated = await updateUserGender(next);
       setUser({ ...user, ...updated, gender: next });
-      toast.success("Gender updated");
+      notify.success("Gender updated");
     } catch (error) {
       setUser(previous);
-      toast.error(error instanceof Error ? error.message : "Update failed");
+      notify.error(error instanceof Error ? error.message : "Update failed");
     } finally {
       setSaving(false);
     }
@@ -64,10 +59,10 @@ export default function AvatarPicker() {
     try {
       const updated = await updateUserAvatar(next);
       setUser({ ...user, ...updated, avatarId: next });
-      toast.success("Avatar updated");
+      notify.success("Avatar updated");
     } catch (error) {
       setUser(previous);
-      toast.error(error instanceof Error ? error.message : "Update failed");
+      notify.error(error instanceof Error ? error.message : "Update failed");
     } finally {
       setSaving(false);
     }
@@ -96,7 +91,8 @@ export default function AvatarPicker() {
             options={GENDER_OPTIONS}
             value={gender as Gender}
             onChange={selectGender}
-            selectedClass={GENDER_SELECTED}
+            variant="tabs"
+            name="gender"
             disabled={!user || saving}
           />
         </div>
