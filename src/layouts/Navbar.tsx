@@ -79,14 +79,11 @@ const Navbar = () => {
             <UserAvatar
               user={user}
               shape="rounded"
-              className="h-8 w-8 shrink-0 shadow-(--shadow-pink)"
+              className="h-8 w-8 shrink-0 shadow-sm ring-1 ring-(--border-color)"
             />
             <span className="hidden min-w-0 text-left lg:block">
               <span className="block max-w-28 truncate text-sm font-semibold leading-tight text-(--text-primary)">
                 {user?.name ?? "Guest"}
-              </span>
-              <span className="block max-w-28 truncate font-interface text-[10px] font-medium leading-tight text-(--text-muted)">
-                {user?.email ?? "View profile"}
               </span>
             </span>
           </button>
