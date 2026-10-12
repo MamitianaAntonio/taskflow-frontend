@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../utils/toast";
 import useUserStore from "../stores/userStore";
 import { updateUserEmail, updateUserName } from "../services/user";
 
@@ -30,18 +30,18 @@ export function useProfileForm() {
     e.preventDefault();
     const name = profile.name.trim();
 
-    if (!name) return toast.error("Name cannot be empty");
+    if (!name) return notify.error("Name cannot be empty");
     if (!EMAIL_RE.test(profile.email))
-      return toast.error("Please enter a valid email");
+      return notify.error("Please enter a valid email");
 
     setSaving(true);
     try {
       if (user && name !== user.name) await updateUserName(name);
       if (user && profile.email !== user.email) await updateUserEmail(profile.email);
       if (user) setUser({ ...user, ...profile, name });
-      toast.success("Profile updated");
+      notify.success("Profile updated");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Update failed");
+      notify.error(error instanceof Error ? error.message : "Update failed");
     } finally {
       setSaving(false);
     }

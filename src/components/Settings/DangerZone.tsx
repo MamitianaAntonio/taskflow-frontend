@@ -1,5 +1,5 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
@@ -17,11 +17,11 @@ export default function DangerZone() {
     setDeleting(true);
     try {
       await deleteUserAccount();
-      toast.success("Account deleted");
+      notify.success("Account deleted");
       logout();
     } catch (error) {
       setDeleting(false);
-      toast.error(error instanceof Error ? error.message : "Delete failed");
+      notify.error(error instanceof Error ? error.message : "Delete failed");
     }
   };
 

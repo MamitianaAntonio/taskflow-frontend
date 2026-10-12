@@ -7,7 +7,7 @@ import {
   faCheckDouble,
 } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
-import toast from "react-hot-toast";
+import { notify } from "../../utils/toast";
 import useNotificationStore, {
   BELL_PAGE_SIZE,
   useBellNotificationStore,
@@ -83,7 +83,7 @@ export default function NotificationBell() {
       await markAllRead();
       refreshBadge();
     } catch {
-      toast.error("Failed to mark as read");
+      notify.error("Failed to mark as read");
     }
   };
 
@@ -92,7 +92,7 @@ export default function NotificationBell() {
       await markRead(id);
       refreshBadge();
     } catch {
-      toast.error("Failed to mark as read");
+      notify.error("Failed to mark as read");
     }
   };
 
@@ -101,7 +101,7 @@ export default function NotificationBell() {
       await deleteOne(id);
       refreshBadge();
     } catch {
-      toast.error("Failed to delete notification");
+      notify.error("Failed to delete notification");
     }
   };
 

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../utils/toast";
 import { updateUserPassword } from "../services/user";
 
 const MIN_LENGTH = 6;
@@ -26,19 +26,19 @@ export function usePasswordForm() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!password.current) return toast.error("Current password is required");
+    if (!password.current) return notify.error("Current password is required");
     if (password.next.length < MIN_LENGTH)
-      return toast.error(`New password must be at least ${MIN_LENGTH} characters`);
+      return notify.error(`New password must be at least ${MIN_LENGTH} characters`);
     if (password.next !== password.confirm)
-      return toast.error("Passwords do not match");
+      return notify.error("Passwords do not match");
 
     setSaving(true);
     try {
       await updateUserPassword(password.current, password.next);
       setPassword({ current: "", next: "", confirm: "" });
-      toast.success("Password updated");
+      notify.success("Password updated");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Update failed");
+      notify.error(error instanceof Error ? error.message : "Update failed");
     } finally {
       setSaving(false);
     }

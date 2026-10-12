@@ -155,6 +155,15 @@ body {
   width: 4px;
 }
 
+@keyframes taskflow-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
 /*input*/
 .input:-webkit-autofill,
 .input:-webkit-autofill:hover,

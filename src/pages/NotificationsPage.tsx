@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../utils/toast";
 import { faInbox, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import useNotificationStore from "../stores/notificationStore";
 import { useProjectStore } from "../stores/projectStore";
@@ -28,9 +28,9 @@ async function run(
 ) {
   try {
     await action();
-    if (successMessage) toast.success(successMessage);
+    if (successMessage) notify.success(successMessage);
   } catch {
-    toast.error(errorMessage);
+    notify.error(errorMessage);
   }
 }
 
@@ -65,12 +65,12 @@ export default function NotificationsPage() {
   useEffect(() => {
     reset();
     const load = tab === "all" ? fetchNotifications : fetchUnread;
-    load().catch(() => toast.error("Failed to load notifications"));
+    load().catch(() => notify.error("Failed to load notifications"));
   }, [tab, fetchNotifications, fetchUnread, reset]);
 
   const retry = () => {
     (tab === "all" ? fetchNotifications : fetchUnread)().catch(() =>
-      toast.error("Failed to load notifications"),
+      notify.error("Failed to load notifications"),
     );
   };
 
