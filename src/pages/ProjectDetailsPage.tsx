@@ -3,11 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
+  faCalendarDays,
   faCheckCircle,
   faCircle,
   faCircleHalfStroke,
   faClipboardList,
   faInbox,
+  faPenToSquare,
   faPlus,
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
@@ -16,12 +18,14 @@ import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
 import Button from "../components/ui/Button";
 import KanbanBoard from "../components/Projects/KanbanBoard";
+import ProjectEditPanel from "../components/Projects/ProjectEditPanel";
 import TaskboardStats from "../components/TaskBoard/TaskboardStats";
 import CustomTask from "../components/TaskBoard/CustomTask";
 import TaskDetail from "../components/TaskBoard/TaskDetail";
 import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
 import Spinner from "../components/ui/Spinner";
+import { formatDate, isOverdue } from "../utils/date";
 import { ROUTES } from "../constants/routes";
 import type {
   BoardTask,
@@ -64,6 +68,7 @@ export default function ProjectDetailsPage() {
     currentProject,
     isLoading,
     fetchById,
+    update: updateProject,
     remove: deleteProject,
   } = useProjectStore();
   const todos = useTodoStore((state) => state.todos);
@@ -75,6 +80,7 @@ export default function ProjectDetailsPage() {
   const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
 
   const [showCreate, setShowCreate] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -161,6 +167,10 @@ export default function ProjectDetailsPage() {
     );
   }
 
+  const overdue = currentProject.dueDate
+    ? isOverdue(currentProject.dueDate)
+    : false;
+
   return (
     <div className="mx-auto flex flex-col gap-4 p-4 sm:gap-5 sm:p-6">
       <div className="flex items-start justify-between gap-4">
@@ -173,16 +183,39 @@ export default function ProjectDetailsPage() {
               {currentProject.description}
             </p>
           )}
+          {currentProject.dueDate && (
+            <span
+              className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 font-interface text-[10px] font-semibold uppercase tracking-wide ${
+                overdue
+                  ? "bg-(--color-error-soft) text-(--color-error)"
+                  : "bg-(--bg-tertiary) text-(--text-secondary)"
+              }`}
+            >
+              <FontAwesomeIcon icon={faCalendarDays} className="text-[9px]" />
+              {overdue ? "Overdue · " : "Due "}
+              {formatDate(currentProject.dueDate)}
+            </span>
+          )}
         </div>
 
-        <Button
-          variant="outline"
-          size="small"
-          onClick={() => navigate(ROUTES.projects)}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
-          Back
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => setShowEdit(true)}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
+            Edit
+          </Button>
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => navigate(ROUTES.projects)}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
+            Back
+          </Button>
+        </div>
       </div>
 
       <TaskboardStats
@@ -292,6 +325,19 @@ export default function ProjectDetailsPage() {
             }}
             onDeleteSubtask={async (subtaskId) => {
               await deleteSubtask(selectedTask.id, subtaskId);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showEdit && (
+          <ProjectEditPanel
+            key="edit-project"
+            project={currentProject}
+            onClose={() => setShowEdit(false)}
+            onSave={async (changes) => {
+              await updateProject(currentProject.id, changes);
             }}
           />
         )}

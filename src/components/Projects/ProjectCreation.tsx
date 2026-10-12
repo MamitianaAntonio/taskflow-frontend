@@ -1,6 +1,9 @@
 import type { FormEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolderBlank } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarDays,
+  faFolderBlank,
+} from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 
 interface ProjectCreationProps {
@@ -8,6 +11,8 @@ interface ProjectCreationProps {
   setName: (value: string) => void;
   description: string;
   setDescription: (value: string) => void;
+  dueDate: string;
+  setDueDate: (value: string) => void;
   handleCreate: (e: FormEvent) => void;
 }
 
@@ -16,6 +21,8 @@ export default function ProjectCreation({
   setName,
   description,
   setDescription,
+  dueDate,
+  setDueDate,
   handleCreate,
 }: ProjectCreationProps) {
   return (
@@ -51,6 +58,22 @@ export default function ProjectCreation({
         onChange={(e) => setDescription(e.target.value)}
         className="mt-2 w-full border-t border-(--border-color) bg-transparent pt-2 text-xs text-(--text-secondary) outline-none placeholder:text-(--text-muted)"
       />
+      <div className="mt-2 flex items-center gap-2 border-t border-(--border-color) pt-2">
+        <FontAwesomeIcon
+          icon={faCalendarDays}
+          className="shrink-0 text-xs text-(--text-muted)"
+        />
+        <span className="font-interface text-xs text-(--text-muted)">
+          Deadline
+        </span>
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="min-w-0 bg-transparent text-xs text-(--text-secondary) outline-none"
+        />
+        <span className="font-interface text-xs text-(--text-muted)">(optional)</span>
+      </div>
     </form>
   );
 }
