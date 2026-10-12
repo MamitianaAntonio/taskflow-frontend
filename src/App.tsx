@@ -36,24 +36,12 @@ function App() {
         <ThemeProvider>
           <Toaster
             position="bottom-right"
+            gutter={10}
             toastOptions={{
               style: {
-                background: "var(--bg-tertiary)",
-                color: "var(--text-primary)",
-                border: "1px solid var(--border-color)",
-                boxShadow: "0 10px 30px var(--shadow-pink)",
-              },
-              success: {
-                iconTheme: {
-                  primary: "var(--color-success)",
-                  secondary: "var(--bg-secondary)",
-                },
-              },
-              error: {
-                iconTheme: {
-                  primary: "var(--color-error)",
-                  secondary: "var(--bg-secondary)",
-                },
+                background: "transparent",
+                boxShadow: "none",
+                padding: "0",
               },
             }}
           />

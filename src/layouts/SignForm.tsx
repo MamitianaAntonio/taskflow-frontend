@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../utils/toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import GoogleAuthButton from "../components/auth/GoogleAuthButton";
@@ -40,17 +40,17 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
     e.preventDefault();
 
     if (!formData.username || !formData.email || !formData.password) {
-      toast.error("Please fill in all fields");
+      notify.error("Please fill in all fields");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      notify.error("Passwords do not match");
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      notify.error("Password must be at least 6 characters");
       return;
     }
 
@@ -64,7 +64,7 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
       login(result.token, result.user);
       navigate(ROUTES.dashboard);
     } catch (error) {
-      toast.error(getErrorMessage(error, "Sign up failed"));
+      notify.error(getErrorMessage(error, "Sign up failed"));
     } finally {
       setLoading(false);
     }

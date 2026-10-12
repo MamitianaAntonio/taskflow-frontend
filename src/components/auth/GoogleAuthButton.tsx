@@ -1,5 +1,5 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../../utils/toast";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { googleLogin } from "../../services/auth";
@@ -28,7 +28,7 @@ const GoogleAuthButton = ({
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
-      toast.error("Google authentication failed. Please try again.");
+      notify.error("Google authentication failed. Please try again.");
       return;
     }
 
@@ -38,7 +38,7 @@ const GoogleAuthButton = ({
       login(result.token, result.user);
       navigate(ROUTES.dashboard);
     } catch (error) {
-      toast.error(getErrorMessage(error, "Google sign-in failed"));
+      notify.error(getErrorMessage(error, "Google sign-in failed"));
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ const GoogleAuthButton = ({
         <GoogleLogin
           onSuccess={handleSuccess}
           onError={() =>
-            toast.error("Google authentication failed. Please try again.")
+            notify.error("Google authentication failed. Please try again.")
           }
           useOneTap={false}
           theme="outline"

@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import toast from "react-hot-toast";
+import { notify } from "../utils/toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import GoogleAuthButton from "../components/auth/GoogleAuthButton";
@@ -36,7 +36,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      toast.error("Please fill in all fields");
+      notify.error("Please fill in all fields");
       return;
     }
 
@@ -46,7 +46,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
       login(result.token, result.user);
       navigate(ROUTES.dashboard);
     } catch (error) {
-      toast.error(getErrorMessage(error, "Login failed"));
+      notify.error(getErrorMessage(error, "Login failed"));
     } finally {
       setLoading(false);
     }

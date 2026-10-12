@@ -18,6 +18,9 @@
   --accent-bg: #fdf2f8;
   --accent-muted: #fce7f3;
 
+  --decor-glow: rgba(236, 72, 153, 0.13);
+  --decor-glow-soft: rgba(236, 72, 153, 0.07);
+
   --gradient-from: #fb7185;
   --gradient-to: #d9469f;
   --color-highlight: #d9469f;
@@ -59,6 +62,10 @@
   --accent-soft: #2a2228;
   --accent-bg: #241b22;
   --accent-muted: #45303e;
+
+  /* Decor glows: toned down in dark mode to stay subtle */
+  --decor-glow: rgba(244, 114, 182, 0.08);
+  --decor-glow-soft: rgba(244, 114, 182, 0.04);
 
   --gradient-from: #fb7185;
   --gradient-to: #ec4899;
@@ -146,6 +153,15 @@ body {
 
 .scrollbar-hidden:hover::-webkit-scrollbar {
   width: 4px;
+}
+
+@keyframes taskflow-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
 
 /*input*/
