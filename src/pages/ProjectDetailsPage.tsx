@@ -11,7 +11,6 @@ import {
   faInbox,
   faPenToSquare,
   faPlus,
-  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence } from "framer-motion";
 import { useProjectStore } from "../stores/projectStore";
@@ -339,40 +338,14 @@ export default function ProjectDetailsPage() {
             onSave={async (changes) => {
               await updateProject(currentProject.id, changes);
             }}
+            onDelete={async () => {
+              if (!id) return;
+              await deleteProject(id);
+              navigate(ROUTES.projects);
+            }}
           />
         )}
       </AnimatePresence>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl shadow-sm bg-(--bg-secondary) px-4 py-3.5">
-        <div className="flex flex-col gap-0.5">
-          <div className="flex items-center gap-2">
-            <FontAwesomeIcon
-              icon={faTriangleExclamation}
-              className="text-xs text-(--color-error)"
-            />
-            <h3 className="text-xs font-bold uppercase tracking-wide text-(--color-error)">
-              Danger zone
-            </h3>
-          </div>
-          <p className="font-interface text-xs text-(--text-muted)">
-            This action permanently deletes the project and its tasks.
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          size="small"
-          className="hover:border-(--color-error) hover:text-(--color-error)"
-          onClick={() => {
-            if (!id) return;
-            if (!window.confirm("Delete this project and its tasks permanently?"))
-              return;
-            deleteProject(id);
-            navigate(ROUTES.projects);
-          }}
-        >
-          Delete project
-        </Button>
-      </div>
     </div>
   );
 }

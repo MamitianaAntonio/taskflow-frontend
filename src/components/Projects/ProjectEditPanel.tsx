@@ -6,6 +6,8 @@ import {
   faFolderOpen,
   faFloppyDisk,
   faTag,
+  faTrashCan,
+  faTriangleExclamation,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import Drawer from "../ui/Drawer";
@@ -17,6 +19,7 @@ interface ProjectEditPanelProps {
   project: Project;
   onClose: () => void;
   onSave: (changes: UpdateProjectPayload) => Promise<void>;
+  onDelete: () => Promise<void> | void;
 }
 
 const inputClass =
@@ -35,11 +38,13 @@ export default function ProjectEditPanel({
   project,
   onClose,
   onSave,
+  onDelete,
 }: ProjectEditPanelProps) {
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState(project.description ?? "");
   const [dueDate, setDueDate] = useState(() => toDateInput(project.dueDate));
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const dirty =
     name !== project.name ||
@@ -66,6 +71,16 @@ export default function ProjectEditPanel({
       onClose();
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this project and its tasks permanently?")) return;
+    setDeleting(true);
+    try {
+      await onDelete();
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -160,6 +175,32 @@ export default function ProjectEditPanel({
           <p className="mt-1 font-interface text-xs text-(--text-muted)">
             {dueDate ? "Target date for this goal." : "No deadline — clear it if not needed."}
           </p>
+        </div>
+
+        <div className="mt-1 border-t border-(--border-color) pt-5">
+          <div className="flex items-center gap-2">
+            <FontAwesomeIcon
+              icon={faTriangleExclamation}
+              className="text-xs text-(--color-error)"
+            />
+            <h3 className="text-xs font-bold uppercase tracking-wide text-(--color-error)">
+              Danger zone
+            </h3>
+          </div>
+          <p className="mt-1 font-interface text-xs text-(--text-muted)">
+            Permanently deletes this project and all of its tasks. This
+            can&apos;t be undone.
+          </p>
+          <Button
+            variant="outline"
+            size="small"
+            className="mt-3 w-full hover:border-(--color-error) hover:text-(--color-error) sm:w-auto"
+            onClick={handleDelete}
+            loading={deleting}
+            disabled={saving}
+            icon={<FontAwesomeIcon icon={faTrashCan} />}
+            text="Delete project"
+          />
         </div>
       </div>
     </Drawer>
