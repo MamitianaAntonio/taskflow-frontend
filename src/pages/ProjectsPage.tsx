@@ -18,6 +18,7 @@ export default function ProjectsPage() {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -34,9 +35,11 @@ export default function ProjectsPage() {
     await create({
       name: name.trim(),
       description: description.trim() || undefined,
+      dueDate: dueDate ? new Date(`${dueDate}T00:00:00`).toISOString() : undefined,
     });
     setName("");
     setDescription("");
+    setDueDate("");
   };
 
   const filtered = projects.filter((p) =>
@@ -72,6 +75,8 @@ export default function ProjectsPage() {
         handleCreate={handleCreate}
         description={description}
         setDescription={setDescription}
+        dueDate={dueDate}
+        setDueDate={setDueDate}
       />
 
       <ProjectSearch search={search} setSearch={setSearch} />

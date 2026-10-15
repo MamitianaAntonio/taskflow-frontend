@@ -1,5 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faCalendarDays,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
+import { formatDate, isOverdue } from "../../utils/date";
 import type { Project } from "../../types/project";
 
 interface ProjectProgress {
@@ -23,6 +28,8 @@ export default function ProjectGrid({
       {projects.map((project) => {
         const p = progress[project.id] ?? { total: 0, done: 0 };
         const pct = p.total > 0 ? Math.round((p.done / p.total) * 100) : 0;
+        const completed = p.total > 0 && p.done === p.total;
+        const overdue = !completed && project.dueDate ? isOverdue(project.dueDate) : false;
 
         return (
           <div
@@ -55,12 +62,34 @@ export default function ProjectGrid({
               )}
             </div>
 
-            <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-              <span className="font-interface text-[11px] text-(--text-muted) tabular-nums">
-                {p.total === 0
-                  ? "No tasks yet"
-                  : `${p.done}/${p.total} done · ${pct}%`}
+            {project.dueDate && (
+              <span
+                className={`inline-flex w-fit items-center gap-1.5 rounded-full px-2 py-0.5 font-interface text-[10px] font-semibold ${
+                  overdue
+                    ? "bg-(--color-error-soft) text-(--color-error)"
+                    : "bg-(--bg-tertiary) text-(--text-secondary)"
+                }`}
+                title={overdue ? "Deadline passed" : "Project deadline"}
+              >
+                <FontAwesomeIcon icon={faCalendarDays} className="text-[9px]" />
+                {overdue ? "Overdue · " : "Due "}
+                {formatDate(project.dueDate)}
               </span>
+            )}
+
+            <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+              {completed ? (
+                <span className="inline-flex items-center gap-1.5 font-interface text-[11px] font-semibold text-(--color-success) tabular-nums">
+                  <FontAwesomeIcon icon={faCircleCheck} className="text-[11px]" />
+                  Completed
+                </span>
+              ) : (
+                <span className="font-interface text-[11px] text-(--text-muted) tabular-nums">
+                  {p.total === 0
+                    ? "No tasks yet"
+                    : `${p.done}/${p.total} done · ${pct}%`}
+                </span>
+              )}
               <FontAwesomeIcon
                 icon={faArrowRight}
                 className="shrink-0 text-xs text-(--text-muted) transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-(--accent-color)"
@@ -69,7 +98,9 @@ export default function ProjectGrid({
 
             <div className="absolute inset-x-0 bottom-0 h-1 bg-(--bg-tertiary)">
               <div
-                className="h-full bg-(--accent-color) transition-all duration-500"
+                className={`h-full transition-all duration-500 ${
+                  completed ? "bg-(--color-success)" : "bg-(--accent-color)"
+                }`}
                 style={{ width: `${pct}%` }}
               />
             </div>
