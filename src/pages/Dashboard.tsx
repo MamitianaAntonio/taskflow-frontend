@@ -28,7 +28,7 @@ export default function Dashboard() {
               clearance with an explicit spacer instead. */}
           <div
             aria-hidden
-            className="h-[calc(7.5rem+env(safe-area-inset-bottom))] md:hidden"
+            className="h-[calc(3.75rem+env(safe-area-inset-bottom))] md:hidden"
           />
         </main>
       </div>
