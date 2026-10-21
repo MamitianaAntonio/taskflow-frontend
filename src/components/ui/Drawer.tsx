@@ -87,19 +87,21 @@ export default function Drawer({
 
       {isMobile ? (
         <motion.div
-          className="fixed bottom-0 left-0 right-0 z-50 max-h-[92vh] overflow-y-auto bg-(--bg-secondary) shadow-xl"
+          role="dialog"
+          aria-modal="true"
+          aria-label={title}
+          className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl bg-(--bg-secondary) shadow-xl"
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          onScroll={handleScroll}
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           <div className="flex justify-center pt-3 pb-1">
             <div className="h-1.5 w-10 rounded-full bg-(--border-color)" />
           </div>
 
-          <div className={`sticky top-0 z-10 flex items-center gap-3 bg-(--bg-secondary)/90 px-4 pt-2.5 pb-3 backdrop-blur-md transition-shadow ${scrollState.atTop ? "" : "shadow-sm"}`}>
+          <div className={`flex items-center gap-3 px-4 pt-1 pb-3 transition-shadow ${scrollState.atTop ? "" : "shadow-sm"}`}>
             {icon && (
               <FontAwesomeIcon
                 icon={icon}
@@ -118,7 +120,9 @@ export default function Drawer({
             <CloseButton onClose={onClose} />
           </div>
 
-          {children}
+          <div className="flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll}>
+            {children}
+          </div>
 
           {footer && (
             <div className={`border-t p-4 transition-colors ${scrollState.atBottom ? "border-(--border-color)" : "border-transparent"}`}>
@@ -154,7 +158,7 @@ export default function Drawer({
             <CloseButton onClose={onClose} />
           </div>
 
-          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          <div className="flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll}>
             {children}
           </div>
 

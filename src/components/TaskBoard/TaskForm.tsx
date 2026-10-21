@@ -37,11 +37,11 @@ const fieldLabelClass =
   "mb-1.5 flex items-center gap-1.5 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-secondary)";
 
 const inputClass = (hasError?: string) =>
-  `w-full rounded-lg border bg-(--bg-primary) py-2 pl-10 text-sm text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
+  `w-full rounded-lg border bg-(--bg-primary) py-1.5 pl-9 text-sm text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) sm:py-2 sm:pl-10 ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
   }`;
 
 const textareaClass = (hasError?: string) =>
-  `w-full resize-none rounded-lg border bg-(--bg-primary) px-3.5 py-2.5 text-sm leading-relaxed text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
+  `w-full resize-none rounded-lg border bg-(--bg-primary) px-3 py-2 text-sm leading-relaxed text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) sm:px-3.5 sm:py-2.5 ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
   }`;
 
 export default function TaskForm({
@@ -83,14 +83,14 @@ export default function TaskForm({
   };
 
   return (
-    <div className="flex flex-col gap-5 p-4 sm:p-5">
+    <div className="flex flex-col gap-3.5 p-3.5 pb-0 sm:gap-5 sm:p-5 sm:pb-0">
       <div>
         <label className={fieldLabelClass}>
           <FontAwesomeIcon icon={faTag} className="text-[10px] text-(--accent-color)" />
           Title
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-xs text-(--text-muted) sm:w-10">
             <FontAwesomeIcon icon={faTag} />
           </span>
           <input
@@ -152,7 +152,7 @@ export default function TaskForm({
           Due date
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-xs text-(--text-muted) sm:w-10">
             <FontAwesomeIcon icon={faCalendarDays} />
           </span>
           <input
@@ -165,7 +165,8 @@ export default function TaskForm({
         {errors.dueDate && <p className="mt-1 text-xs text-(--color-error)">{errors.dueDate}</p>}
       </div>
 
-      <div className="flex flex-col-reverse gap-2 border-t border-(--border-color) pt-4 sm:flex-row sm:justify-end">
+      {/* Pinned to the bottom of the sheet so creating a task never needs a scroll. */}
+      <div className="sticky bottom-0 -mx-3.5 flex flex-col-reverse gap-2 border-t border-(--border-color) bg-(--bg-secondary) px-3.5 pt-3 pb-3 sm:-mx-5 sm:px-5 sm:flex-row sm:justify-end">
         <Button
           variant="outline"
           size="small"
