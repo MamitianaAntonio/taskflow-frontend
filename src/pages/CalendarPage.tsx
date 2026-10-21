@@ -4,12 +4,18 @@ import {
   faCalendarDays,
   faChevronLeft,
   faChevronRight,
+  faCirclePlus,
+  faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence } from "framer-motion";
 import MonthGrid from "../components/Calendar/MonthGrid";
+import AgendaList from "../components/Calendar/AgendaList";
+import DayDrawer from "../components/Calendar/DayDrawer";
 import TaskDetail from "../components/TaskBoard/TaskDetail";
+import CustomTask from "../components/TaskBoard/CustomTask";
 import Button from "../components/ui/Button";
 import EmptyState from "../components/ui/EmptyState";
+import OptionChips from "../components/ui/OptionChips";
 import Spinner from "../components/ui/Spinner";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useProjectStore } from "../stores/projectStore";
@@ -20,10 +26,20 @@ import {
   groupByDay,
   monthLabel,
   startOfMonth,
+  todayKey,
   type DayKey,
 } from "../utils/calendar";
+import { isOverdue, toLocalDatetime } from "../utils/date";
 import { toBoardTask } from "../utils/task";
+import type { Project } from "../types/project";
 import type { Todo, UpdateTodoPayload } from "../types/todo";
+
+type CalendarView = "month" | "agenda";
+
+/** 9am, a sane default when someone picks a day on the calendar. */
+function defaultTimeFor(day: DayKey) {
+  return toLocalDatetime(`${day}T09:00:00`);
+}
 
 export default function CalendarPage() {
   const todos = useTodoStore((state) => state.todos);
@@ -41,8 +57,13 @@ export default function CalendarPage() {
   const compact = useIsMobile(768);
 
   const [cursor, setCursor] = useState(() => startOfMonth(new Date()));
+  const [view, setView] = useState<CalendarView>(() =>
+    compact ? "agenda" : "month",
+  );
   const [selectedDay, setSelectedDay] = useState<DayKey | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [createDay, setCreateDay] = useState<DayKey | null>(null);
 
   useEffect(() => {
     fetchTodos();
@@ -52,6 +73,8 @@ export default function CalendarPage() {
     fetchProjects();
   }, [fetchProjects]);
 
+  const today = todayKey();
+
   const tasksByDay = useMemo(
     () => groupByDay(todos, (todo) => dayKey(todo.dueDate)),
     [todos],
@@ -60,6 +83,41 @@ export default function CalendarPage() {
   const projectNames = useMemo(
     () => new Map(projects.map((project) => [project.id, project.name])),
     [projects],
+  );
+
+  const projectName = (id: string | null | undefined) =>
+    id ? projectNames.get(id) ?? null : null;
+
+  const overdue = useMemo(
+    () =>
+      todos
+        .filter((todo) => todo.status !== "done" && isOverdue(todo.dueDate))
+        .sort(
+          (a, b) =>
+            new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime(),
+        ),
+    [todos],
+  );
+
+  const upcomingDays = useMemo(
+    () =>
+      [...tasksByDay.entries()]
+        .filter(([day]) => day >= today)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([day, tasks]) => ({ day, tasks })),
+    [tasksByDay, today],
+  );
+
+  const deadlines = useMemo(
+    () =>
+      projects
+        .map((project) => ({ day: dayKey(project.dueDate), project }))
+        .filter(
+          (item): item is { day: DayKey; project: Project } =>
+            Boolean(item.day) && item.day >= today,
+        )
+        .sort((a, b) => a.day.localeCompare(b.day)),
+    [projects, today],
   );
 
   const selectedTask = useMemo(
@@ -74,6 +132,11 @@ export default function CalendarPage() {
   const handleDelete = (taskId: string) => {
     void deleteTodo(taskId);
     setSelectedTaskId(null);
+  };
+
+  const openCreate = (day: DayKey | null) => {
+    setCreateDay(day);
+    setShowCreate(true);
   };
 
   if (isLoading && todos.length === 0) {
@@ -118,13 +181,31 @@ export default function CalendarPage() {
           </Button>
         </div>
 
-        <Button
-          variant="outline"
-          size="small"
-          onClick={() => setCursor(startOfMonth(new Date()))}
-          icon={<FontAwesomeIcon icon={faCalendarDays} className="text-xs" />}
-          text="Today"
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => setCursor(startOfMonth(new Date()))}
+            icon={<FontAwesomeIcon icon={faCalendarDays} className="text-xs" />}
+            text="Today"
+          />
+          <OptionChips<CalendarView>
+            name="calendar-view"
+            value={view}
+            onChange={setView}
+            options={[
+              { value: "month", label: "Month", icon: faCalendarDays },
+              { value: "agenda", label: "Agenda", icon: faListCheck },
+            ]}
+          />
+          <Button
+            variant="primary"
+            size="small"
+            onClick={() => openCreate(null)}
+            icon={<FontAwesomeIcon icon={faCirclePlus} className="text-[10px]" />}
+            text="New task"
+          />
+        </div>
       </div>
 
       {todos.length === 0 ? (
@@ -135,7 +216,7 @@ export default function CalendarPage() {
             text="Tasks with a due date show up here."
           />
         </div>
-      ) : (
+      ) : view === "month" ? (
         <MonthGrid
           cursor={cursor}
           tasksByDay={tasksByDay}
@@ -143,9 +224,39 @@ export default function CalendarPage() {
           onSelectDay={setSelectedDay}
           onOpenTask={(task) => setSelectedTaskId(task.id)}
           compact={compact}
-          projectName={(id) => (id ? projectNames.get(id) ?? null : null)}
+          projectName={projectName}
+        />
+      ) : (
+        <AgendaList
+          today={today}
+          overdue={overdue}
+          days={upcomingDays}
+          deadlines={deadlines}
+          projectName={projectName}
+          onOpenTask={(task) => setSelectedTaskId(task.id)}
+          onSelectDay={setSelectedDay}
         />
       )}
+
+      <AnimatePresence>
+        {selectedDay && (
+          <DayDrawer
+            key="day-drawer"
+            day={selectedDay}
+            tasks={tasksByDay.get(selectedDay) ?? []}
+            projectName={projectName}
+            onClose={() => setSelectedDay(null)}
+            onOpenTask={(task) => {
+              setSelectedDay(null);
+              setSelectedTaskId(task.id);
+            }}
+            onAddTask={() => {
+              openCreate(selectedDay);
+              setSelectedDay(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {selectedTask && (
@@ -166,6 +277,16 @@ export default function CalendarPage() {
             onDeleteSubtask={async (subtaskId) => {
               await deleteSubtask(selectedTask.id, subtaskId);
             }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCreate && (
+          <CustomTask
+            key="create-task"
+            onClose={() => setShowCreate(false)}
+            initial={{ dueDate: defaultTimeFor(createDay ?? today) }}
           />
         )}
       </AnimatePresence>

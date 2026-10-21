@@ -19,6 +19,8 @@ interface TaskFormProps {
   onSubmit: (payload: CreateTodoPayload) => void;
   onCancel: () => void;
   loading?: boolean;
+  /** Values pre-filled on mount, e.g. the day picked on the calendar. */
+  initial?: Partial<CreateTodoPayload>;
 }
 
 const defaultValues: CreateTodoPayload = {
@@ -42,8 +44,16 @@ const textareaClass = (hasError?: string) =>
   `w-full resize-none rounded-lg border bg-(--bg-primary) px-3.5 py-2.5 text-sm leading-relaxed text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) ${hasError ? "border-(--color-error)" : "border-(--border-color) focus:border-(--accent-color)"
   }`;
 
-export default function TaskForm({ onSubmit, onCancel, loading = false }: TaskFormProps) {
-  const [form, setForm] = useState<CreateTodoPayload>(defaultValues);
+export default function TaskForm({
+  onSubmit,
+  onCancel,
+  loading = false,
+  initial,
+}: TaskFormProps) {
+  const [form, setForm] = useState<CreateTodoPayload>(() => ({
+    ...defaultValues,
+    ...initial,
+  }));
   const [errors, setErrors] = useState<Partial<Record<TaskFormField, string>>>({});
 
   const set = (field: TaskFormField, value: string) => {
