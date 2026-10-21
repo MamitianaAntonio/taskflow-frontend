@@ -11,7 +11,7 @@ export default function BottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Main navigation"
     >
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-6">
         {bottomItems.map((item) => (
           <NavLink
             key={item.key}
