@@ -82,7 +82,7 @@ export default function Modal({
 
   const body = isMobile ? (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 z-50 flex max-h-[92vh] flex-col overflow-hidden rounded-t-2xl bg-(--bg-secondary) shadow-xl"
+      className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl bg-(--bg-secondary) shadow-xl"
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
@@ -93,7 +93,7 @@ export default function Modal({
         <div className="h-1.5 w-10 rounded-full bg-(--border-color)" />
       </div>
       {header}
-      <div className="overflow-y-auto" onScroll={handleScroll}>
+      <div className="overflow-y-auto overscroll-contain" onScroll={handleScroll}>
         {children}
       </div>
       {footer && (
@@ -121,7 +121,7 @@ export default function Modal({
         transition={{ duration: 0.2, ease: "easeOut" }}
       >
         {header}
-        <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+        <div className="flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll}>
           {children}
         </div>
         {footer && (

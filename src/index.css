@@ -106,6 +106,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Phones: one notch tighter. Everything sized in rem (type and the spacing
+   around it) scales with it, so dense screens stop feeling oversized. */
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+}
+
 .font-interface {
   font-family: var(--font-ui);
 }

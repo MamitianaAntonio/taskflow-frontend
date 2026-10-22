@@ -6,6 +6,7 @@ export const ROUTES = {
   projects: "/dashboard/projects",
   projectDetails: (projectId: string) =>
     `/dashboard/projects/${projectId}`,
+  calendar: "/dashboard/calendar",
   notifications: "/dashboard/notifications",
   settings: "/dashboard/settings",
 } as const;

@@ -2,6 +2,7 @@ import {
   faChartLine,
   faListCheck,
   faFolderOpen,
+  faCalendarDays,
   faBell,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +30,12 @@ export const primaryNav: NavItem[] = [
     icon: faFolderOpen,
     path: ROUTES.projects,
   },
+  {
+    key: "calendar",
+    label: "Calendar",
+    icon: faCalendarDays,
+    path: ROUTES.calendar,
+  },
 ];
 
 export const systemNav: NavItem[] = [
@@ -45,6 +52,7 @@ export function getPageTitle(pathname: string): string {
   if (pathname === ROUTES.dashboard) return "Dashboard";
   if (pathname.startsWith(ROUTES.projects)) return "Projects";
   if (pathname.startsWith(ROUTES.tasks)) return "Tasks";
+  if (pathname.startsWith(ROUTES.calendar)) return "Calendar";
   if (pathname.startsWith(ROUTES.notifications)) return "Notifications";
   if (pathname.startsWith(ROUTES.settings)) return "Settings";
   return "Workspace";

@@ -15,6 +15,7 @@ const DashboardHome = lazy(() => import("./pages/DashboardHome"));
 const TaskboardPage = lazy(() => import("./pages/TaskboardPage"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const ProjectDetailsPage = lazy(() => import("./pages/ProjectDetailsPage"));
+const CalendarPage = lazy(() => import("./pages/CalendarPage"));
 const NotificationsPage = lazy(() => import("./pages/NotificationsPage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 
@@ -63,6 +64,7 @@ function App() {
                   <Route path="tasks" element={<TaskboardPage />} />
                   <Route path="projects" element={<ProjectsPage />} />
                   <Route path="projects/:projectId" element={<ProjectDetailsPage />} />
+                  <Route path="calendar" element={<CalendarPage />} />
                   <Route path="notifications" element={<NotificationsPage />} />
                   <Route path="settings" element={<SettingsPage />} />
                 </Route>
