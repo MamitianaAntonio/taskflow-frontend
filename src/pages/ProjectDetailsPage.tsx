@@ -25,6 +25,7 @@ import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
 import Spinner from "../components/ui/Spinner";
 import { formatDate, isOverdue } from "../utils/date";
+import { toBoardTask } from "../utils/task";
 import { ROUTES } from "../constants/routes";
 import type {
   BoardTask,
@@ -43,19 +44,6 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
     dueDate: todo.dueDate,
     priority: todo.priority,
     updatedAt: todo.updatedAt,
-    subtasks: todo.subtasks ?? [],
-  };
-}
-
-function toBoardTask(todo: Todo): BoardTask {
-  return {
-    id: todo.id,
-    label: todo.title,
-    description: todo.description,
-    status: todo.status || "todo",
-    dueDate: todo.dueDate,
-    priority: todo.priority || "medium",
-    projectId: todo.projectId,
     subtasks: todo.subtasks ?? [],
   };
 }

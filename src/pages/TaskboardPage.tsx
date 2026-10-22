@@ -20,17 +20,7 @@ import Spinner from "../components/ui/Spinner";
 import useTodoStore from "../stores/todoStore";
 import { statusConfig } from "../constants/taskConfig";
 import type { BoardTask, Todo, UpdateTodoPayload } from "../types/todo";
-
-const toBoardTask = (todo: Todo): BoardTask => ({
-  id: todo.id,
-  label: todo.title,
-  description: todo.description,
-  status: todo.status || "todo",
-  dueDate: todo.dueDate,
-  priority: todo.priority || "medium",
-  projectId: todo.projectId,
-  subtasks: todo.subtasks ?? [],
-});
+import { toBoardTask } from "../utils/task";
 
 export default function TaskboardPage() {
   const todos = useTodoStore((state) => state.todos);

@@ -8,9 +8,11 @@ import type { CreateTodoPayload } from "../../types/todo";
 interface CustomTaskProps {
   onClose: () => void;
   projectId?: string;
+  /** Form values pre-filled on open, e.g. `dueDate` picked on the calendar. */
+  initial?: Partial<CreateTodoPayload>;
 }
 
-export default function CustomTask({ onClose, projectId }: CustomTaskProps) {
+export default function CustomTask({ onClose, projectId, initial }: CustomTaskProps) {
   const addTodo = useTodoStore((state) => state.addTodo);
   const [creating, setCreating] = useState(false);
 
@@ -35,7 +37,12 @@ export default function CustomTask({ onClose, projectId }: CustomTaskProps) {
       icon={faCirclePlus}
       subtitle="Create a task from scratch"
     >
-      <TaskForm onSubmit={handleCreate} onCancel={onClose} loading={creating} />
+      <TaskForm
+        onSubmit={handleCreate}
+        onCancel={onClose}
+        loading={creating}
+        initial={initial}
+      />
     </Modal>
   );
 }
