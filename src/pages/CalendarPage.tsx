@@ -14,8 +14,8 @@ import DayDrawer from "../components/Calendar/DayDrawer";
 import TaskDetail from "../components/TaskBoard/TaskDetail";
 import CustomTask from "../components/TaskBoard/CustomTask";
 import Button from "../components/ui/Button";
+import ChipTabs from "../components/ui/ChipTabs";
 import EmptyState from "../components/ui/EmptyState";
-import OptionChips from "../components/ui/OptionChips";
 import Spinner from "../components/ui/Spinner";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useProjectStore } from "../stores/projectStore";
@@ -189,14 +189,14 @@ export default function CalendarPage() {
             icon={<FontAwesomeIcon icon={faCalendarDays} className="text-xs" />}
             text="Today"
           />
-          <OptionChips<CalendarView>
-            name="calendar-view"
+          <ChipTabs<CalendarView>
+            items={[
+              { id: "month", label: "Month", icon: faCalendarDays },
+              { id: "agenda", label: "Agenda", icon: faListCheck },
+            ]}
             value={view}
             onChange={setView}
-            options={[
-              { value: "month", label: "Month", icon: faCalendarDays },
-              { value: "agenda", label: "Agenda", icon: faListCheck },
-            ]}
+            ariaLabel="Calendar view"
           />
           <Button
             variant="primary"
