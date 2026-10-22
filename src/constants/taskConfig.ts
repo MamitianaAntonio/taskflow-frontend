@@ -1,4 +1,9 @@
 import {
+  faBan,
+  faCalendar,
+  faCalendarDay,
+  faCalendarDays,
+  faCalendarWeek,
   faCircle,
   faCircleDot,
   faCircleHalfStroke,
@@ -9,7 +14,7 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import type { TodoPriority, TodoStatus } from "../types/todo";
+import type { RepeatRule, TodoPriority, TodoStatus } from "../types/todo";
 
 interface SelectOption<T extends string> {
   value: T;
@@ -112,6 +117,31 @@ export const priorityList: SelectOption<TodoPriority>[] = [
   { value: "medium", label: "Medium", icon: faMinus },
   { value: "high", label: "High", icon: faArrowUp },
 ];
+
+export const repeatList: SelectOption<RepeatRule>[] = [
+  { value: "none", label: "Never", icon: faBan },
+  { value: "daily", label: "Daily", icon: faCalendarDay },
+  { value: "weekly", label: "Weekly", icon: faCalendarWeek },
+  { value: "monthly", label: "Monthly", icon: faCalendarDays },
+  { value: "yearly", label: "Yearly", icon: faCalendar },
+];
+
+/** Short hint under the repeat chips, and the sentence shown on a task. */
+export const repeatHint: Record<RepeatRule, string> = {
+  none: "Completing it closes the task for good.",
+  daily: "The next one is created the day after.",
+  weekly: "The next one is created a week later.",
+  monthly: "The next one is created a month later, on the same day.",
+  yearly: "The next one is created a year later, on the same day.",
+};
+
+export const repeatPhrase: Record<RepeatRule, string> = {
+  none: "Does not repeat",
+  daily: "Repeats daily",
+  weekly: "Repeats weekly",
+  monthly: "Repeats monthly",
+  yearly: "Repeats yearly",
+};
 
 export const statusColor: Record<TodoStatus, string> = {
   todo: "text-(--color-warning) border-(--color-warning-soft) bg-(--color-warning-soft)",

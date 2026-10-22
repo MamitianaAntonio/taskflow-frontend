@@ -1,5 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import ProjectBadge from "../ui/ProjectBadge";
 import TaskProgressBadge from "../TaskBoard/TaskProgressBadge";
+import { repeatPhrase } from "../../constants/taskConfig";
 import { isOverdue } from "../../utils/date";
 import type { Todo, TodoStatus } from "../../types/todo";
 
@@ -44,6 +47,15 @@ export default function CalendarTaskRow({
         {task.title}
       </span>
       <TaskProgressBadge subtasks={task.subtasks} />
+      {task.repeat && task.repeat !== "none" && (
+        <span
+          className="shrink-0 text-[10px] text-(--text-muted)"
+          title={repeatPhrase[task.repeat]}
+          aria-label={repeatPhrase[task.repeat]}
+        >
+          <FontAwesomeIcon icon={faArrowsRotate} size="2xs" />
+        </span>
+      )}
       {project && <ProjectBadge name={project} />}
     </button>
   );

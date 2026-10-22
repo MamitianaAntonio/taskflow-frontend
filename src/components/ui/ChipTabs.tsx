@@ -1,4 +1,4 @@
-import { useRef, type KeyboardEvent } from "react";
+import { useRef, type KeyboardEvent, type ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
@@ -17,6 +17,14 @@ interface ChipTabsProps<T extends string> {
   role?: "tablist" | "group";
   ariaLabel?: string;
   className?: string;
+  /** Rendered above the pills, matching the task form field labels. */
+  label?: ReactNode;
+  disabled?: boolean;
+  /**
+   * Framer Motion id for the sliding pill. Give each group on screen its own
+   * value so two chip rows never animate into each other.
+   */
+  layoutId?: string;
 }
 
 const ACTIVE_LAYOUT_ID = "chip-tab-active";
@@ -28,6 +36,9 @@ export default function ChipTabs<T extends string>({
   role = "group",
   ariaLabel,
   className = "",
+  label,
+  disabled = false,
+  layoutId = ACTIVE_LAYOUT_ID,
 }: ChipTabsProps<T>) {
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
   const isTablist = role === "tablist";
@@ -52,7 +63,7 @@ export default function ChipTabs<T extends string>({
     }
   };
 
-  return (
+  const pills = (
     <div
       role={role}
       aria-label={ariaLabel}
@@ -74,10 +85,11 @@ export default function ChipTabs<T extends string>({
             aria-pressed={isTablist ? undefined : active}
             tabIndex={isTablist ? (active ? 0 : -1) : undefined}
             onClick={() => onChange(item.id)}
+            disabled={disabled}
             onKeyDown={isTablist ? (e) => onKeyDown(e, index) : undefined}
             whileTap={{ scale: 0.95 }}
             className="group relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-interface text-xs font-semibold transition-colors focus-visible:outline-2
-            focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)"
+            focus-visible:outline-offset-2 focus-visible:outline-(--accent-color) disabled:cursor-not-allowed disabled:opacity-60"
           >
             <span
               aria-hidden="true"
@@ -85,7 +97,7 @@ export default function ChipTabs<T extends string>({
             />
             {active && (
               <motion.span
-                layoutId={ACTIVE_LAYOUT_ID}
+                layoutId={layoutId}
                 aria-hidden="true"
                 className="absolute inset-0 rounded-lg border border-(--accent-color) bg-(--accent-soft)"
                 transition={{ type: "spring", stiffness: 500, damping: 40 }}
@@ -110,6 +122,17 @@ export default function ChipTabs<T extends string>({
           </motion.button>
         );
       })}
+    </div>
+  );
+
+  if (!label) return pills;
+
+  return (
+    <div>
+      <label className="mb-1.5 flex items-center gap-1.5 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-secondary)">
+        {label}
+      </label>
+      {pills}
     </div>
   );
 }

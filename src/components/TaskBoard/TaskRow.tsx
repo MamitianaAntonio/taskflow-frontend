@@ -1,5 +1,6 @@
 import {
   faArrowDown,
+  faArrowsRotate,
   faBolt,
   faCheck,
   faCircleXmark,
@@ -14,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { formatDate } from "../../utils/date";
-import { priorityConfig, statusCardColor } from "../../constants/taskConfig";
+import { priorityConfig, repeatPhrase, statusCardColor } from "../../constants/taskConfig";
 import TaskProgressBadge from "./TaskProgressBadge";
 import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
 
@@ -276,6 +277,16 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
 
           <div className="flex items-center gap-2">
             <TaskProgressBadge subtasks={task.subtasks} />
+
+            {task.repeat && task.repeat !== "none" && (
+              <span
+                className="flex shrink-0 items-center text-[10px] text-(--text-muted)"
+                title={repeatPhrase[task.repeat]}
+                aria-label={repeatPhrase[task.repeat]}
+              >
+                <FontAwesomeIcon icon={faArrowsRotate} size="2xs" />
+              </span>
+            )}
 
             {task.priority && task.priority !== "low" && (
               <span

@@ -3,7 +3,7 @@ import TaskDetailPanel from "./TaskDetailPanel";
 import { formatDate, toLocalDatetime } from "../../utils/date";
 import { useProjectStore } from "../../stores/projectStore";
 import type { BoardTask } from "../../types/todo";
-import type { UpdateTodoPayload } from "../../types/todo";
+import type { RepeatRule, UpdateTodoPayload } from "../../types/todo";
 
 interface TaskDetailProps {
   task: BoardTask;
@@ -32,6 +32,7 @@ export default function TaskDetail({
   const [localStatus, setLocalStatus] = useState(task.status);
   const [localPriority, setLocalPriority] = useState(task.priority);
   const [localDueDate, setLocalDueDate] = useState(() => toLocalDatetime(task.dueDate));
+  const [localRepeat, setLocalRepeat] = useState<RepeatRule>(task.repeat ?? "none");
   const [localProjectId, setLocalProjectId] = useState<string | null>(
     task.projectId ?? null,
   );
@@ -56,9 +57,10 @@ export default function TaskDetail({
       localStatus !== task.status ||
       localPriority !== task.priority ||
       toLocalDatetime(task.dueDate) !== localDueDate ||
+      localRepeat !== (task.repeat ?? "none") ||
       (task.projectId ?? null) !== localProjectId
     );
-  }, [localTitle, localDescription, localStatus, localPriority, localDueDate, localProjectId, task]);
+  }, [localTitle, localDescription, localStatus, localPriority, localDueDate, localRepeat, localProjectId, task]);
 
   const handleSave = async () => {
     const changes: UpdateTodoPayload = {};
@@ -68,6 +70,9 @@ export default function TaskDetail({
     if (localPriority !== task.priority) changes.priority = localPriority;
     if (toLocalDatetime(task.dueDate) !== localDueDate) {
       changes.dueDate = localDueDate ? new Date(localDueDate).toISOString() : null;
+    }
+    if (localRepeat !== (task.repeat ?? "none")) {
+      changes.repeat = localRepeat;
     }
     if ((task.projectId ?? null) !== localProjectId) {
       changes.projectId = localProjectId;
@@ -109,6 +114,8 @@ export default function TaskDetail({
       setLocalPriority={setLocalPriority}
       localDueDate={localDueDate}
       setLocalDueDate={setLocalDueDate}
+      localRepeat={localRepeat}
+      setLocalRepeat={setLocalRepeat}
       localProjectId={localProjectId}
       setLocalProjectId={setLocalProjectId}
       projects={projects}

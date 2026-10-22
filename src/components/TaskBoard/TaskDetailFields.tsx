@@ -1,5 +1,6 @@
 import {
   faAlignLeft,
+  faArrowsRotate,
   faCalendarDays,
   faChevronDown,
   faCircleHalfStroke,
@@ -8,10 +9,11 @@ import {
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import OptionChips from "../ui/OptionChips";
-import { priorityColor, priorityList, statusColor, statusList } from "../../constants/taskConfig";
+import ChipTabs from "../ui/ChipTabs";
+import { repeatHint } from "../../constants/taskConfig";
+import { priorityChips, repeatChips, statusChips } from "./taskChips";
 import type { Project } from "../../types/project";
-import type { TodoPriority, TodoStatus } from "../../types/todo";
+import type { RepeatRule, TodoPriority, TodoStatus } from "../../types/todo";
 
 interface TaskDetailFieldsProps {
   localTitle: string;
@@ -24,6 +26,8 @@ interface TaskDetailFieldsProps {
   setLocalPriority: (value: TodoPriority) => void;
   localDueDate: string;
   setLocalDueDate: (value: string) => void;
+  localRepeat: RepeatRule;
+  setLocalRepeat: (value: RepeatRule) => void;
   localProjectId: string | null;
   setLocalProjectId: (value: string | null) => void;
   projects: Project[];
@@ -40,6 +44,11 @@ const textareaClass =
 const fieldLabelClass =
   "mb-1.5 flex items-center gap-1.5 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-secondary)";
 
+const iconSlotClass =
+  "pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)";
+
+const helperClass = "mt-1 font-interface text-[11px] text-(--text-muted)";
+
 export default function TaskDetailFields({
   localTitle,
   setLocalTitle,
@@ -51,6 +60,8 @@ export default function TaskDetailFields({
   setLocalPriority,
   localDueDate,
   setLocalDueDate,
+  localRepeat,
+  setLocalRepeat,
   localProjectId,
   setLocalProjectId,
   projects,
@@ -65,7 +76,7 @@ export default function TaskDetailFields({
           Task title
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
+          <span className={iconSlotClass}>
             <FontAwesomeIcon icon={faTag} />
           </span>
           <input
@@ -94,89 +105,109 @@ export default function TaskDetailFields({
         />
       </div>
 
-      <OptionChips
+      <ChipTabs
         label={
           <>
             <FontAwesomeIcon icon={faCircleHalfStroke} className="text-[10px] text-(--accent-color)" />
             Status
           </>
         }
-        options={statusList}
+        items={statusChips}
         value={localStatus}
         onChange={setLocalStatus}
-        selectedClass={statusColor}
+        ariaLabel="Status"
+        layoutId="task-detail-status"
         disabled={saving}
       />
 
-      <OptionChips
+      <ChipTabs
         label={
           <>
             <FontAwesomeIcon icon={faFlag} className="text-[10px] text-(--accent-color)" />
             Priority
           </>
         }
-        options={priorityList}
+        items={priorityChips}
         value={localPriority}
         onChange={setLocalPriority}
-        selectedClass={priorityColor}
+        ariaLabel="Priority"
+        layoutId="task-detail-priority"
         disabled={saving}
       />
 
-      <div>
-        <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faCalendarDays} className="text-[10px] text-(--accent-color)" />
-          Due date
-        </label>
-        <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
-            <FontAwesomeIcon icon={faCalendarDays} />
-          </span>
-          <input
-            type="datetime-local"
-            value={localDueDate}
-            onChange={(e) => setLocalDueDate(e.target.value)}
-            disabled={saving}
-            className={`${inputClass} pr-10`}
-          />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={fieldLabelClass}>
+            <FontAwesomeIcon icon={faCalendarDays} className="text-[10px] text-(--accent-color)" />
+            Due date
+          </label>
+          <div className="relative">
+            <span className={iconSlotClass}>
+              <FontAwesomeIcon icon={faCalendarDays} />
+            </span>
+            <input
+              type="datetime-local"
+              value={localDueDate}
+              onChange={(e) => setLocalDueDate(e.target.value)}
+              disabled={saving}
+              className={`${inputClass} pr-2`}
+            />
+          </div>
+          {dueDateStr && <p className={helperClass}>{dueDateStr}</p>}
         </div>
-        {dueDateStr && (
-          <p className="mt-1 font-interface text-xs text-(--text-muted)">{dueDateStr}</p>
-        )}
+
+        <div>
+          <label className={fieldLabelClass}>
+            <FontAwesomeIcon icon={faFolderOpen} className="text-[10px] text-(--accent-color)" />
+            Project
+          </label>
+          <div className="relative">
+            <span className={iconSlotClass}>
+              <FontAwesomeIcon icon={faFolderOpen} />
+            </span>
+            <select
+              value={localProjectId ?? ""}
+              onChange={(e) => setLocalProjectId(e.target.value || null)}
+              disabled={saving}
+              className={`${inputClass} appearance-none pr-9`}
+            >
+              <option value="">Inbox — no project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex w-9 items-center justify-center text-xs text-(--text-muted)">
+              <FontAwesomeIcon icon={faChevronDown} size="2xs" />
+            </span>
+          </div>
+          <p className={helperClass}>
+            {projects.length === 0
+              ? "Create a project to organize this task there."
+              : localProjectId
+                ? "Attached to the selected project."
+                : "Lives in your inbox."}
+          </p>
+        </div>
       </div>
 
       <div>
-        <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faFolderOpen} className="text-[10px] text-(--accent-color)" />
-          Project
-        </label>
-        <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
-            <FontAwesomeIcon icon={faFolderOpen} />
-          </span>
-          <select
-            value={localProjectId ?? ""}
-            onChange={(e) => setLocalProjectId(e.target.value || null)}
-            disabled={saving}
-            className={`${inputClass} appearance-none pr-9`}
-          >
-            <option value="">Inbox — no project</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex w-9 items-center justify-center text-xs text-(--text-muted)">
-            <FontAwesomeIcon icon={faChevronDown} size="2xs" />
-          </span>
-        </div>
-        <p className="mt-1 font-interface text-xs text-(--text-muted)">
-          {projects.length === 0
-            ? "Create a project to organize this task there."
-            : localProjectId
-              ? "This task is attached to the selected project."
-              : "This task lives in your inbox."}
-        </p>
+        <ChipTabs
+          label={
+            <>
+              <FontAwesomeIcon icon={faArrowsRotate} className="text-[10px] text-(--accent-color)" />
+              Repeat
+            </>
+          }
+          items={repeatChips}
+          value={localRepeat}
+          onChange={setLocalRepeat}
+          ariaLabel="Repeat"
+          layoutId="task-detail-repeat"
+          disabled={saving}
+        />
+        <p className={helperClass}>{repeatHint[localRepeat]}</p>
       </div>
     </div>
   );

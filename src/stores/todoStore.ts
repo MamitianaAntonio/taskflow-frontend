@@ -49,7 +49,7 @@ const mapSubtask = (
       : t,
   );
 
-const useTodoStore = create<TodoState>()((set) => ({
+const useTodoStore = create<TodoState>()((set, get) => ({
   todos: [],
   isLoading: false,
   error: null,
@@ -81,7 +81,17 @@ const useTodoStore = create<TodoState>()((set) => ({
   updateTodo: async (id, updates) => {
     try {
       const updated = await updateTodoService(id, updates);
-      set((state) => ({ todos: mapTodo(state.todos, id, updated) }));
+      let todos = mapTodo(get().todos, id, updated);
+      // Completing a recurring task makes the server create the next
+      // occurrence, so pull the list again to show it right away.
+      if (
+        updates.status === "done" &&
+        updated.repeat &&
+        updated.repeat !== "none"
+      ) {
+        todos = await getAllTodo();
+      }
+      set({ todos });
       emitMutation();
       return updated;
     } catch (error) {

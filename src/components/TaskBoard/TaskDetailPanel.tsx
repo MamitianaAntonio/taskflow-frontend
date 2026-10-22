@@ -1,4 +1,5 @@
 import {
+  faArrowsRotate,
   faFloppyDisk,
   faTrashCan,
   faXmark,
@@ -9,9 +10,9 @@ import ProjectBadge from "../ui/ProjectBadge";
 import TaskDetailFields from "./TaskDetailFields";
 import SubtaskList from "./SubtaskList";
 import Button from "../ui/Button";
-import { statusConfig } from "../../constants/taskConfig";
+import { repeatPhrase, statusConfig } from "../../constants/taskConfig";
 import type { Project } from "../../types/project";
-import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
+import type { BoardTask, RepeatRule, TodoPriority, TodoStatus } from "../../types/todo";
 
 interface TaskDetailPanelProps {
   task: BoardTask;
@@ -28,6 +29,8 @@ interface TaskDetailPanelProps {
   setLocalPriority: (value: TodoPriority) => void;
   localDueDate: string;
   setLocalDueDate: (value: string) => void;
+  localRepeat: RepeatRule;
+  setLocalRepeat: (value: RepeatRule) => void;
   localProjectId: string | null;
   setLocalProjectId: (value: string | null) => void;
   projects: Project[];
@@ -39,6 +42,8 @@ interface TaskDetailPanelProps {
   onToggleSubtask?: (id: string, done: boolean) => Promise<void>;
   onDeleteSubtask?: (id: string) => Promise<void>;
 }
+
+const metaSeparator = <span className="text-(--text-muted)">·</span>;
 
 export default function TaskDetailPanel({
   task,
@@ -55,6 +60,8 @@ export default function TaskDetailPanel({
   setLocalPriority,
   localDueDate,
   setLocalDueDate,
+  localRepeat,
+  setLocalRepeat,
   localProjectId,
   setLocalProjectId,
   projects,
@@ -82,13 +89,25 @@ export default function TaskDetailPanel({
           </span>
           {dueDateStr && (
             <>
-              <span className="text-(--text-muted)">·</span>
+              {metaSeparator}
               <span>{dueDateStr}</span>
+            </>
+          )}
+          {localRepeat !== "none" && (
+            <>
+              {metaSeparator}
+              <span className="inline-flex items-center gap-1.5">
+                <FontAwesomeIcon
+                  icon={faArrowsRotate}
+                  className="text-[10px] text-(--accent-color)"
+                />
+                {repeatPhrase[localRepeat]}
+              </span>
             </>
           )}
           {projectName && (
             <>
-              <span className="text-(--text-muted)">·</span>
+              {metaSeparator}
               <ProjectBadge name={projectName} />
             </>
           )}
@@ -143,6 +162,8 @@ export default function TaskDetailPanel({
           setLocalPriority={setLocalPriority}
           localDueDate={localDueDate}
           setLocalDueDate={setLocalDueDate}
+          localRepeat={localRepeat}
+          setLocalRepeat={setLocalRepeat}
           localProjectId={localProjectId}
           setLocalProjectId={setLocalProjectId}
           projects={projects}

@@ -11,5 +11,6 @@ export function toBoardTask(todo: Todo): BoardTask {
     priority: todo.priority || "medium",
     projectId: todo.projectId,
     subtasks: todo.subtasks ?? [],
+    repeat: todo.repeat ?? "none",
   };
 }
