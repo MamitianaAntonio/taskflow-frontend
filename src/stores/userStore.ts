@@ -17,6 +17,11 @@ const useUserStore = create<UserState>()(
       isAuthenticated: false,
       setUser: (user) => set({ user, isAuthenticated: true }),
       login: (token, user) => {
+        // A session without a token would leave every write silently failing
+        // (403 on each request), so refuse it loudly instead.
+        if (!token) {
+          throw new Error("Sign-in failed: no session token was returned");
+        }
         localStorage.setItem("token", token);
         set({ user, isAuthenticated: true });
       },
