@@ -1,16 +1,49 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { notify } from "../utils/toast";
 import { faInbox, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import useNotificationStore from "../stores/notificationStore";
 import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
-import NotificationsPanel from "../components/Notifications/NotificationsPanel";
+import NotificationItem from "../components/Notifications/NotificationItem";
 import ChipTabs, { type ChipTabItem } from "../components/ui/ChipTabs";
 import Button from "../components/ui/Button";
+import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
 import Spinner from "../components/ui/Spinner";
+import type { AppNotification } from "../types/notification";
 
 type NotificationTab = "all" | "unread";
+
+const DAY = 86_400_000;
+
+function dayLabel(iso: string) {
+  const date = new Date(iso);
+  const startOfToday = new Date().setHours(0, 0, 0, 0);
+  const diff = Math.round(
+    (startOfToday - new Date(date).setHours(0, 0, 0, 0)) / DAY,
+  );
+
+  if (diff <= 0) return "Today";
+  if (diff === 1) return "Yesterday";
+  return date.toLocaleDateString(undefined, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+}
+
+// Groups consecutive notifications that share the same day.
+function groupByDay(items: AppNotification[]) {
+  const groups: { label: string; items: AppNotification[] }[] = [];
+  for (const n of items) {
+    const label = dayLabel(n.createdAt);
+    const last = groups[groups.length - 1];
+    if (last?.label === label) last.items.push(n);
+    else groups.push({ label, items: [n] });
+  }
+  return groups;
+}
 
 const TABS: ChipTabItem<NotificationTab>[] = [
   { id: "all", label: "All", icon: faInbox },
@@ -149,34 +182,76 @@ export default function NotificationsPage() {
               </Button>
             }
           />
-        ) : (
-          <NotificationsPanel
-            notifications={notifications}
-            onMarkRead={(id: string) =>
-              run(() => markRead(id), "Failed to mark notification as read")
-            }
-            onDelete={(id: string) =>
-              run(() => deleteOne(id), "Failed to delete notification")
-            }
-            onLoadMore={() =>
-              run(
-                tab === "all" ? loadMore : loadMoreUnread,
-                "Failed to load more notifications",
-              )
-            }
-            hasMore={hasMore}
-            isLoadingMore={isLoadingMore}
-            emptyTitle={
+        ) : notifications.length === 0 ? (
+          <EmptyState
+            title={
               tab === "unread"
                 ? "No unread notifications"
                 : "No notifications yet"
             }
-            emptyText={
+            text={
               tab === "unread"
                 ? "Everything is read. Nice work."
                 : "Things you do in TaskFlow will show up here."
             }
           />
+        ) : (
+          <div className="flex flex-col gap-6 p-2">
+            {groupByDay(notifications).map((group) => (
+              <section key={group.label}>
+                <h2 className="mb-1 flex items-center gap-3 px-2 font-interface text-xs font-medium text-(--text-muted)">
+                  {group.label}
+                  <span className="h-px flex-1 bg-(--border-color)" />
+                </h2>
+
+                <div className="divide-y divide-(--border-color)/60">
+                  <AnimatePresence initial={false}>
+                    {group.items.map((notification) => (
+                      <motion.div
+                        key={notification.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <NotificationItem
+                          notification={notification}
+                          onMarkRead={(id: string) =>
+                            run(
+                              () => markRead(id),
+                              "Failed to mark notification as read",
+                            )
+                          }
+                          onDelete={(id: string) =>
+                            run(
+                              () => deleteOne(id),
+                              "Failed to delete notification",
+                            )
+                          }
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </section>
+            ))}
+
+            {hasMore && (
+              <button
+                onClick={() =>
+                  run(
+                    tab === "all" ? loadMore : loadMoreUnread,
+                    "Failed to load more notifications",
+                  )
+                }
+                disabled={isLoadingMore}
+                className="self-center py-1 font-interface text-xs font-medium text-(--text-muted) transition-colors
+                hover:text-(--text-primary) disabled:opacity-50"
+              >
+                {isLoadingMore ? "Loading..." : "Load more"}
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
