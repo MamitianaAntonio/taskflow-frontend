@@ -1,11 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faFolder,
-  faSearch,
+  faMagnifyingGlass,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
@@ -13,17 +20,16 @@ import useTodoStore from "../stores/todoStore";
 import { useProjectStore } from "../stores/projectStore";
 import { statusConfig } from "../constants/taskConfig";
 import { ROUTES } from "../constants/routes";
-import type { TodoStatus } from "../types/todo";
 
 const MIN_QUERY = 2;
 const MAX_PROJECTS = 4;
 const MAX_TASKS = 6;
+const RESULTS_ID = "global-search-results";
 
-const statusBg: Record<TodoStatus, string> = {
-  todo: "bg-(--color-warning-soft)",
-  doing: "bg-(--accent-bg)",
-  done: "bg-(--color-success-soft)",
-};
+const isMac =
+  typeof navigator !== "undefined" &&
+  /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
+const shortcutLabel = isMac ? "⌘ K" : "Ctrl K";
 
 interface SearchResult {
   id: string;
@@ -34,16 +40,42 @@ interface SearchResult {
   run: () => void;
 }
 
+interface ResultSection {
+  label: string;
+  items: (SearchResult & { index: number })[];
+}
+
 interface GlobalSearchProps {
   autoFocus?: boolean;
   className?: string;
   onNavigate?: () => void;
+  /** Binds ⌘K / Ctrl K to this field. Enable it on one instance only. */
+  shortcut?: boolean;
+}
+
+const rowClass =
+  "group/row flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left transition-colors";
+
+/** Highlights the matched part of a title without shouting. */
+function Highlight({ text, query }: { text: string; query: string }) {
+  const at = text.toLowerCase().indexOf(query);
+  if (!query || at === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, at)}
+      <span className="text-(--accent-strong)">
+        {text.slice(at, at + query.length)}
+      </span>
+      {text.slice(at + query.length)}
+    </>
+  );
 }
 
 export default function GlobalSearch({
   autoFocus,
   className = "",
   onNavigate,
+  shortcut = false,
 }: GlobalSearchProps) {
   const navigate = useNavigate();
   const todos = useTodoStore((state) => state.todos);
@@ -57,6 +89,7 @@ export default function GlobalSearch({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const trimmed = query.trim();
   const expanded = open && trimmed.length >= MIN_QUERY;
@@ -78,8 +111,26 @@ export default function GlobalSearch({
     if (projects.length === 0) fetchProjects().catch(() => {});
   }, [expanded, todos, projects, fetchTodos, fetchProjects]);
 
-  const results = useMemo<SearchResult[]>(() => {
-    if (trimmed.length < MIN_QUERY) return [];
+  useEffect(() => {
+    if (!shortcut) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [shortcut]);
+
+  const { sections, results } = useMemo<{
+    sections: ResultSection[];
+    results: SearchResult[];
+  }>(() => {
+    if (trimmed.length < MIN_QUERY) {
+      return { sections: [], results: [] };
+    }
     const q = trimmed.toLowerCase();
 
     const projectResults: SearchResult[] = projects
@@ -92,7 +143,7 @@ export default function GlobalSearch({
       .map((p) => ({
         id: `project-${p.id}`,
         icon: faFolder,
-        iconClasses: "bg-(--accent-soft) text-(--accent-strong)",
+        iconClasses: "text-(--text-muted)",
         title: p.name,
         meta: `${todos.filter((t) => t.projectId === p.id).length} tasks`,
         run: () => go(ROUTES.projectDetails(p.id)),
@@ -114,7 +165,7 @@ export default function GlobalSearch({
         return {
           id: `task-${t.id}`,
           icon: cfg.icon,
-          iconClasses: `${statusBg[status]} ${cfg.color}`,
+          iconClasses: cfg.color,
           title: t.title,
           meta: project ? `${project.name} · ${cfg.label}` : cfg.label,
           run: () =>
@@ -126,10 +177,22 @@ export default function GlobalSearch({
         };
       });
 
-    return [...projectResults, ...taskResults].slice(
-      0,
-      MAX_PROJECTS + MAX_TASKS,
-    );
+    const flat: SearchResult[] = [];
+    const grouped = [
+      { label: "Projects", items: projectResults },
+      { label: "Tasks", items: taskResults },
+    ]
+      .filter((section) => section.items.length > 0)
+      .map((section) => ({
+        label: section.label,
+        items: section.items.map((item) => {
+          const index = flat.length;
+          flat.push(item);
+          return { ...item, index };
+        }),
+      }));
+
+    return { sections: grouped, results: flat };
   }, [trimmed, todos, projects, go]);
 
   const activeIndex =
@@ -149,9 +212,18 @@ export default function GlobalSearch({
     return () => document.removeEventListener("mousedown", handleDown);
   }, []);
 
+  // Keep the keyboard selection inside the visible part of the list.
+  useEffect(() => {
+    if (!expanded) return;
+    document
+      .getElementById(`search-option-${activeIndex}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex, expanded]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Escape") {
       setOpen(false);
+      inputRef.current?.blur();
       return;
     }
     if (!expanded || results.length === 0) return;
@@ -168,79 +240,85 @@ export default function GlobalSearch({
   };
 
   const loading = todosLoading || projectsLoading;
+  const optionId = (index: number) => `search-option-${index}`;
 
   return (
     <div className={`relative ${className}`} ref={containerRef}>
-      <div className="group relative w-full">
+      <div
+        className="group relative rounded-full border border-transparent bg-(--bg-tertiary)
+        transition-colors hover:bg-(--bg-hover) focus-within:border-(--accent-color)
+        focus-within:bg-(--bg-primary) focus-within:ring-2 focus-within:ring-(--accent-soft)"
+      >
         <span
-          className="pointer-events-none absolute left-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full
-        bg-(--accent-soft) text-(--accent-strong) transition-colors group-focus-within:text-(--accent-color)"
+          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-(--text-muted)
+          transition-colors group-focus-within:text-(--accent-color)"
         >
-          <FontAwesomeIcon icon={faSearch} size="xs" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} size="xs" aria-hidden />
         </span>
+
         <input
+          ref={inputRef}
           type="text"
           value={query}
           autoFocus={autoFocus}
           placeholder="Search tasks, projects…"
+          role="combobox"
           aria-label="Search tasks and projects"
           aria-expanded={expanded}
+          aria-controls={RESULTS_ID}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            expanded && results.length > 0 ? optionId(activeIndex) : undefined
+          }
           onChange={(e) => {
             setQuery(e.target.value);
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          className="w-full rounded-xl border border-(--border-color) bg-(--bg-primary) py-2.5 pl-10 pr-9 font-interface text-sm text-(--text-primary)
-          shadow-sm outline-none transition-all placeholder:text-(--text-muted) focus:border-(--accent-color) focus:ring-2 focus:ring-(--accent-soft)"
+          className="h-10 w-full rounded-full bg-transparent pl-9.5 pr-10 font-interface text-sm text-(--text-primary)
+          outline-none placeholder:text-(--text-muted)"
         />
-        {query && (
+
+        {query ? (
           <button
             type="button"
             aria-label="Clear search"
             onClick={() => {
               setQuery("");
               setOpen(false);
+              inputRef.current?.focus();
             }}
             className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full
             text-(--text-muted) transition-colors hover:bg-(--bg-hover) hover:text-(--text-primary)"
           >
             <FontAwesomeIcon icon={faXmark} size="xs" />
           </button>
+        ) : (
+          shortcut && (
+            <kbd
+              className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 items-center rounded-md
+              border border-(--border-color) bg-(--bg-secondary) px-1.5 py-0.5 font-interface text-[10px]
+              font-medium text-(--text-muted) transition-opacity group-focus-within:opacity-0 sm:flex"
+            >
+              {shortcutLabel}
+            </kbd>
+          )
         )}
       </div>
 
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: -4 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: -4 }}
-            transition={{ duration: 0.15 }}
-            className="absolute inset-x-0 top-full z-50 mt-5 overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-primary) shadow-sm"
+            initial={{ opacity: 0, y: -4, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.98 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+            className="absolute left-1/2 top-full z-50 mt-5 w-full -translate-x-1/2 overflow-hidden rounded-2xl
+            border border-(--border-color) bg-(--bg-primary) shadow-xl md:w-[26rem]"
           >
-            <div className="flex items-center justify-between gap-2 border-b border-(--border-color) bg-(--bg-secondary) px-4 py-3">
-              <p className="flex items-center gap-2 text-sm font-semibold text-(--text-primary)">
-                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-(--accent-soft) text-(--accent-strong)">
-                  <FontAwesomeIcon icon={faSearch} size="xs" />
-                </span>
-                Results
-                <span className="rounded-full bg-(--accent-color) px-1.5 py-0.5 font-interface text-[10px] font-bold text-(--text-white) tabular-nums">
-                  {results.length}
-                </span>
-              </p>
-              <span className="flex items-center gap-1 font-interface text-[10px] text-(--text-muted)">
-                <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
-                  ↑↓
-                </kbd>
-                <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
-                  Enter
-                </kbd>
-              </span>
-            </div>
-
             {results.length === 0 ? (
-              <div className="px-4 py-6 text-center">
+              <div className="px-4 py-8 text-center">
                 <p className="text-sm font-semibold text-(--text-primary)">
                   {loading ? "Searching…" : `No results for “${trimmed}”`}
                 </p>
@@ -251,44 +329,88 @@ export default function GlobalSearch({
                 )}
               </div>
             ) : (
-              <ul className="max-h-80 overflow-y-auto p-1.5">
-                {results.map((result, index) => (
-                  <li key={result.id}>
-                    <button
-                      type="button"
-                      onClick={result.run}
-                      onMouseEnter={() => setActive(index)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors ${
-                        index === activeIndex ? "bg-(--bg-hover)" : ""
-                      }`}
+              <ul
+                id={RESULTS_ID}
+                role="listbox"
+                aria-label="Search results"
+                className="max-h-80 overflow-y-auto p-1.5"
+              >
+                {sections.map((section) => (
+                  <Fragment key={section.label}>
+                    <li
+                      role="presentation"
+                      className="px-2.5 pb-1 pt-2 font-interface text-[10px] font-semibold uppercase tracking-widest text-(--text-muted)"
                     >
-                      <span
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${result.iconClasses}`}
-                      >
-                        <FontAwesomeIcon icon={result.icon} size="xs" />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-(--text-primary)">
-                          {result.title}
-                        </span>
-                        <span className="block truncate font-interface text-xs text-(--text-muted)">
-                          {result.meta}
-                        </span>
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faChevronRight}
-                        size="xs"
-                        className={`shrink-0 transition-colors ${
-                          index === activeIndex
-                            ? "text-(--accent-color)"
-                            : "text-(--text-muted)"
-                        }`}
-                      />
-                    </button>
-                  </li>
+                      {section.label}
+                    </li>
+                    {section.items.map((result) => {
+                      const isActive = result.index === activeIndex;
+                      return (
+                        <li key={result.id} role="presentation">
+                          <button
+                            type="button"
+                            id={optionId(result.index)}
+                            role="option"
+                            aria-selected={isActive}
+                            onClick={result.run}
+                            onMouseEnter={() => setActive(result.index)}
+                            className={`${rowClass} ${
+                              isActive ? "bg-(--bg-hover)" : ""
+                            }`}
+                          >
+                            <FontAwesomeIcon
+                              icon={result.icon}
+                              size="xs"
+                              aria-hidden
+                              className={`w-3.5 shrink-0 ${result.iconClasses}`}
+                            />
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-sm text-(--text-primary)">
+                                <Highlight text={result.title} query={trimmed.toLowerCase()} />
+                              </span>
+                              <span className="block truncate font-interface text-xs text-(--text-muted)">
+                                {result.meta}
+                              </span>
+                            </span>
+                            <FontAwesomeIcon
+                              icon={faChevronRight}
+                              size="2xs"
+                              aria-hidden
+                              className={`shrink-0 text-(--accent-color) transition-opacity ${
+                                isActive ? "opacity-100" : "opacity-0"
+                              }`}
+                            />
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </Fragment>
                 ))}
               </ul>
             )}
+
+            <div className="hidden items-center justify-between border-t border-(--border-color) px-3 py-2 font-interface text-[10px] text-(--text-muted) sm:flex">
+              <span className="flex items-center gap-1.5">
+                <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
+                  ↑↓
+                </kbd>
+                Navigate
+              </span>
+              <span className="flex items-center gap-3">
+                <span className="flex items-center gap-1.5">
+                  <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
+                    ↵
+                  </kbd>
+                  Open
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
+                    esc
+                  </kbd>
+                  Close
+                </span>
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
