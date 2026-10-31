@@ -19,7 +19,7 @@ import ErrorState from "../components/ui/ErrorState";
 import Spinner from "../components/ui/Spinner";
 import useTodoStore from "../stores/todoStore";
 import { statusConfig } from "../constants/taskConfig";
-import type { BoardTask, Todo, UpdateTodoPayload } from "../types/todo";
+import type { BoardTask, UpdateTodoPayload } from "../types/todo";
 import { toBoardTask } from "../utils/task";
 
 export default function TaskboardPage() {
@@ -49,9 +49,7 @@ export default function TaskboardPage() {
   const selectedTask = useMemo<BoardTask | null>(() => {
     const id = paramTaskId ?? openTaskId;
     if (!id) return null;
-    const todo = (Array.isArray(todos) ? todos : []).find(
-      (t) => t.id === id,
-    );
+    const todo = (Array.isArray(todos) ? todos : []).find((t) => t.id === id);
     return todo ? toBoardTask(todo) : null;
   }, [paramTaskId, openTaskId, todos]);
 
@@ -166,7 +164,10 @@ export default function TaskboardPage() {
       <div className="flex items-center gap-4 text-xs font-interface text-(--text-muted)">
         {Object.entries(statusConfig).map(([status, cfg]) => (
           <span key={status} className="flex items-center gap-1.5">
-            <FontAwesomeIcon icon={cfg.icon} className={`text-[12px] ${cfg.color}`} />
+            <FontAwesomeIcon
+              icon={cfg.icon}
+              className={`text-[12px] ${cfg.color}`}
+            />
             {cfg.label}
           </span>
         ))}
@@ -201,14 +202,12 @@ export default function TaskboardPage() {
             }}
             onEdit={(task) => setOpenTaskId(task.id)}
             onDelete={(task) => {
-              if (paramTaskId === task.id) setSearchParams({}, { replace: true });
+              if (paramTaskId === task.id)
+                setSearchParams({}, { replace: true });
               setOpenTaskId((prev) => (prev === task.id ? null : prev));
               deleteTodo(task.id);
             }}
           />
-          <p className="font-interface text-xs text-(--text-muted)">
-            Tasks tied to a project live on its board — open Projects to see them.
-          </p>
         </>
       )}
     </div>
