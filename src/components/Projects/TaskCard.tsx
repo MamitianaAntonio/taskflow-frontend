@@ -1,11 +1,12 @@
 import { useDraggable } from "@dnd-kit/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowsRotate,
   faBolt,
   faFlag,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { priorityConfig, statusCardColor } from "../../constants/taskConfig";
+import { priorityConfig, repeatPhrase, statusCardColor } from "../../constants/taskConfig";
 import { formatRelativeDate } from "../../utils/date";
 import TaskProgressBadge from "../TaskBoard/TaskProgressBadge";
 import type { KanbanTask } from "../../types/todo";
@@ -88,6 +89,16 @@ export function TaskCardView({
 
         <div className="flex items-center gap-2">
           <TaskProgressBadge subtasks={task.subtasks} />
+
+          {task.repeat && task.repeat !== "none" && (
+            <span
+              className="inline-flex shrink-0 items-center text-[10px] text-(--text-muted)"
+              title={repeatPhrase[task.repeat]}
+              aria-label={repeatPhrase[task.repeat]}
+            >
+              <FontAwesomeIcon icon={faArrowsRotate} size="2xs" />
+            </span>
+          )}
 
           {task.priority && task.priority !== "low" && (
             <span

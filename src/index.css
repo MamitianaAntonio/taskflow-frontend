@@ -1,99 +1,130 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400..700&family=Sora:wght@300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Plus+Jakarta+Sans:wght@500..800&display=swap");
 
+/* ─── Light Theme ─── */
 :root {
-  --bg-primary: #f6f6f8;
-  --bg-secondary: #f1f1f4;
-  --bg-tertiary: #ebebef;
-  --bg-hover: #e9e9ee;
-  --text-primary: #1f1f24;
-  --text-secondary: #4b4b54;
-  --text-muted: #6f6f79;
+  /* Backgrounds */
+  --bg-primary: #f7f5f8;
+  --bg-secondary: #f0ecf2;
+  --bg-tertiary: #e8e2ec;
+  --bg-hover: #eee7f0;
+
+  /* Text */
+  --text-primary: #29232e;
+  --text-secondary: #625968;
+  --text-muted: #918796;
   --text-white: #ffffff;
-  --border-color: #dfdfe5;
 
-  --accent-color: #ec4899;
-  --accent-strong: #d5377f;
-  --accent-soft: #fbe7f1;
-  --accent-bg: #fdf2f8;
-  --accent-muted: #fce7f3;
+  /* Borders */
+  --border-color: #e5dde8;
 
-  --decor-glow: rgba(236, 72, 153, 0.13);
-  --decor-glow-soft: rgba(236, 72, 153, 0.07);
+  /* Sakura Accent */
+  --accent-color: #d9579b;
+  --accent-strong: #ad397d;
+  --accent-soft: #f6dfeb;
+  --accent-bg: #fbeaf3;
+  --accent-muted: #f1d0e2;
 
-  --gradient-from: #fb7185;
-  --gradient-to: #d9469f;
-  --color-highlight: #d9469f;
+  /* Decorative Glow */
+  --decor-glow: rgba(217, 87, 155, 0.14);
+  --decor-glow-soft: rgba(217, 87, 155, 0.06);
 
-  --color-success: #16a34a;
-  --color-success-soft: #e7f5ec;
-  --color-warning: #d97706;
-  --color-warning-soft: #fdf2e1;
-  --color-error: #dc2626;
-  --color-error-soft: #fdecec;
-  --color-info: #2563eb;
-  --color-info-soft: #e8f0fd;
+  /* Gradient */
+  --gradient-from: #f18abb;
+  --gradient-to: #b94d91;
+  --color-highlight: #c65391;
 
-  --color-warning-hover: #d97706;
-  --color-success-hover: #16a34a;
+  /* Status Colors */
+  --color-success: #249b75;
+  --color-success-soft: #e5f4ed;
+  --color-warning: #c68a36;
+  --color-warning-soft: #f8f0e2;
+  --color-error: #d45c68;
+  --color-error-soft: #f9e9ea;
+  --color-info: #6489cf;
+  --color-info-soft: #e9effb;
 
-  --shadow: rgba(23, 23, 31, 0.07);
-  --shadow-pink: 0 10px 30px rgba(236, 72, 153, 0.16);
-  --overlay: rgba(23, 23, 31, 0.04);
+  /* Hover States */
+  --color-warning-hover: #a66f27;
+  --color-success-hover: #187d5d;
 
-  /* Fonts: single source of truth for html/body and .font-interface */
-  --font-display: "Sora", sans-serif; /* titles, headings, strong UI moments */
-  --font-ui: "Roboto", sans-serif; /* body copy and micro-text (.font-interface) */
+  /* Shadows */
+  --shadow: rgba(40, 25, 45, 0.06);
+  --shadow-pink: 0 10px 30px rgba(190, 65, 137, 0.14);
+  --overlay: rgba(35, 25, 40, 0.05);
+
+  /* Typography */
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-ui: "Inter", system-ui, sans-serif;
 }
+
+/* ─── Dark Theme ─── */
 
 [data-theme="dark"] {
-  --bg-primary: #141117;
-  --bg-secondary: #1b1820;
-  --bg-tertiary: #232029;
-  --bg-hover: #2b2732;
-  --text-primary: #f5f0f5;
-  --text-secondary: #d0c6d0;
-  --text-muted: #9c919e;
+  /* Backgrounds */
+  --bg-primary: #17141c;
+  --bg-secondary: #211c27;
+  --bg-tertiary: #2c2433;
+  --bg-hover: #352b3d;
+
+  /* Text */
+  --text-primary: #f5eff7;
+  --text-secondary: #d1c5d7;
+  --text-muted: #a398aa;
   --text-white: #ffffff;
-  --border-color: #322b37;
 
-  --accent-color: #f472b6;
-  --accent-strong: #f9a8d4;
-  --accent-soft: #2a2228;
-  --accent-bg: #241b22;
-  --accent-muted: #45303e;
+  /* Borders */
+  --border-color: #392f41;
 
-  /* Decor glows: toned down in dark mode to stay subtle */
-  --decor-glow: rgba(244, 114, 182, 0.08);
-  --decor-glow-soft: rgba(244, 114, 182, 0.04);
+  /* Midnight Sakura */
+  --accent-color: #f18abb;
+  --accent-strong: #ffb5d9;
+  --accent-soft: #392333;
+  --accent-bg: #2b1d2b;
+  --accent-muted: #503047;
 
-  --gradient-from: #fb7185;
-  --gradient-to: #ec4899;
-  --color-highlight: #f9a8d4;
+  /* Decorative Glow */
+  --decor-glow: rgba(241, 138, 187, 0.12);
+  --decor-glow-soft: rgba(241, 138, 187, 0.05);
 
-  --color-success: #6ee7b7;
-  --color-success-soft: #20271f;
-  --color-warning: #fcd34d;
-  --color-warning-soft: #2c2820;
-  --color-error: #fca5a5;
-  --color-error-soft: #3a2224;
-  --color-info: #93c5fd;
-  --color-info-soft: #1f2f47;
+  /* Gradient */
+  --gradient-from: #f18abb;
+  --gradient-to: #c65a9c;
+  --color-highlight: #ffb5d9;
 
-  --color-warning-hover: #8a6d2f;
-  --color-success-hover: #3f8f6a;
+  /* Status Colors */
+  --color-success: #70d6ae;
+  --color-success-soft: #20342f;
+  --color-warning: #f2c477;
+  --color-warning-soft: #382d20;
+  --color-error: #f49aa3;
+  --color-error-soft: #3b252c;
+  --color-info: #91b6f4;
+  --color-info-soft: #222e46;
 
-  --shadow: rgba(0, 0, 0, 0.45);
-  --shadow-pink: 0 10px 30px rgba(244, 114, 182, 0.2);
-  --overlay: rgba(8, 6, 10, 0.6);
+  /* Hover States */
+  --color-warning-hover: #a98242;
+  --color-success-hover: #3e9d79;
+
+  /* Shadows */
+  --shadow: rgba(0, 0, 0, 0.38);
+  --shadow-pink: 0 10px 30px rgba(241, 138, 187, 0.16);
+  --overlay: rgba(8, 5, 12, 0.65);
 }
+
+/* ─── Tailwind Theme ─── */
 
 @theme {
-  /* Tailwind's `font-sans` utility stays aligned with the display font. */
   --font-sans: var(--font-display);
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  --radius-control: 0.75rem;
+  --radius-inner: 0.5rem;
 }
+
+/* ─── Global Styles ─── */
 
 html,
 body {
@@ -104,23 +135,6 @@ body {
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Phones: one notch tighter. Everything sized in rem (type and the spacing
-   around it) scales with it, so dense screens stop feeling oversized. */
-@media (max-width: 640px) {
-  html {
-    font-size: 15px;
-  }
-}
-
-.font-interface {
-  font-family: var(--font-ui);
-}
-
-::selection {
-  background: var(--accent-color);
-  color: var(--text-white);
 }
 
 * {
@@ -134,9 +148,47 @@ body {
     border-color 0.25s ease;
 }
 
+/* ─── Responsive ─── */
+
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* ─── Typography ─── */
+
+.font-interface {
+  font-family: var(--font-ui);
+}
+
+::selection {
+  background: var(--accent-color);
+  color: var(--text-white);
+}
+
+/* ─── Inputs ─── */
+
 [data-theme="dark"] input[type="datetime-local"] {
   color-scheme: dark;
 }
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary);
+  caret-color: var(--text-primary);
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px var(--bg-primary) inset;
+}
+
+.input:-webkit-autofill:focus {
+  box-shadow:
+    0 0 0 1000px var(--bg-primary) inset,
+    0 0 0 4px var(--accent-soft);
+}
+
+/* ─── Scrollbar ─── */
 
 ::-webkit-scrollbar {
   width: 4px;
@@ -163,27 +215,40 @@ body {
   width: 4px;
 }
 
+/* ─── Animations ─── */
+
 @keyframes taskflow-toast-progress {
   from {
     transform: scaleX(1);
   }
+
   to {
     transform: scaleX(0);
   }
 }
 
-/*input*/
-.input:-webkit-autofill,
-.input:-webkit-autofill:hover,
-.input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--text-primary);
-  caret-color: var(--text-primary);
-  transition: background-color 9999s ease-in-out 0s;
-  box-shadow: 0 0 0 1000px var(--bg-primary) inset;
+/* ─── Interactions ─── */
+
+button,
+a,
+.input,
+.card {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
-.input:-webkit-autofill:focus {
-  box-shadow:
-    0 0 0 1000px var(--bg-primary) inset,
-    0 0 0 4px var(--accent-soft);
+/* ─── Accessibility ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
+

@@ -2,6 +2,8 @@ export type TodoStatus = "todo" | "doing" | "done";
 
 export type TodoPriority = "low" | "medium" | "high";
 
+export type RepeatRule = "none" | "daily" | "weekly" | "monthly" | "yearly";
+
 export interface Todo {
   id: string;
   title: string;
@@ -13,6 +15,8 @@ export interface Todo {
   parentId?: string | null;
   subtasks?: Todo[];
   completedAt?: string | null;
+  repeat?: RepeatRule;
+  repeatAnchorDay?: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,6 +29,7 @@ export interface CreateTodoPayload {
   priority?: TodoPriority;
   projectId?: string | null;
   parentId?: string | null;
+  repeat?: RepeatRule;
 }
 
 export interface UpdateTodoPayload {
@@ -34,6 +39,7 @@ export interface UpdateTodoPayload {
   dueDate?: string | null;
   priority?: TodoPriority;
   projectId?: string | null;
+  repeat?: RepeatRule;
 }
 
 export interface BoardTask {
@@ -47,6 +53,7 @@ export interface BoardTask {
   overdue?: boolean;
   projectId?: string | null;
   subtasks?: Todo[];
+  repeat?: RepeatRule;
 }
 
 export interface KanbanTask {
@@ -58,6 +65,7 @@ export interface KanbanTask {
   priority: TodoPriority;
   updatedAt?: string;
   subtasks?: Todo[];
+  repeat?: RepeatRule;
 }
 
 export type DashboardTask = Todo & {

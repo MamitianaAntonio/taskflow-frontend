@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   faAlignLeft,
+  faArrowsRotate,
   faCalendarDays,
   faCircleHalfStroke,
   faFlag,
@@ -10,10 +11,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../ui/Button";
-import OptionChips from "../ui/OptionChips";
-import { priorityColor, priorityList, statusColor, statusList } from "../../constants/taskConfig";
+import ChipTabs from "../ui/ChipTabs";
+import { repeatHint } from "../../constants/taskConfig";
+import { priorityChips, repeatChips, statusChips } from "./taskChips";
 import { toLocalDatetime } from "../../utils/date";
-import type { CreateTodoPayload, TodoPriority, TodoStatus } from "../../types/todo";
+import type {
+  CreateTodoPayload,
+  RepeatRule,
+  TodoPriority,
+  TodoStatus,
+} from "../../types/todo";
 
 interface TaskFormProps {
   onSubmit: (payload: CreateTodoPayload) => void;
@@ -29,6 +36,7 @@ const defaultValues: CreateTodoPayload = {
   status: "todo",
   dueDate: toLocalDatetime(new Date()),
   priority: "medium",
+  repeat: "none",
 };
 
 type TaskFormField = keyof CreateTodoPayload;
@@ -73,6 +81,7 @@ export default function TaskForm({
       status: form.status as TodoStatus,
       dueDate: new Date(form.dueDate!).toISOString(),
       priority: form.priority as TodoPriority,
+      repeat: form.repeat ?? "none",
     });
   };
 
@@ -120,30 +129,32 @@ export default function TaskForm({
         />
       </div>
 
-      <OptionChips
+      <ChipTabs
         label={
           <>
             <FontAwesomeIcon icon={faCircleHalfStroke} className="text-[10px] text-(--accent-color)" />
             Status
           </>
         }
-        options={statusList}
+        items={statusChips}
         value={form.status as TodoStatus}
         onChange={(value) => set("status", value)}
-        selectedClass={statusColor}
+        ariaLabel="Status"
+        layoutId="task-form-status"
       />
 
-      <OptionChips
+      <ChipTabs
         label={
           <>
             <FontAwesomeIcon icon={faFlag} className="text-[10px] text-(--accent-color)" />
             Priority
           </>
         }
-        options={priorityList}
+        items={priorityChips}
         value={form.priority as TodoPriority}
         onChange={(value) => set("priority", value)}
-        selectedClass={priorityColor}
+        ariaLabel="Priority"
+        layoutId="task-form-priority"
       />
 
       <div>
@@ -164,6 +175,23 @@ export default function TaskForm({
         </div>
         {errors.dueDate && <p className="mt-1 text-xs text-(--color-error)">{errors.dueDate}</p>}
       </div>
+
+      <ChipTabs<RepeatRule>
+        label={
+          <>
+            <FontAwesomeIcon icon={faArrowsRotate} className="text-[10px] text-(--accent-color)" />
+            Repeat
+          </>
+        }
+        items={repeatChips}
+        value={form.repeat ?? "none"}
+        onChange={(value) => setForm((prev) => ({ ...prev, repeat: value }))}
+        ariaLabel="Repeat"
+        layoutId="task-form-repeat"
+      />
+      <p className="-mt-2 font-interface text-xs text-(--text-muted)">
+        {repeatHint[form.repeat ?? "none"]}
+      </p>
 
       {/* Pinned to the bottom of the sheet so creating a task never needs a scroll. */}
       <div className="sticky bottom-0 -mx-3.5 flex flex-col-reverse gap-2 border-t border-(--border-color) bg-(--bg-secondary) px-3.5 pt-3 pb-3 sm:-mx-5 sm:px-5 sm:flex-row sm:justify-end">

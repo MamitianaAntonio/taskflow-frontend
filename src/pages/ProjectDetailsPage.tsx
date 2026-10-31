@@ -45,6 +45,7 @@ function mapTodoForBoard(todo: Todo): KanbanTask {
     priority: todo.priority,
     updatedAt: todo.updatedAt,
     subtasks: todo.subtasks ?? [],
+    repeat: todo.repeat ?? "none",
   };
 }
 
