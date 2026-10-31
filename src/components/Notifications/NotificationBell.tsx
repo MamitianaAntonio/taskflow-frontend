@@ -13,9 +13,10 @@ export default function NotificationBell() {
 
   return (
     <button
+      type="button"
       onClick={() => navigate(ROUTES.notifications)}
-      className="relative flex h-9 w-9 items-center justify-center rounded-xl text-(--text-muted)
-       transition-all hover:bg-(--bg-tertiary) hover:text-(--text-primary)"
+      className="relative flex h-9 w-9 items-center justify-center rounded-control text-(--text-muted)
+       transition-colors hover:bg-(--bg-tertiary) hover:text-(--text-primary)"
       aria-label="Notifications"
     >
       <FontAwesomeIcon icon={faBell} />
