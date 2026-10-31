@@ -2,10 +2,12 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,7 +56,10 @@ interface GlobalSearchProps {
 }
 
 const rowClass =
-  "group/row flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left transition-colors";
+  "group/row flex w-full items-center gap-3 rounded-inner px-2 py-2 text-left transition-colors";
+
+const kbdClass =
+  "rounded-md border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5";
 
 /** Highlights the matched part of a title without shouting. */
 function Highlight({ text, query }: { text: string; query: string }) {
@@ -63,7 +68,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, at)}
-      <span className="text-(--accent-strong)">
+      <span className="font-semibold text-(--accent-strong)">
         {text.slice(at, at + query.length)}
       </span>
       {text.slice(at + query.length)}
@@ -89,10 +94,41 @@ export default function GlobalSearch({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [anchor, setAnchor] = useState<{
+    left: number;
+    top: number;
+    width: number;
+  } | null>(null);
 
   const trimmed = query.trim();
   const expanded = open && trimmed.length >= MIN_QUERY;
+
+  // The panel lives in a portal on <body>, so it must follow the field's
+  // viewport position instead of relying on `absolute`/`top-full`.
+  const updateAnchor = useCallback(() => {
+    const field = containerRef.current;
+    if (!field) return;
+    const rect = field.getBoundingClientRect();
+    setAnchor({ left: rect.left, top: rect.bottom + 8, width: rect.width });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (expanded) updateAnchor();
+  }, [expanded, updateAnchor]);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const onReflow = () => updateAnchor();
+    window.addEventListener("resize", onReflow);
+    // Capture scroll events from any scroll container (e.g. <main>).
+    window.addEventListener("scroll", onReflow, true);
+    return () => {
+      window.removeEventListener("resize", onReflow);
+      window.removeEventListener("scroll", onReflow, true);
+    };
+  }, [expanded, updateAnchor]);
 
   const go = useCallback(
     (path: string) => {
@@ -198,15 +234,13 @@ export default function GlobalSearch({
   const activeIndex =
     results.length > 0 ? Math.min(active, results.length - 1) : 0;
 
-  // Close the panel when clicking outside.
+  // Close the panel when clicking outside both the field and the portalled panel.
   useEffect(() => {
     const handleDown = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
+      const target = e.target as Node;
+      if (containerRef.current?.contains(target)) return;
+      if (panelRef.current?.contains(target)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", handleDown);
     return () => document.removeEventListener("mousedown", handleDown);
@@ -244,10 +278,11 @@ export default function GlobalSearch({
 
   return (
     <div className={`relative ${className}`} ref={containerRef}>
+      {/* Field */}
       <div
-        className="group relative rounded-full border border-transparent bg-(--bg-tertiary)
-        transition-colors hover:bg-(--bg-hover) focus-within:border-(--accent-color)
-        focus-within:bg-(--bg-primary) focus-within:ring-2 focus-within:ring-(--accent-soft)"
+        className="group relative rounded-control border border-(--border-color)/60 bg-(--bg-tertiary)/70
+        transition-all hover:bg-(--bg-hover) focus-within:border-(--accent-color)
+        focus-within:bg-(--bg-primary) focus-within:ring-4 focus-within:ring-(--accent-soft)"
       >
         <span
           className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-(--text-muted)
@@ -276,8 +311,8 @@ export default function GlobalSearch({
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          className="h-10 w-full rounded-full bg-transparent pl-9.5 pr-10 font-interface text-sm text-(--text-primary)
-          outline-none placeholder:text-(--text-muted)"
+          className="h-10 w-full rounded-control bg-transparent pl-10 pr-16 font-interface text-sm
+          text-(--text-primary) outline-none placeholder:text-(--text-muted) md:h-9"
         />
 
         {query ? (
@@ -289,7 +324,7 @@ export default function GlobalSearch({
               setOpen(false);
               inputRef.current?.focus();
             }}
-            className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full
+            className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md
             text-(--text-muted) transition-colors hover:bg-(--bg-hover) hover:text-(--text-primary)"
           >
             <FontAwesomeIcon icon={faXmark} size="xs" />
@@ -299,7 +334,7 @@ export default function GlobalSearch({
             <kbd
               className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 items-center rounded-md
               border border-(--border-color) bg-(--bg-secondary) px-1.5 py-0.5 font-interface text-[10px]
-              font-medium text-(--text-muted) transition-opacity group-focus-within:opacity-0 sm:flex"
+              font-medium text-(--text-muted) transition-opacity group-focus-within:opacity-0 md:flex"
             >
               {shortcutLabel}
             </kbd>
@@ -307,113 +342,143 @@ export default function GlobalSearch({
         )}
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            className="absolute left-1/2 top-full z-50 mt-5 w-full -translate-x-1/2 overflow-hidden rounded-2xl
-            border border-(--border-color) bg-(--bg-primary) shadow-xl md:w-[26rem]"
-          >
-            {results.length === 0 ? (
-              <div className="px-4 py-8 text-center">
-                <p className="text-sm font-semibold text-(--text-primary)">
-                  {loading ? "Searching…" : `No results for “${trimmed}”`}
-                </p>
-                {!loading && (
-                  <p className="mt-1 font-interface text-xs text-(--text-muted)">
-                    Try a task title or a project name.
+      {/* Results — portalled to <body> so no ancestor (e.g. the animated
+          mobile search wrapper) can clip it. */}
+      {createPortal(
+        <AnimatePresence>
+          {expanded && anchor && (
+            <motion.div
+              ref={panelRef}
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.14, ease: "easeOut" }}
+              style={{
+                left: anchor.left,
+                top: anchor.top,
+                width: anchor.width,
+              }}
+              className="fixed z-[60] overflow-hidden rounded-control border border-(--border-color)
+              bg-(--bg-primary) shadow-xl"
+            >
+              {results.length === 0 ? (
+                <div id={RESULTS_ID} className="px-4 py-8 text-center">
+                  <span
+                    className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-control
+                    bg-(--bg-tertiary) text-(--text-muted)"
+                  >
+                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                  </span>
+                  <p className="text-sm font-semibold text-(--text-primary)">
+                    {loading ? "Searching…" : `No results for “${trimmed}”`}
                   </p>
-                )}
-              </div>
-            ) : (
-              <ul
-                id={RESULTS_ID}
-                role="listbox"
-                aria-label="Search results"
-                className="max-h-80 overflow-y-auto p-1.5"
-              >
-                {sections.map((section) => (
-                  <Fragment key={section.label}>
-                    <li
-                      role="presentation"
-                      className="px-2.5 pb-1 pt-2 font-interface text-[10px] font-semibold uppercase tracking-widest text-(--text-muted)"
-                    >
-                      {section.label}
-                    </li>
-                    {section.items.map((result) => {
-                      const isActive = result.index === activeIndex;
-                      return (
-                        <li key={result.id} role="presentation">
-                          <button
-                            type="button"
-                            id={optionId(result.index)}
-                            role="option"
-                            aria-selected={isActive}
-                            onClick={result.run}
-                            onMouseEnter={() => setActive(result.index)}
-                            className={`${rowClass} ${
-                              isActive ? "bg-(--bg-hover)" : ""
-                            }`}
-                          >
-                            <FontAwesomeIcon
-                              icon={result.icon}
-                              size="xs"
-                              aria-hidden
-                              className={`w-3.5 shrink-0 ${result.iconClasses}`}
-                            />
-                            <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm text-(--text-primary)">
-                                <Highlight text={result.title} query={trimmed.toLowerCase()} />
-                              </span>
-                              <span className="block truncate font-interface text-xs text-(--text-muted)">
-                                {result.meta}
-                              </span>
-                            </span>
-                            <FontAwesomeIcon
-                              icon={faChevronRight}
-                              size="2xs"
-                              aria-hidden
-                              className={`shrink-0 text-(--accent-color) transition-opacity ${
-                                isActive ? "opacity-100" : "opacity-0"
+                  {!loading && (
+                    <p className="mt-1 font-interface text-xs text-(--text-muted)">
+                      Try a task title or a project name.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <ul
+                  id={RESULTS_ID}
+                  role="listbox"
+                  aria-label="Search results"
+                  className="max-h-[min(22rem,60dvh)] overflow-y-auto p-1"
+                >
+                  {sections.map((section) => (
+                    <Fragment key={section.label}>
+                      <li
+                        role="presentation"
+                        className="flex items-center gap-2 px-2 pb-1 pt-2.5 font-interface text-[10px] font-semibold
+                        uppercase tracking-widest text-(--text-muted)"
+                      >
+                        {section.label}
+                        <span className="h-px flex-1 bg-(--border-color)" />
+                      </li>
+                      {section.items.map((result) => {
+                        const isActive = result.index === activeIndex;
+                        return (
+                          <li key={result.id} role="presentation">
+                            <button
+                              type="button"
+                              id={optionId(result.index)}
+                              role="option"
+                              aria-selected={isActive}
+                              onClick={result.run}
+                              onMouseEnter={() => setActive(result.index)}
+                              className={`${rowClass} ${
+                                isActive ? "bg-(--accent-soft)" : ""
                               }`}
-                            />
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </Fragment>
-                ))}
-              </ul>
-            )}
+                            >
+                              <span
+                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors ${
+                                  isActive
+                                    ? "bg-(--bg-primary)"
+                                    : "bg-(--bg-tertiary)"
+                                }`}
+                              >
+                                <FontAwesomeIcon
+                                  icon={result.icon}
+                                  size="xs"
+                                  aria-hidden
+                                  className={result.iconClasses}
+                                />
+                              </span>
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate text-sm text-(--text-primary)">
+                                  <Highlight
+                                    text={result.title}
+                                    query={trimmed.toLowerCase()}
+                                  />
+                                </span>
+                                <span className="block truncate font-interface text-xs text-(--text-muted)">
+                                  {result.meta}
+                                </span>
+                              </span>
+                              <FontAwesomeIcon
+                                icon={faChevronRight}
+                                size="2xs"
+                                aria-hidden
+                                className={`shrink-0 text-(--accent-strong) transition-all ${
+                                  isActive
+                                    ? "translate-x-0 opacity-100"
+                                    : "-translate-x-1 opacity-0"
+                                }`}
+                              />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </Fragment>
+                  ))}
+                </ul>
+              )}
 
-            <div className="hidden items-center justify-between border-t border-(--border-color) px-3 py-2 font-interface text-[10px] text-(--text-muted) sm:flex">
-              <span className="flex items-center gap-1.5">
-                <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
-                  ↑↓
-                </kbd>
-                Navigate
-              </span>
-              <span className="flex items-center gap-3">
+              {/* Keyboard hints (hidden on touch-sized screens) */}
+              <div
+                className="hidden items-center justify-between border-t border-(--border-color) bg-(--bg-secondary)
+                px-3 py-2 font-interface text-[10px] text-(--text-muted) md:flex"
+              >
                 <span className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
-                    ↵
-                  </kbd>
-                  Open
+                  <kbd className={kbdClass}>↑↓</kbd>
+                  Navigate
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <kbd className="rounded border border-(--border-color) bg-(--bg-tertiary) px-1 py-0.5">
-                    esc
-                  </kbd>
-                  Close
+                <span className="flex items-center gap-3">
+                  <span className="flex items-center gap-1.5">
+                    <kbd className={kbdClass}>↵</kbd>
+                    Open
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <kbd className={kbdClass}>esc</kbd>
+                    Close
+                  </span>
                 </span>
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }
