@@ -209,6 +209,41 @@ export default function TaskDetailFields({
         />
         <p className={helperClass}>{repeatHint[localRepeat]}</p>
       </div>
+
+      <div>
+        <label className={fieldLabelClass}>
+          <FontAwesomeIcon icon={faFolderOpen} className="text-[10px] text-(--accent-color)" />
+          Project
+        </label>
+        <div className="relative">
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
+            <FontAwesomeIcon icon={faFolderOpen} />
+          </span>
+          <select
+            value={localProjectId ?? ""}
+            onChange={(e) => setLocalProjectId(e.target.value || null)}
+            disabled={saving}
+            className={`${inputClass} appearance-none pr-9`}
+          >
+            <option value="">Inbox — no project</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex w-9 items-center justify-center text-xs text-(--text-muted)">
+            <FontAwesomeIcon icon={faChevronDown} size="2xs" />
+          </span>
+        </div>
+        <p className="mt-1 font-interface text-xs text-(--text-muted)">
+          {projects.length === 0
+            ? "Create a project to organize this task there."
+            : localProjectId
+              ? "This task is attached to the selected project."
+              : "This task lives in your inbox."}
+        </p>
+      </div>
     </div>
   );
 }
