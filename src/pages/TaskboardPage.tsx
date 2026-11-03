@@ -89,8 +89,7 @@ export default function TaskboardPage() {
         <Button
           onClick={() => setShowCustom(true)}
           title="Create a new task with custom fields"
-          variant="outline"
-          className="h-11 shrink-0 border-(--border-color) text-(--text-primary) hover:border-(--accent-color) hover:bg-(--accent-soft) hover:text-(--accent-strong)"
+          variant="primary"
         >
           <FontAwesomeIcon icon={faPlus} className="text-[11px]" />
           Custom task

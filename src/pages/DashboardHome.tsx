@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import useTodoStore from "../stores/todoStore";
 import useUserStore from "../stores/userStore";
 import TaskStats from "../components/DashboardProfile/TaskStats";
-import ProgressReminder from "../components/DashboardProfile/ProgressReminder";
 import ProjectOverview from "../components/DashboardProfile/ProjectOverview";
 import DashboardGreeting from "../components/DashboardProfile/DashboardGreeting";
 import DashboardTasks from "../components/DashboardProfile/DashboardTasks";
@@ -43,23 +42,17 @@ export default function DashboardHome() {
 
   return (
     <div className="flex flex-col gap-4 p-3 sm:p-4">
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <div className="flex-1">
+      <header className="mb-2 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+        <div className="min-w-0 flex-1">
           <DashboardGreeting name={user?.name ?? "there"} />
         </div>
         <ProfileCard user={user} />
-      </div>
+      </header>
 
       <TaskStats
         completed={completedCount}
         incomplete={incompleteCount}
         left={leftCount}
-        total={total}
-        isLoading={isLoading}
-      />
-
-      <ProgressReminder
-        completed={completedCount}
         total={total}
         isLoading={isLoading}
       />

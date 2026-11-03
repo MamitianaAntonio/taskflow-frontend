@@ -139,7 +139,7 @@ export default function ProjectOverview() {
                 open();
               }
             }}
-            className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm transition-all duration-200 ${
+            className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 transition-all duration-200 ${
               link
                 ? "cursor-pointer hover:-translate-y-0.5 hover:border-(--accent-muted) hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)"
                 : ""

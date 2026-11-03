@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { Settings } from "lucide-react";
 import { ROUTES } from "../../constants/routes";
 import UserAvatar from "../ui/UserAvatar";
 import type { User } from "../../types/user";
@@ -10,51 +9,49 @@ export default function ProfileCard({ user }: { user: User | null }) {
 
   return (
     <div
-      className="relative flex shrink-0 items-center gap-4 overflow-hidden rounded-xl
-      border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm sm:p-4"
+      className="flex w-full min-w-0 items-center gap-3 rounded-2xl border border-(--border-color)
+      bg-(--bg-secondary) p-2.5 pr-3 sm:w-auto sm:max-w-xs sm:gap-3.5"
     >
-      {/* Décor : halos légers le long des bords */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full bg-(--decor-glow) blur-2xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-12 -left-10 h-24 w-24 rounded-full bg-(--decor-glow-soft) blur-2xl"
-      />
-
-      <div className="relative z-10 shrink-0">
+      {/* Avatar */}
+      <div className="relative shrink-0">
         <UserAvatar
           user={user}
           shape="rounded"
-          className="h-10 w-10 ring-1 ring-(--border-color) select-none sm:h-12 sm:w-12"
+          className="h-11 w-11 select-none sm:h-12 sm:w-12"
         />
         <span
           aria-hidden="true"
-          className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-(--bg-secondary) bg-(--color-success)"
+          className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2
+          border-(--bg-secondary) bg-(--color-success)"
         />
       </div>
 
-      <div className="relative z-10 min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold tracking-tight text-(--text-primary)">
+      {/* Infos */}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold leading-tight tracking-tight text-(--text-primary) sm:text-base">
           {user?.name ?? "Guest user"}
         </p>
-        <p className="truncate font-interface text-xs text-(--text-muted)">
+        <p className="mt-0.5 truncate font-interface text-xs text-(--text-muted) sm:text-[13px]">
           {user?.email ?? "No email address"}
         </p>
       </div>
 
+      {/* Settings */}
       <button
         type="button"
         onClick={() => navigate(ROUTES.settings)}
         aria-label="Settings"
         title="Settings"
-        className="relative z-10 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg
-        border border-(--border-color) bg-(--bg-primary) text-(--text-muted) outline-none
-        transition-colors duration-200 hover:bg-(--bg-hover) hover:text-(--text-primary)
-        focus-visible:ring-2 focus-visible:ring-(--border-color) active:scale-95"
+        className="group flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl
+        text-(--text-muted) outline-none transition-colors duration-200
+        hover:bg-(--bg-hover) hover:text-(--text-primary)
+        focus-visible:ring-2 focus-visible:ring-(--accent-color) active:scale-95"
       >
-        <FontAwesomeIcon icon={faGear} className="text-sm" />
+        <Settings
+          aria-hidden="true"
+          strokeWidth={1.75}
+          className="h-5 w-5 transition-transform duration-300 motion-safe:group-hover:rotate-45"
+        />
       </button>
     </div>
   );

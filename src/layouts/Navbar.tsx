@@ -57,13 +57,13 @@ const Navbar = () => {
         </div>
 
         {/* Right: actions */}
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex min-w-0 items-center justify-end gap-1">
           <button
             type="button"
             onClick={() => setMobileSearch((prev) => !prev)}
             aria-label={mobileSearch ? "Close search" : "Search"}
             aria-expanded={mobileSearch}
-            className="flex h-9 w-9 items-center justify-center rounded-control text-(--text-muted) transition-colors
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-control text-(--text-muted) transition-colors
             hover:bg-(--bg-tertiary) hover:text-(--text-primary) md:hidden"
           >
             <FontAwesomeIcon icon={mobileSearch ? faXmark : faSearch} />
@@ -76,18 +76,15 @@ const Navbar = () => {
             type="button"
             onClick={() => navigate(ROUTES.settings)}
             title={user?.name ?? "Guest"}
-            aria-label={`User: ${user?.name ?? "Guest"}`}
-            className="flex cursor-pointer items-center gap-3 rounded-control p-1 outline-none transition-colors
-            hover:bg-(--bg-tertiary) focus-visible:ring-2 focus-visible:ring-(--accent-color) lg:pr-3"
+            aria-label={`Settings for ${user?.name ?? "Guest"}`}
+            className="ml-1 flex shrink-0 cursor-pointer rounded-control p-1 outline-none transition-colors
+            hover:bg-(--bg-tertiary) focus-visible:ring-2 focus-visible:ring-(--accent-color)"
           >
             <UserAvatar
               user={user}
               shape="rounded"
-              className="h-8 w-8 shrink-0 ring-1 ring-(--border-color)"
+              className="h-8 w-8 ring-1 ring-(--border-color)"
             />
-            <span className="hidden max-w-36 truncate text-sm font-semibold text-(--text-primary) lg:block">
-              {user?.name ?? "Guest"}
-            </span>
           </button>
         </div>
       </div>
