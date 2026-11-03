@@ -90,7 +90,7 @@ export default function TaskStats({
 
   if (isLoading) {
     return (
-      <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm">
+      <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary)">
         <div className="h-3 w-28 animate-pulse rounded-full bg-(--border-color)" />
         <div className="flex items-center gap-3">
           <div className="h-28 w-28 shrink-0 animate-pulse rounded-full bg-(--border-color)" />
@@ -108,7 +108,7 @@ export default function TaskStats({
   }
 
   return (
-    <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3 shadow-sm">
+    <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3">
       <p className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
         <FontAwesomeIcon icon={faTasks} className="text-(--accent-color)" />
         Task breakdown

@@ -11,9 +11,8 @@ export default function ProfileCard({ user }: { user: User | null }) {
   return (
     <div
       className="relative flex shrink-0 items-center gap-4 overflow-hidden rounded-xl
-      border border-(--border-color) bg-(--bg-secondary) p-3 shadow-sm sm:p-4"
+      bg-(--bg-secondary) p-3 sm:p-4"
     >
-      {/* Décor : halos légers le long des bords */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full bg-(--decor-glow) blur-2xl"
