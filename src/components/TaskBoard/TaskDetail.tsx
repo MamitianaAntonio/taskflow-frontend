@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import TaskDetailPanel from "./TaskDetailPanel";
 import { formatDate, toLocalDatetime } from "../../utils/date";
+import { getErrorMessage } from "../../api/axios";
+import { notify } from "../../utils/toast";
 import { useProjectStore } from "../../stores/projectStore";
 import type { BoardTask } from "../../types/todo";
 import type { RepeatRule, UpdateTodoPayload } from "../../types/todo";
@@ -82,6 +84,8 @@ export default function TaskDetail({
     setSaving(true);
     try {
       await onUpdate(task.id, changes);
+    } catch (error) {
+      notify.error(getErrorMessage(error, "Failed to update task"));
     } finally {
       setSaving(false);
     }
