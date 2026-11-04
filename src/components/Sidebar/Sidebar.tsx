@@ -11,7 +11,7 @@ import { useLogout } from "../../hooks/useLogout";
 type NavItem = (typeof primaryNav)[number] | (typeof systemNav)[number];
 
 const ROW =
-  "group/item relative flex w-full items-center gap-3 rounded-control py-2.5 font-interface text-sm font-medium transition-colors";
+  "group/item relative flex w-full items-center gap-3 rounded-control py-2.5 font-interface text-sm font-medium transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)";
 
 const TOOLTIP =
   "pointer-events-none absolute left-full z-50 ml-3 -translate-x-1 whitespace-nowrap rounded-inner border " +

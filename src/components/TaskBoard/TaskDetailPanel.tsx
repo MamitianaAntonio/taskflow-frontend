@@ -5,7 +5,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Drawer from "../ui/Drawer";
+import Modal from "../ui/Modal";
 import ProjectBadge from "../ui/ProjectBadge";
 import TaskDetailFields from "./TaskDetailFields";
 import SubtaskList from "./SubtaskList";
@@ -74,9 +74,10 @@ export default function TaskDetailPanel({
   onDeleteSubtask,
 }: TaskDetailPanelProps) {
   return (
-    <Drawer
+    <Modal
       open
       onClose={onClose}
+      widthClass="max-w-3xl"
       title={task.label}
       icon={statusConfig[localStatus].icon}
       subtitle={
@@ -183,6 +184,6 @@ export default function TaskDetailPanel({
           </div>
         )}
       </div>
-    </Drawer>
+    </Modal>
   );
 }

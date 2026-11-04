@@ -33,7 +33,7 @@ export default function TaskList({ tasks, onUpdate, onEdit, onDelete }: TaskList
           text="Create a task to get started, or adjust your filters."
         />
       ) : (
-        <div className="flex flex-col gap-1.5">
+        <div className="divide-y divide-(--border-color) overflow-hidden rounded-xl border border-(--border-color)">
           <AnimatePresence initial={false}>
             {filtered.map((task) => (
               <motion.div
