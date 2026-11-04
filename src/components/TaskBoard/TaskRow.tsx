@@ -2,10 +2,11 @@ import {
   faArrowDown,
   faArrowsRotate,
   faBolt,
+  faCalendarDays,
   faCheck,
   faCircleXmark,
-  faClockFour,
   faFlag,
+  faListCheck,
   faMinus,
   faPenToSquare,
   faTrashCan,
@@ -13,11 +14,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
-import type { MouseEvent } from "react";
-import { formatDate } from "../../utils/date";
-import { priorityConfig, repeatPhrase, statusCardColor } from "../../constants/taskConfig";
-import TaskProgressBadge from "./TaskProgressBadge";
-import type { BoardTask, TodoPriority, TodoStatus } from "../../types/todo";
+import type { MouseEvent, ReactNode } from "react";
+import { formatRelativeDate } from "../../utils/date";
+import { priorityConfig, repeatPhrase } from "../../constants/taskConfig";
+import type { BoardTask, TodoPriority } from "../../types/todo";
 
 interface TaskRowProps {
   task: BoardTask;
@@ -32,10 +32,15 @@ const priorityIcons: Record<TodoPriority, typeof faFlag> = {
   high: faArrowUp,
 };
 
-const priorityIndicator = {
-  medium: faFlag,
-  high: faBolt,
-};
+const ACTION_BUTTON =
+  "flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)";
+
+const REPEAT_LABEL = {
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+  yearly: "Yearly",
+} as const;
 
 export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowProps) {
   const [flagOpen, setFlagOpen] = useState(false);
@@ -90,15 +95,74 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
     await onUpdate({ ...task, priority: next });
   };
 
-  const prioCfg = priorityConfig[task.priority] || priorityConfig.medium;
-  const tint = statusCardColor[task.status];
   const isDone = task.status === "done";
+  const isDoing = task.status === "doing";
+  const dueLabel = task.dueDate ? formatRelativeDate(task.dueDate) : null;
+
+  const checkboxClass = `mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+    completed
+      ? "border-(--color-success) bg-(--color-success) text-(--text-white)"
+      : isDoing
+        ? "border-(--accent-color) text-transparent hover:bg-(--accent-soft)"
+        : "border-(--text-muted) text-transparent hover:border-(--accent-color) hover:text-(--accent-color)"
+  }`;
+
+  const meta: ReactNode[] = [];
+  if (dueLabel) {
+    meta.push(
+      <span
+        key="due"
+        className={
+          task.overdue && !isDone ? "text-(--color-error)" : undefined
+        }
+      >
+        <FontAwesomeIcon icon={faCalendarDays} className="mr-1 text-[9px]" />
+        {dueLabel}
+      </span>,
+    );
+  }
+  if (isDoing) {
+    meta.push(
+      <span key="status" className="text-(--accent-strong)">
+        In progress
+      </span>,
+    );
+  }
+  if (task.subtasks && task.subtasks.length > 0) {
+    const done = task.subtasks.filter((s) => s.status === "done").length;
+    meta.push(
+      <span key="progress" className="inline-flex items-center gap-1">
+        <FontAwesomeIcon icon={faListCheck} className="text-[9px]" />
+        {done}/{task.subtasks.length}
+      </span>,
+    );
+  }
+  if (task.repeat && task.repeat !== "none") {
+    meta.push(
+      <span
+        key="repeat"
+        className="inline-flex items-center gap-1"
+        title={repeatPhrase[task.repeat]}
+      >
+        <FontAwesomeIcon icon={faArrowsRotate} className="text-[9px]" />
+        {REPEAT_LABEL[task.repeat]}
+      </span>,
+    );
+  }
+  if (task.priority === "high" && !isDone) {
+    meta.push(
+      <span key="priority" className="inline-flex items-center gap-1 text-(--color-error)">
+        <FontAwesomeIcon icon={faBolt} className="text-[9px]" />
+        High
+      </span>,
+    );
+  }
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className={`group cursor-pointer rounded-lg border border-transparent px-2.5 py-1.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color) ${tint.bg} ${tint.hover}`}
+      className="group flex cursor-pointer items-start gap-3 px-4 py-3 transition-colors hover:bg-(--bg-hover)/60 focus:outline-none focus-visible:bg-(--bg-hover)/60"
       onClick={() => onEdit(task)}
       onKeyDown={(e) => {
         if (e.target !== e.currentTarget) return;
@@ -109,22 +173,17 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
       }}
       onMouseLeave={() => setFlagOpen(false)}
     >
-      <div className="flex min-h-5 items-center gap-1.5">
+      <button
+        onClick={toggleStatus}
+        className={checkboxClass}
+        aria-label={completed ? "Mark as not done" : "Mark as done"}
+      >
+        <FontAwesomeIcon icon={faCheck} size="2xs" />
+      </button>
+
+      <div className="min-w-0 flex-1">
         {isEditing ? (
-          <div
-            className="flex flex-1 gap-2"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={toggleStatus}
-              className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${completed
-                ? "border-(--color-success) bg-(--color-success) text-(--text-white)"
-                : "border-(--text-muted) text-transparent hover:border-(--accent-color) hover:text-(--accent-color)"
-                }`}
-              aria-label={completed ? "Mark as not done" : "Mark as done"}
-            >
-              <FontAwesomeIcon icon={faCheck} size="2xs" />
-            </button>
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
             <input
               ref={editRef}
               type="text"
@@ -137,12 +196,9 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
               }}
               onBlur={isTitleDirty ? saveTitle : cancelTitle}
               autoFocus
-              className="min-w-0 flex-1 rounded-md border border-(--accent-color) bg-(--bg-primary) px-2 py-0.5 text-[13px] font-semibold text-(--text-primary) outline-none"
+              className="min-w-0 flex-1 rounded-md border border-(--accent-color) bg-(--bg-primary) px-2 py-0.5 text-[13px] font-medium text-(--text-primary) outline-none"
             />
-            <span
-              className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <span className="flex items-center gap-0.5">
               <button
                 onClick={saveTitle}
                 disabled={!isTitleDirty}
@@ -162,145 +218,113 @@ export default function TaskRow({ task, onUpdate, onEdit, onDelete }: TaskRowPro
           </div>
         ) : (
           <>
-            <button
-              onClick={toggleStatus}
-              className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${completed
-                ? "border-(--color-success) bg-(--color-success) text-(--text-white)"
-                : "border-(--text-muted) text-transparent hover:border-(--accent-color) hover:text-(--accent-color)"
+            <div className="flex items-center gap-3">
+              <p
+                className={`min-w-0 flex-1 truncate text-[13px] leading-snug ${
+                  isDone
+                    ? "text-(--text-muted) line-through"
+                    : "font-medium text-(--text-primary)"
                 }`}
-              aria-label={completed ? "Mark as not done" : "Mark as done"}
-            >
-              <FontAwesomeIcon icon={faCheck} size="2xs" />
-            </button>
+                title={task.label}
+              >
+                {task.label}
+              </p>
 
-            <p
-              className={`min-w-0 flex-1 truncate rounded text-[13px] font-semibold leading-snug ${
-                isDone
-                  ? "text-(--text-secondary) line-through"
-                  : "text-(--text-primary)"
-              }`}
-            >
-              {task.label}
-            </p>
-
-            <span className="flex shrink-0 items-center gap-0.5 transition-opacity md:invisible md:opacity-0 md:group-hover:visible md:group-hover:opacity-100 md:group-focus-within:visible md:group-focus-within:opacity-100">
-              <div className="relative" ref={flagRef}>
-                <button
-                  onClick={toggleFlag}
-                  className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
-                  aria-label="Change priority"
-                >
-                  <FontAwesomeIcon icon={faFlag} size="xs" />
-                </button>
-                {flagOpen && (
-                  <div className="absolute right-0 top-full z-10 mt-1 w-28 rounded-lg border border-(--border-color) bg-(--bg-primary) p-1">
-                    {(["low", "medium", "high"] as const).map((priority) => (
+              <span className="flex shrink-0 items-center gap-0.5 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                <div className="relative" ref={flagRef}>
+                  <button
+                    onClick={toggleFlag}
+                    className={ACTION_BUTTON}
+                    aria-label="Change priority"
+                  >
+                    <FontAwesomeIcon icon={faFlag} size="xs" />
+                  </button>
+                  {flagOpen && (
+                    <div className="absolute top-full right-0 z-10 mt-1 w-28 rounded-lg border border-(--border-color) bg-(--bg-primary) p-1">
+                      {(["low", "medium", "high"] as const).map((priority) => (
+                        <button
+                          key={priority}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFlagOpen(false);
+                            onUpdate({ ...task, priority });
+                          }}
+                          className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 font-interface text-xs text-(--text-secondary) hover:bg-(--bg-hover)"
+                        >
+                          <FontAwesomeIcon
+                            icon={priorityIcons[priority]}
+                            size="2xs"
+                          />
+                          {priorityConfig[priority].label}
+                        </button>
+                      ))}
+                      <div className="my-1 border-t border-(--border-color)" />
                       <button
-                        key={priority}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setFlagOpen(false);
-                          onUpdate({ ...task, priority });
+                          cyclePriority();
                         }}
-                        className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-secondary) font-interface hover:bg-(--bg-hover)"
+                        className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 font-interface text-xs text-(--text-muted) hover:bg-(--bg-hover)"
                       >
-                        <FontAwesomeIcon
-                          icon={priorityIcons[priority]}
-                          size="2xs"
-                        />
-                        {priorityConfig[priority].label}
+                        <FontAwesomeIcon icon={faFlag} size="2xs" />
+                        Cycle
                       </button>
-                    ))}
-                    <div className="my-1 border-t border-(--border-color)" />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        cyclePriority();
-                      }}
-                      className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-(--text-muted) font-interface hover:bg-(--bg-hover)"
-                    >
-                      <FontAwesomeIcon icon={faFlag} size="2xs" />
-                      Cycle
-                    </button>
-                  </div>
-                )}
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit(task);
-                }}
-                className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--bg-primary) hover:text-(--accent-color)"
-                aria-label="Edit task"
-              >
-                <FontAwesomeIcon icon={faPenToSquare} size="xs" />
-              </button>
-              {onDelete && (
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(task);
+                    onEdit(task);
                   }}
-                  className="flex h-5 w-5 items-center justify-center rounded text-(--text-muted) transition-colors hover:bg-(--color-error) hover:text-(--text-white)"
-                  aria-label="Delete task"
+                  className={ACTION_BUTTON}
+                  aria-label="Edit task"
                 >
-                  <FontAwesomeIcon icon={faTrashCan} size="xs" />
+                  <FontAwesomeIcon icon={faPenToSquare} size="xs" />
                 </button>
+                {onDelete && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(task);
+                    }}
+                    className={`${ACTION_BUTTON} hover:bg-(--color-error) hover:text-(--text-white)`}
+                    aria-label="Delete task"
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} size="xs" />
+                  </button>
+                )}
+              </span>
+            </div>
+
+            <div className="mt-1 flex min-h-4 items-center gap-3">
+              {task.description && (
+                <p className="min-w-0 flex-1 truncate text-[11px] leading-relaxed text-(--text-muted)">
+                  {task.description}
+                </p>
               )}
-            </span>
+
+              {meta.length > 0 && (
+                <div className="ml-auto flex shrink-0 items-center gap-2 font-interface text-[10px] font-medium text-(--text-muted)">
+                  {meta.map((item, index) => (
+                    <span key={index} className="inline-flex items-center gap-2">
+                      {index > 0 && (
+                        <span
+                          aria-hidden="true"
+                          className="text-(--text-muted)/50"
+                        >
+                          ·
+                        </span>
+                      )}
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
-
-      {!isEditing && task.description && (
-        <p className="line-clamp-1 pl-6 text-[11px] leading-relaxed text-(--text-secondary)">
-          {task.description}
-        </p>
-      )}
-
-      {!isEditing && (
-        <div className="flex items-center justify-between gap-2 pl-6">
-          {task.dueDate ? (
-            <span
-              className={`flex items-center gap-1 font-interface text-[10px] font-medium ${
-                task.overdue && !isDone ? "text-(--color-error)" : "text-(--text-muted)"
-              }`}
-            >
-              <FontAwesomeIcon icon={faClockFour} size="2xs" />
-              {formatDate(task.dueDate)}
-            </span>
-          ) : (
-            <span className="font-interface text-[10px] font-medium text-(--text-muted)">
-              No date
-            </span>
-          )}
-
-          <div className="flex items-center gap-2">
-            <TaskProgressBadge subtasks={task.subtasks} />
-
-            {task.repeat && task.repeat !== "none" && (
-              <span
-                className="flex shrink-0 items-center text-[10px] text-(--text-muted)"
-                title={repeatPhrase[task.repeat]}
-                aria-label={repeatPhrase[task.repeat]}
-              >
-                <FontAwesomeIcon icon={faArrowsRotate} size="2xs" />
-              </span>
-            )}
-
-            {task.priority && task.priority !== "low" && (
-              <span
-                className={`flex shrink-0 items-center gap-1 text-[10px] font-semibold ${isDone ? "text-(--text-muted)" : prioCfg.color}`}
-              >
-                <FontAwesomeIcon
-                  icon={priorityIndicator[task.priority] ?? faFlag}
-                  size="2xs"
-                />
-              </span>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
