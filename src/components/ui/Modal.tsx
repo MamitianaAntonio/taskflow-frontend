@@ -15,6 +15,7 @@ interface ModalProps {
   subtitle?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
+  widthClass?: string;
 }
 
 export default function Modal({
@@ -25,6 +26,7 @@ export default function Modal({
   subtitle,
   children,
   footer,
+  widthClass = "max-w-lg",
 }: ModalProps) {
   const isMobile = useIsMobile(640);
   const [scrollState, setScrollState] = useState({ atTop: true, atBottom: false });
@@ -114,7 +116,7 @@ export default function Modal({
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
     >
       <motion.div
-        className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-secondary) shadow-2xl"
+        className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-secondary) shadow-2xl`}
         initial={{ opacity: 0, scale: 0.96, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 8 }}
