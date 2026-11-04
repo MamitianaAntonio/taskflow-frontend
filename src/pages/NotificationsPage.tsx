@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { notify } from "../utils/toast";
-import { faInbox, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faInbox,
+} from "@fortawesome/free-solid-svg-icons";
 import useNotificationStore from "../stores/notificationStore";
 import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
@@ -10,6 +13,7 @@ import ChipTabs, { type ChipTabItem } from "../components/ui/ChipTabs";
 import Button from "../components/ui/Button";
 import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
+import PageHeader from "../components/ui/PageHeader";
 import Spinner from "../components/ui/Spinner";
 import type { AppNotification } from "../types/notification";
 
@@ -109,23 +113,21 @@ export default function NotificationsPage() {
 
   return (
     // The page fills its parent: the header stays put, only the list scrolls.
-    <div className="flex h-full min-h-0 w-full flex-col p-4 sm:p-6">
-      <header className="shrink-0 border-b border-(--border-color)">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-              Notifications
-            </h1>
-
-            <p className="mt-0.5 font-interface text-xs text-(--text-muted)">
-              {unreadCount > 0
-                ? `${unreadCount} unread`
-                : "You're all caught up"}
-            </p>
-          </div>
-
-          {notifications.length > 0 && (
-            <div className="flex shrink-0 items-center gap-4 pt-1 font-interface text-xs font-medium">
+    <div className="flex h-full min-h-0 w-full flex-col p-3 sm:p-4">
+      <PageHeader
+        title="Your"
+        highlight="notifications"
+        description="Every update, in one place."
+        className="shrink-0 border-b border-(--border-color) pb-3"
+        meta={[
+          {
+            label: unreadCount > 0 ? `${unreadCount} unread` : "All caught up",
+            tone: unreadCount > 0 ? "accent" : "success",
+          },
+        ]}
+        actions={
+          notifications.length > 0 && (
+            <div className="flex items-center gap-4 font-interface text-xs font-medium">
               <button
                 onClick={() =>
                   run(
@@ -152,18 +154,18 @@ export default function NotificationsPage() {
                 Clear all
               </button>
             </div>
-          )}
-        </div>
-
-        <ChipTabs
-          items={TABS}
-          value={tab}
-          onChange={setTab}
-          role="tablist"
-          ariaLabel="Notifications filter"
-          className="mt-4 pb-3"
-        />
-      </header>
+          )
+        }
+        footer={
+          <ChipTabs
+            items={TABS}
+            value={tab}
+            onChange={setTab}
+            role="tablist"
+            ariaLabel="Notifications filter"
+          />
+        }
+      />
 
       <div
         role="tabpanel"

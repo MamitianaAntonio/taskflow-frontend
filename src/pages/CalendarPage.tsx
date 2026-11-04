@@ -16,6 +16,7 @@ import CustomTask from "../components/TaskBoard/CustomTask";
 import Button from "../components/ui/Button";
 import ChipTabs from "../components/ui/ChipTabs";
 import EmptyState from "../components/ui/EmptyState";
+import PageHeader from "../components/ui/PageHeader";
 import Spinner from "../components/ui/Spinner";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useProjectStore } from "../stores/projectStore";
@@ -99,6 +100,13 @@ export default function CalendarPage() {
     [todos],
   );
 
+  const todayTasks = useMemo(
+    () =>
+      (tasksByDay.get(today) ?? []).filter((todo) => todo.status !== "done")
+        .length,
+    [tasksByDay, today],
+  );
+
   const upcomingDays = useMemo(
     () =>
       [...tasksByDay.entries()]
@@ -141,22 +149,31 @@ export default function CalendarPage() {
 
   if (isLoading && todos.length === 0) {
     return (
-      <div className="mx-auto flex flex-col gap-5 p-4 sm:p-6">
+      <div className="flex w-full flex-col gap-5 p-3 sm:p-4">
         <Spinner className="py-10" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto flex flex-col gap-4 p-4 sm:gap-5 sm:p-6">
-      <div>
-        <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-          Calendar
-        </h1>
-        <p className="mt-1.5 font-interface text-(--text-muted)">
-          See every deadline at a glance
-        </p>
-      </div>
+    <div className="flex w-full flex-col gap-4 p-3 sm:gap-5 sm:p-4">
+      <PageHeader
+        title="Your"
+        highlight="calendar"
+        description="Every deadline, in clear view."
+        meta={[
+          {
+            label:
+              todayTasks > 0
+                ? `${todayTasks} today`
+                : "Nothing scheduled today",
+            tone: todayTasks > 0 ? "accent" : "success",
+          },
+          ...(overdue.length > 0
+            ? [{ label: `${overdue.length} overdue`, tone: "error" as const }]
+            : []),
+        ]}
+      />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">

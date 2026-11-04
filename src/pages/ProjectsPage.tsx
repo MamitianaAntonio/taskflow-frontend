@@ -8,7 +8,9 @@ import ProjectGrid from "../components/Projects/ProjectGrid";
 import { EmptyState, LoadingState, NoResults } from "../components/Projects/ProjectStates";
 import Button from "../components/ui/Button";
 import ErrorState from "../components/ui/ErrorState";
+import PageHeader from "../components/ui/PageHeader";
 import { ROUTES } from "../constants/routes";
+import { isOverdue } from "../utils/date";
 
 export default function ProjectsPage() {
   const { projects, isLoading, error, fetchAll, create } = useProjectStore();
@@ -58,16 +60,47 @@ export default function ProjectsPage() {
     return map;
   }, [projects, todos]);
 
+  const headerStats = useMemo(() => {
+    const projectIds = new Set(projects.map((project) => project.id));
+    const projectTodos = todos.filter(
+      (todo) => todo.projectId && projectIds.has(todo.projectId),
+    );
+    const open = projectTodos.filter((todo) => todo.status !== "done");
+
+    return {
+      open: open.length,
+      overdue: open.filter((todo) => isOverdue(todo.dueDate)).length,
+    };
+  }, [projects, todos]);
+
   return (
-    <div className="mx-auto flex flex-col gap-5 p-4 sm:p-6">
-      <div>
-        <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-          Projects
-        </h1>
-        <p className="mt-1.5 font-interface text-(--text-muted)">
-          Organize your tasks into projects
-        </p>
-      </div>
+    <div className="flex w-full flex-col gap-4 p-3 sm:gap-5 sm:p-4">
+      <PageHeader
+        title="Your"
+        highlight="projects"
+        description="Group your work. Watch it move."
+        meta={[
+          {
+            label: `${projects.length} project${projects.length !== 1 ? "s" : ""}`,
+            tone: "accent",
+          },
+          {
+            label:
+              headerStats.open > 0
+                ? `${headerStats.open} open task${headerStats.open !== 1 ? "s" : ""}`
+                : "No open tasks",
+            tone: headerStats.open > 0 ? "warning" : "success",
+          },
+          ...(headerStats.overdue > 0
+            ? [
+                {
+                  label: `${headerStats.overdue} overdue`,
+                  tone: "error" as const,
+                },
+              ]
+            : []),
+        ]}
+      />
 
       <ProjectCreation
         name={name}
