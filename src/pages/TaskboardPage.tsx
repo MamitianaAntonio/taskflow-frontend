@@ -16,11 +16,13 @@ import TaskList from "../components/TaskBoard/TaskList";
 import TaskboardStats from "../components/TaskBoard/TaskboardStats";
 import Button from "../components/ui/Button";
 import ErrorState from "../components/ui/ErrorState";
+import PageHeader from "../components/ui/PageHeader";
 import Spinner from "../components/ui/Spinner";
 import useTodoStore from "../stores/todoStore";
 import { statusConfig } from "../constants/taskConfig";
 import type { BoardTask, UpdateTodoPayload } from "../types/todo";
 import { toBoardTask } from "../utils/task";
+import { isOverdue, isToday } from "../utils/date";
 
 export default function TaskboardPage() {
   const todos = useTodoStore((state) => state.todos);
@@ -62,25 +64,30 @@ export default function TaskboardPage() {
     ? todos.filter((todo) => !todo.projectId).map(toBoardTask)
     : [];
 
+  const activeTasks = tasks.filter((task) => task.status !== "done");
+  const dueToday = activeTasks.filter((task) => isToday(task.dueDate)).length;
+  const overdue = activeTasks.filter((task) => isOverdue(task.dueDate)).length;
+
   const updateTask = async (id: string, changes: UpdateTodoPayload) => {
     await updateTodo(id, changes);
   };
 
   return (
     <div className="flex w-full flex-col gap-4 p-3 sm:gap-5 sm:p-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="tracking-tight">
-          <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-            Your flow
-          </h1>
-          <p className="mt-1.5 text-base font-interface text-(--text-muted)">
-            Your inbox — quick tasks not tied to a project
-          </p>
-        </div>
-        <span className="rounded-full bg-(--bg-tertiary) px-3 py-1.5 font-interface text-xs font-semibold text-(--text-secondary)">
-          {tasks.length} task{tasks.length !== 1 ? "s" : ""} in inbox
-        </span>
-      </div>
+      <PageHeader
+        title="Your"
+        highlight="flow"
+        description="Capture, prioritize, finish. One task at a time."
+        meta={[
+          {
+            label: dueToday > 0 ? `${dueToday} due today` : "Nothing due today",
+            tone: dueToday > 0 ? "warning" : "success",
+          },
+          ...(overdue > 0
+            ? [{ label: `${overdue} overdue`, tone: "error" as const }]
+            : []),
+        ]}
+      />
 
       <div className="flex flex-col items-stretch gap-2.5 sm:flex-row sm:items-center">
         <div className="flex-1">
