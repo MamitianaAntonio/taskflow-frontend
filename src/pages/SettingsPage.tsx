@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import useUserStore from "../stores/userStore";
+import PageHeader from "../components/ui/PageHeader";
 import ProfileHero from "../components/Settings/ProfileHero";
 import SettingsTabs from "../components/Settings/SettingsTabs";
 import ProfileForm from "../components/Settings/ProfileForm";
@@ -32,17 +33,16 @@ export default function SettingsPage() {
 
   const raw = params.get("tab");
   const tab: SettingsTab = isSettingsTab(raw) ? raw : DEFAULT_TAB;
+  const activeTab = SETTINGS_TABS.find((item) => item.id === tab) ?? SETTINGS_TABS[0];
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-4 p-4 sm:gap-5 sm:p-6">
-      <header>
-        <h1 className="text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-          Settings
-        </h1>
-        <p className="mt-1.5 font-interface text-(--text-muted)">
-          Tune your account your way
-        </p>
-      </header>
+    <div className="flex w-full flex-col gap-4 p-3 sm:gap-5 sm:p-4">
+      <PageHeader
+        title="Your"
+        highlight="settings"
+        description="Make TaskFlow feel like yours."
+        meta={[{ label: activeTab.label, tone: "accent" }]}
+      />
 
       <ProfileHero user={user} />
 
