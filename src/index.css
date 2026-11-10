@@ -215,27 +215,6 @@ body {
   width: 4px;
 }
 
-/* ─── Google sign-in ─── */
-
-/*
- * The Google widget is kept as an invisible click target so the credential
- * popup keeps working, while the visible surface is a regular app button.
- * Stretch its iframe over that surface.
- */
-.google-auth-overlay iframe {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  cursor: pointer !important;
-}
-
-.google-auth-overlay > div,
-.google-auth-overlay > div > div {
-  width: 100% !important;
-  height: 100% !important;
-}
-
 /* ─── Animations ─── */
 
 @keyframes taskflow-toast-progress {
