@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useProjectStore } from "../../stores/projectStore";
 import useTodoStore from "../../stores/todoStore";
+import { loadProjectsIfNeeded } from "../../utils/bootstrap";
 import { ROUTES } from "../../constants/routes";
 
 interface OverviewCard {
@@ -22,12 +23,12 @@ interface OverviewCard {
 
 export default function ProjectOverview() {
   const navigate = useNavigate();
-  const { projects, isLoading, fetchAll } = useProjectStore();
+  const { projects, isLoading } = useProjectStore();
   const todos = useTodoStore((state) => state.todos);
 
   useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+    loadProjectsIfNeeded();
+  }, []);
 
   const stats = useMemo(() => {
     const withTasks = projects.filter((p) =>
