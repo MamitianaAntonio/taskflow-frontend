@@ -32,6 +32,7 @@ import {
 } from "../utils/calendar";
 import { isOverdue, toLocalDatetime } from "../utils/date";
 import { toBoardTask } from "../utils/task";
+import { loadProjectsIfNeeded, loadTodosIfNeeded } from "../utils/bootstrap";
 import type { Project } from "../types/project";
 import type { Todo, UpdateTodoPayload } from "../types/todo";
 
@@ -45,7 +46,6 @@ function defaultTimeFor(day: DayKey) {
 export default function CalendarPage() {
   const todos = useTodoStore((state) => state.todos);
   const isLoading = useTodoStore((state) => state.isLoading);
-  const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const updateTodo = useTodoStore((state) => state.updateTodo);
   const deleteTodo = useTodoStore((state) => state.deleteTodo);
   const addSubtask = useTodoStore((state) => state.addSubtask);
@@ -53,7 +53,6 @@ export default function CalendarPage() {
   const deleteSubtask = useTodoStore((state) => state.deleteSubtask);
 
   const projects = useProjectStore((state) => state.projects);
-  const fetchProjects = useProjectStore((state) => state.fetchAll);
 
   const compact = useIsMobile(768);
 
@@ -67,12 +66,9 @@ export default function CalendarPage() {
   const [createDay, setCreateDay] = useState<DayKey | null>(null);
 
   useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
-
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    loadTodosIfNeeded();
+    loadProjectsIfNeeded();
+  }, []);
 
   const today = todayKey();
 

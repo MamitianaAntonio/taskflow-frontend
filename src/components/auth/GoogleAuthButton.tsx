@@ -1,11 +1,6 @@
-import { useState } from "react";
 import { notify } from "../../utils/toast";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
-import { googleLogin } from "../../services/auth";
-import useUserStore from "../../stores/userStore";
-import { getErrorMessage } from "../../api/axios";
-import { ROUTES } from "../../constants/routes";
+import { useSignIn } from "../../hooks/useSignIn";
 
 type GoogleButtonText =
   | "signin_with"
@@ -22,29 +17,18 @@ const GoogleAuthButton = ({
   disabled = false,
   text = "continue_with",
 }: GoogleAuthButtonProps) => {
-  const navigate = useNavigate();
-  const login = useUserStore((state) => state.login);
-  const [loading, setLoading] = useState(false);
+  const { signInWithGoogle, isBusy } = useSignIn();
 
-  const handleSuccess = async (credentialResponse: CredentialResponse) => {
+  const handleSuccess = (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
       notify.error("Google authentication failed. Please try again.");
       return;
     }
 
-    setLoading(true);
-    try {
-      const result = await googleLogin(credentialResponse.credential);
-      login(result.token, result.user);
-      navigate(ROUTES.dashboard);
-    } catch (error) {
-      notify.error(getErrorMessage(error, "Google sign-in failed"));
-    } finally {
-      setLoading(false);
-    }
+    void signInWithGoogle(credentialResponse.credential);
   };
 
-  const isDisabled = disabled || loading;
+  const isDisabled = disabled || isBusy;
 
   return (
     <>

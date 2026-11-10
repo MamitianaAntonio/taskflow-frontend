@@ -3,11 +3,7 @@ import { notify } from "../utils/toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import GoogleAuthButton from "../components/auth/GoogleAuthButton";
-import { login as loginRequest } from "../services/auth";
-import useUserStore from "../stores/userStore";
-import { useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../api/axios";
-import { ROUTES } from "../constants/routes";
+import { useSignIn } from "../hooks/useSignIn";
 
 interface LoginFormProps {
   onSwitch: () => void;
@@ -19,9 +15,7 @@ interface LoginFields {
 }
 
 const LoginForm = ({ onSwitch }: LoginFormProps) => {
-  const navigate = useNavigate();
-  const login = useUserStore((state) => state.login);
-  const [loading, setLoading] = useState(false);
+  const { signInWithCredentials, isBusy } = useSignIn();
   const [formData, setFormData] = useState<LoginFields>({
     email: "",
     password: "",
@@ -40,16 +34,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
       return;
     }
 
-    setLoading(true);
-    try {
-      const result = await loginRequest({ email: formData.email, password: formData.password });
-      login(result.token, result.user);
-      navigate(ROUTES.dashboard);
-    } catch (error) {
-      notify.error(getErrorMessage(error, "Login failed"));
-    } finally {
-      setLoading(false);
-    }
+    await signInWithCredentials(formData.email, formData.password);
   };
 
   return (
@@ -68,7 +53,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
           placeholder="you@example.com"
           value={formData.email}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
@@ -86,7 +71,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
           placeholder="••••••••"
           value={formData.password}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
@@ -94,14 +79,15 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
         type="submit"
         text="Login"
         variant="primary"
-        loading={loading}
-        disabled={loading}
+        loading={isBusy}
+        loadingText="Signing in…"
+        disabled={isBusy}
       />
 
-      <GoogleAuthButton disabled={loading} text="signin_with" />
+      <GoogleAuthButton disabled={isBusy} text="signin_with" />
 
       <p
-        onClick={!loading ? onSwitch : undefined}
+        onClick={isBusy ? undefined : onSwitch}
         className="cursor-pointer text-center text-sm text-(--text-secondary) transition-colors duration-200 hover:text-(--accent-color)"
       >
         Don't have an account?{" "}

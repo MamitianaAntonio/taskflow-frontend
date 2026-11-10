@@ -11,11 +11,11 @@ import ErrorState from "../components/ui/ErrorState";
 import PageHeader from "../components/ui/PageHeader";
 import { ROUTES } from "../constants/routes";
 import { isOverdue } from "../utils/date";
+import { loadProjectsIfNeeded, loadTodosIfNeeded } from "../utils/bootstrap";
 
 export default function ProjectsPage() {
   const { projects, isLoading, error, fetchAll, create } = useProjectStore();
   const todos = useTodoStore((state) => state.todos);
-  const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -24,12 +24,9 @@ export default function ProjectsPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
-
-  useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
+    loadProjectsIfNeeded();
+    loadTodosIfNeeded();
+  }, []);
 
   const handleCreate = async (e: FormEvent) => {
     e.preventDefault();

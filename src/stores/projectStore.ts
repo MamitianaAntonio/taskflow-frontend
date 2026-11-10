@@ -17,6 +17,7 @@ interface ProjectState {
   projects: Project[];
   currentProject: Project | null;
   isLoading: boolean;
+  hasLoaded: boolean;
   error: Error | null;
 
   fetchAll: () => Promise<Project[]>;
@@ -31,13 +32,14 @@ export const useProjectStore = create<ProjectState>()((set) => ({
   projects: [],
   currentProject: null,
   isLoading: false,
+  hasLoaded: false,
   error: null,
 
   fetchAll: async () => {
     set({ isLoading: true, error: null });
     try {
       const projects = await getAllProjects();
-      set({ projects, isLoading: false });
+      set({ projects, isLoading: false, hasLoaded: true });
       return projects;
     } catch (error) {
       set({ error: error as Error, isLoading: false });
@@ -101,7 +103,13 @@ export const useProjectStore = create<ProjectState>()((set) => ({
   },
 
   reset: () => {
-    set({ projects: [], currentProject: null, isLoading: false, error: null });
+    set({
+      projects: [],
+      currentProject: null,
+      isLoading: false,
+      hasLoaded: false,
+      error: null,
+    });
   },
 }));
 

@@ -3,11 +3,7 @@ import { notify } from "../utils/toast";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import GoogleAuthButton from "../components/auth/GoogleAuthButton";
-import { signUp } from "../services/auth";
-import useUserStore from "../stores/userStore";
-import { useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../api/axios";
-import { ROUTES } from "../constants/routes";
+import { useSignIn } from "../hooks/useSignIn";
 
 interface SignFormProps {
   onSwitch: () => void;
@@ -21,9 +17,7 @@ interface SignFields {
 }
 
 const SignForm = ({ onSwitch }: SignFormProps) => {
-  const navigate = useNavigate();
-  const login = useUserStore((state) => state.login);
-  const [loading, setLoading] = useState(false);
+  const { signUpWithCredentials, isBusy } = useSignIn();
   const [formData, setFormData] = useState<SignFields>({
     username: "",
     email: "",
@@ -54,20 +48,11 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
       return;
     }
 
-    setLoading(true);
-    try {
-      const result = await signUp({
-        name: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
-      login(result.token, result.user);
-      navigate(ROUTES.dashboard);
-    } catch (error) {
-      notify.error(getErrorMessage(error, "Sign up failed"));
-    } finally {
-      setLoading(false);
-    }
+    await signUpWithCredentials(
+      formData.username,
+      formData.email,
+      formData.password,
+    );
   };
 
   return (
@@ -86,7 +71,7 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
           placeholder="johndoe"
           value={formData.username}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
@@ -104,7 +89,7 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
           placeholder="you@example.com"
           value={formData.email}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
@@ -122,7 +107,7 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
           placeholder="••••••••"
           value={formData.password}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
@@ -140,16 +125,23 @@ const SignForm = ({ onSwitch }: SignFormProps) => {
           placeholder="••••••••"
           value={formData.confirmPassword}
           onChange={handleChange}
-          disabled={loading}
+          disabled={isBusy}
         />
       </div>
 
-      <Button type="submit" text="Sign Up" variant="primary" loading={loading} disabled={loading} />
+      <Button
+        type="submit"
+        text="Sign Up"
+        variant="primary"
+        loading={isBusy}
+        loadingText="Creating your account…"
+        disabled={isBusy}
+      />
 
-      <GoogleAuthButton disabled={loading} text="signup_with" />
+      <GoogleAuthButton disabled={isBusy} text="signup_with" />
 
       <p
-        onClick={loading ? undefined : onSwitch}
+        onClick={isBusy ? undefined : onSwitch}
         className="cursor-pointer text-center text-sm text-(--text-secondary) transition-colors duration-200 hover:text-(--accent-color)"
       >
         Already have an account?{" "}

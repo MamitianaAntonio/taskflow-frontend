@@ -12,6 +12,7 @@ interface ButtonProps {
   className?: string;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
+  loadingText?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   children?: ReactNode;
@@ -50,6 +51,7 @@ export default function Button({
   className = "",
   onClick,
   loading = false,
+  loadingText,
   disabled = false,
   type = "button",
   children,
@@ -73,7 +75,14 @@ export default function Button({
       }`}
     >
       {loading ? (
-        <FontAwesomeIcon icon={faSpinner} className="animate-spin" aria-label="loading" />
+        <>
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="animate-spin"
+            aria-label="loading"
+          />
+          {loadingText && <span>{loadingText}</span>}
+        </>
       ) : (
         <>
           {icon && iconPosition === "left" && (

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginForm from "../layouts/LoginForm";
 import SignForm from "../layouts/SignForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import { useTheme } from "../contexts/ThemeContext";
+import { warmUpBackend } from "../services/health";
 import "./style/Auth.css";
 
 function Auth() {
@@ -12,6 +13,11 @@ function Auth() {
   const { isDarkMode, setIsDarkMode } = useTheme();
   const [isFlipping, setIsFlipping] = useState(false);
   const FormComponent = isLogin ? LoginForm : SignForm;
+
+  // Start waking the backend while the user is still typing.
+  useEffect(() => {
+    warmUpBackend();
+  }, []);
 
   const toggleForm = () => {
     setIsFlipping(true);
