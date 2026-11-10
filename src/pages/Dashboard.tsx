@@ -3,9 +3,15 @@ import { motion } from "framer-motion";
 import Navbar from "../layouts/Navbar";
 import BottomNav from "../layouts/BottomNav";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { useDashboardBoot } from "../hooks/useDashboardBoot";
 
 export default function Dashboard() {
   const { pathname } = useLocation();
+  const ready = useDashboardBoot();
+
+  if (!ready) {
+    return <div className="min-h-screen bg-(--bg-primary)" />;
+  }
 
   return (
     <div className="flex h-screen flex-col">
