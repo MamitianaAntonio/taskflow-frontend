@@ -9,7 +9,12 @@ export function useUnreadNotifications(): void {
 
   useEffect(() => {
     const refresh = () => fetchUnreadCount().catch(() => {});
-    refresh();
+
+    // The workspace bootstrap already fetched the counter; skip the immediate
+    // duplicate and let the interval keep it fresh from there.
+    if (!useNotificationStore.getState().hasLoadedCount) {
+      refresh();
+    }
 
     const interval = setInterval(refresh, 15000);
     document.addEventListener("visibilitychange", refresh);
