@@ -21,6 +21,7 @@ interface NotificationState {
   hasMore: boolean;
   isLoading: boolean;
   isLoadingMore: boolean;
+  hasLoadedCount: boolean;
   error: Error | null;
 
   fetchNotifications: (reset?: boolean) => Promise<void>;
@@ -43,6 +44,7 @@ export const createNotificationStore = (pageSize: number = PAGE_SIZE) =>
     hasMore: false,
     isLoading: false,
     isLoadingMore: false,
+    hasLoadedCount: false,
     error: null,
 
     fetchNotifications: async (reset = true) => {
@@ -137,7 +139,7 @@ export const createNotificationStore = (pageSize: number = PAGE_SIZE) =>
     fetchUnreadCount: async () => {
       try {
         const unreadCount = await getUnreadCount();
-        set({ unreadCount });
+        set({ unreadCount, hasLoadedCount: true });
         return unreadCount;
       } catch (error) {
         set({ error: error as Error });
@@ -217,6 +219,7 @@ export const createNotificationStore = (pageSize: number = PAGE_SIZE) =>
         hasMore: false,
         isLoading: false,
         isLoadingMore: false,
+        hasLoadedCount: false,
         error: null,
       });
     },
