@@ -6,6 +6,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import ProtectedRoute from "./components/ui/ProtectedRoute";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import Spinner from "./components/ui/Spinner";
+import WorkspaceBootScreen from "./components/auth/WorkspaceBootScreen";
 import Dashboard from "./pages/Dashboard";
 import { ROUTES } from "./constants/routes";
 
@@ -47,6 +48,7 @@ function App() {
             }}
           />
           <BrowserRouter>
+            <WorkspaceBootScreen />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path={ROUTES.home} element={<Home />} />
