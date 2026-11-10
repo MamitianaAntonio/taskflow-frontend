@@ -23,6 +23,7 @@ import { statusConfig } from "../constants/taskConfig";
 import type { BoardTask, UpdateTodoPayload } from "../types/todo";
 import { toBoardTask } from "../utils/task";
 import { isOverdue, isToday } from "../utils/date";
+import { loadTodosIfNeeded } from "../utils/bootstrap";
 
 export default function TaskboardPage() {
   const todos = useTodoStore((state) => state.todos);
@@ -41,8 +42,8 @@ export default function TaskboardPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
+    loadTodosIfNeeded();
+  }, []);
 
   // Task opened via ?task=<id> (global search) or by clicking a row. It is
   // derived from the store, so it always reflects the latest data — including
