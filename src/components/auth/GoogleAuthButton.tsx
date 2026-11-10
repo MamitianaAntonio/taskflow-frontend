@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { notify } from "../../utils/toast";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useSignIn } from "../../hooks/useSignIn";
@@ -48,6 +49,7 @@ const GoogleAuthButton = ({
   text = "continue_with",
 }: GoogleAuthButtonProps) => {
   const { signInWithGoogle, isBusy } = useSignIn();
+  const googleRef = useRef<HTMLDivElement>(null);
 
   const handleSuccess = (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
@@ -62,6 +64,16 @@ const GoogleAuthButton = ({
   const label =
     text === "signup_with" ? "Sign up with Google" : "Continue with Google";
 
+  // The Google widget is kept in the DOM so its popup and credential flow
+  // keep working, but clicking our button forwards the click to it. This
+  // avoids an invisible iframe sitting on top of the real control.
+  const openGoogle = () => {
+    const trigger = googleRef.current?.querySelector<HTMLElement>(
+      '[role="button"]',
+    );
+    trigger?.click();
+  };
+
   return (
     <>
       <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-(--text-secondary)">
@@ -70,28 +82,21 @@ const GoogleAuthButton = ({
         <span className="h-px flex-1 bg-(--border-color)" />
       </div>
 
-      {/* The official Google widget stays underneath as an invisible click
-          target: we keep the credential popup, but the surface follows the
-          app design instead of Google's iframe styling. */}
-      <div
-        className={`group relative w-full rounded-lg ${
-          isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-        }`}
-      >
-        <div
-          aria-hidden="true"
-          className={`flex w-full items-center justify-center gap-2.5 rounded-lg border border-(--border-color) px-4 py-2.5 text-sm font-semibold text-(--text-secondary) transition-colors group-hover:border-(--accent-color) group-hover:text-(--text-primary) group-focus-within:ring-2 group-focus-within:ring-(--accent-color) group-focus-within:ring-offset-2 group-focus-within:ring-offset-(--bg-primary) ${
-            isDisabled ? "opacity-60" : ""
-          }`}
+      <div className="relative w-full">
+        <button
+          type="button"
+          onClick={openGoogle}
+          disabled={isDisabled}
+          className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-(--border-color) px-4 py-2.5 text-sm font-semibold text-(--text-secondary) transition-colors hover:border-(--accent-color) hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-primary) focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         >
           <GoogleMark />
           {label}
-        </div>
+        </button>
 
         <div
-          className={`google-auth-overlay absolute inset-0 overflow-hidden rounded-lg opacity-0 ${
-            isDisabled ? "invisible" : ""
-          }`}
+          ref={googleRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg opacity-0"
         >
           <GoogleLogin
             onSuccess={handleSuccess}
