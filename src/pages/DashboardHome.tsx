@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useTodoStore from "../stores/todoStore";
 import useUserStore from "../stores/userStore";
+import { loadTodosIfNeeded } from "../utils/bootstrap";
 import TaskStats from "../components/DashboardProfile/TaskStats";
 import ProjectOverview from "../components/DashboardProfile/ProjectOverview";
 import DashboardGreeting from "../components/DashboardProfile/DashboardGreeting";
@@ -14,12 +15,11 @@ export default function DashboardHome() {
   const user = useUserStore((state) => state.user);
   const tasks = useTodoStore((state) => state.todos);
   const isLoading = useTodoStore((state) => state.isLoading);
-  const fetchTodos = useTodoStore((state) => state.fetchTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
 
   useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
+    loadTodosIfNeeded();
+  }, []);
 
   const dashboardTasks: DashboardTask[] = tasks.map((task) => ({
     ...task,
