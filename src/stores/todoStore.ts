@@ -11,9 +11,11 @@ import { emitMutation } from "../utils/eventBus";
 interface TodoState {
   todos: Todo[];
   isLoading: boolean;
+  hasLoaded: boolean;
   error: Error | null;
 
   fetchTodos: () => Promise<Todo[]>;
+  reset: () => void;
   addTodo: (data: CreateTodoPayload) => Promise<Todo>;
   updateTodo: (id: string, updates: UpdateTodoPayload) => Promise<Todo>;
   deleteTodo: (id: string) => Promise<void>;
@@ -52,18 +54,23 @@ const mapSubtask = (
 const useTodoStore = create<TodoState>()((set, get) => ({
   todos: [],
   isLoading: false,
+  hasLoaded: false,
   error: null,
 
   fetchTodos: async () => {
     set({ isLoading: true, error: null });
     try {
       const todos = await getAllTodo();
-      set({ todos, isLoading: false });
+      set({ todos, isLoading: false, hasLoaded: true });
       return todos;
     } catch (error) {
       set({ error: error as Error, isLoading: false });
       throw error;
     }
+  },
+
+  reset: () => {
+    set({ todos: [], isLoading: false, hasLoaded: false, error: null });
   },
 
   addTodo: async (data) => {
