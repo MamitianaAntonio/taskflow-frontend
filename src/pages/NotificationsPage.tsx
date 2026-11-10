@@ -6,8 +6,7 @@ import {
   faInbox,
 } from "@fortawesome/free-solid-svg-icons";
 import useNotificationStore from "../stores/notificationStore";
-import { useProjectStore } from "../stores/projectStore";
-import useTodoStore from "../stores/todoStore";
+import { loadProjectsIfNeeded, loadTodosIfNeeded } from "../utils/bootstrap";
 import NotificationItem from "../components/Notifications/NotificationItem";
 import ChipTabs, { type ChipTabItem } from "../components/ui/ChipTabs";
 import Button from "../components/ui/Button";
@@ -91,13 +90,10 @@ export default function NotificationsPage() {
   } = useNotificationStore();
   const [tab, setTab] = useState<NotificationTab>("all");
 
-  const fetchTodos = useTodoStore((state) => state.fetchTodos);
-  const fetchProjects = useProjectStore((state) => state.fetchAll);
-
   useEffect(() => {
-    fetchTodos().catch(() => {});
-    fetchProjects().catch(() => {});
-  }, [fetchTodos, fetchProjects]);
+    loadTodosIfNeeded();
+    loadProjectsIfNeeded();
+  }, []);
 
   useEffect(() => {
     reset();
