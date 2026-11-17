@@ -1,63 +1,51 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
-import { DarkModeToggle } from "../components/ui/DarkModeToggle";
-import { useTheme } from "../contexts/ThemeContext";
-import { ROUTES } from "../constants/routes";
+import { useEffect, type ComponentType } from "react";
+import { useSearchParams } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
+import AboutPanel from "../components/marketing/home/AboutPanel";
+import ContactPanel from "../components/marketing/home/ContactPanel";
+import StartPanel from "../components/marketing/home/StartPanel";
+import PageMeta from "../components/marketing/PageMeta";
+import { EASE } from "../components/marketing/motion";
+import { homeMeta } from "../constants/homeContent";
+import { isHomeTab, type HomeTabKey } from "../constants/homeTabs";
 
-function Home() {
-  const { isDarkMode, setIsDarkMode } = useTheme();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+const panels: Record<HomeTabKey, ComponentType> = {
+  start: StartPanel,
+  about: AboutPanel,
+  contact: ContactPanel,
+};
 
-  const handleClick = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate(ROUTES.login);
-    }, 500);
-  };
+export default function Home() {
+  const [params] = useSearchParams();
+  const raw = params.get("tab");
+  const tab: HomeTabKey = isHomeTab(raw) ? raw : "start";
+  const reduceMotion = useReducedMotion();
+  const Panel = panels[tab];
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [tab]);
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden">
-      <img
-        src="Logo.png"
-        alt="Logo"
-        className="absolute top-4 left-4 w-12"
+    <>
+      <PageMeta
+        title={homeMeta[tab].title}
+        description={homeMeta[tab].description}
       />
 
-      <div className="absolute top-4 right-4">
-        <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
-      </div>
-
-      <div className="grow flex flex-col items-center justify-center space-y-6 px-4 text-center">
-        <img
-          className="max-h-xs w-[20vh]"
-          src="/home-photo.png"
-          alt="TaskFlow home"
-        />
-        <h1 className="text-4xl font-bold">
-          <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">
-            Task
-          </span>
-          <span className="text-(--text-primary)">Flow</span>
-        </h1>
-        <h3 className="text-[1.7vh] text-(--text-secondary) max-sm:text-base">
-          "Organize your task, keep your flow"
-        </h3>
-        <Button
-          text="Get Started"
-          variant="primary"
-          onClick={handleClick}
-          loading={loading}
-        />
-      </div>
-
-      <h3 className="mb-4 font-light text-(--text-primary)">
-        © Copyright 2026 Taskflow
-      </h3>
-    </div>
+      <motion.section
+        key={tab}
+        id={`panel-${tab}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${tab}`}
+        tabIndex={0}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: EASE }}
+        className="outline-none"
+      >
+        <Panel />
+      </motion.section>
+    </>
   );
 }
-
-export default Home;

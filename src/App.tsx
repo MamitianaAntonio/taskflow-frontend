@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ui/ProtectedRoute";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import Spinner from "./components/ui/Spinner";
 import WorkspaceBootScreen from "./components/auth/WorkspaceBootScreen";
+import MarketingLayout from "./layouts/MarketingLayout";
 import Dashboard from "./pages/Dashboard";
 import { ROUTES } from "./constants/routes";
 
@@ -51,7 +52,10 @@ function App() {
             <WorkspaceBootScreen />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                <Route path={ROUTES.home} element={<Home />} />
+                <Route element={<MarketingLayout />}>
+                  <Route path={ROUTES.home} element={<Home />} />
+                </Route>
+
                 <Route path={ROUTES.login} element={<Auth />} />
 
                 <Route

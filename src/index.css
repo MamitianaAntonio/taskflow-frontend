@@ -148,6 +148,29 @@ body {
     border-color 0.25s ease;
 }
 
+/* Smooth the color swap when the theme changes. Scoped to a short-lived
+   class so hover and interaction transitions keep their own timing. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property:
+    background-color, border-color, color, fill, stroke, box-shadow,
+    text-decoration-color, outline-color !important;
+  transition-duration: 320ms !important;
+  transition-timing-function: ease !important;
+  transition-delay: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-duration: 0s !important;
+  }
+}
+
 /* ─── Responsive ─── */
 
 @media (max-width: 640px) {
