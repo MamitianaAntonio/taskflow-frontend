@@ -23,19 +23,24 @@ interface ButtonProps {
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg text-sm tracking-wide " +
-  "cursor-pointer transition-all duration-200 relative overflow-hidden outline-none " +
+  "group relative inline-flex items-center justify-center gap-2 rounded-lg text-sm tracking-wide " +
+  "cursor-pointer outline-none transition-[transform,box-shadow,background-color,border-color,color] " +
+  "duration-200 ease-out active:scale-[0.98] motion-reduce:transform-none motion-reduce:transition-none " +
   "focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:ring-offset-2 " +
   "focus-visible:ring-offset-(--bg-primary)";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
     "bg-linear-to-br from-(--gradient-from) to-(--gradient-to) text-(--text-white) " +
-    "shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0",
+    "shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm " +
+    "disabled:hover:translate-y-0 disabled:hover:shadow-none",
   outline:
     "border border-(--border-color) text-(--text-muted) font-semibold " +
-    "hover:text-(--accent-color) hover:border-(--accent-color)",
-  text: "bg-transparent text-(--text-primary) hover:bg-(--bg-tertiary)",
+    "hover:border-(--accent-color) hover:bg-(--accent-soft) hover:text-(--accent-strong) " +
+    "active:bg-(--accent-bg) disabled:hover:border-(--border-color) disabled:hover:bg-transparent " +
+    "disabled:hover:text-(--text-muted)",
+  text: "bg-transparent text-(--text-primary) hover:bg-(--bg-hover) active:bg-(--bg-tertiary) " +
+    "disabled:hover:bg-transparent",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -74,30 +79,32 @@ export default function Button({
         isDisabled ? "opacity-60 cursor-not-allowed" : ""
       }`}
     >
-      {loading ? (
-        <>
-          <FontAwesomeIcon
-            icon={faSpinner}
-            className="animate-spin"
-            aria-label="loading"
-          />
-          {loadingText && <span>{loadingText}</span>}
-        </>
-      ) : (
-        <>
-          {icon && iconPosition === "left" && (
-            <span className="inline-flex items-center justify-center leading-none">
-              {icon}
-            </span>
-          )}
-          {children ?? text}
-          {icon && iconPosition === "right" && (
-            <span className="inline-flex items-center justify-center leading-none">
-              {icon}
-            </span>
-          )}
-        </>
-      )}
+      <span className="relative z-10 inline-flex items-center gap-2">
+        {loading ? (
+          <>
+            <FontAwesomeIcon
+              icon={faSpinner}
+              className="animate-spin"
+              aria-label="loading"
+            />
+            {loadingText && <span>{loadingText}</span>}
+          </>
+        ) : (
+          <>
+            {icon && iconPosition === "left" && (
+              <span className="inline-flex items-center justify-center leading-none transition-transform duration-200 group-hover:-translate-x-0.5 motion-reduce:transform-none">
+                {icon}
+              </span>
+            )}
+            {children ?? text}
+            {icon && iconPosition === "right" && (
+              <span className="inline-flex items-center justify-center leading-none transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transform-none">
+                {icon}
+              </span>
+            )}
+          </>
+        )}
+      </span>
     </button>
   );
 }
