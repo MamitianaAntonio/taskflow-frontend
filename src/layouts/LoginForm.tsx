@@ -38,11 +38,11 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="email"
-          className="text-md font-medium text-(--text-secondary)"
+          className="font-interface text-[11px] font-medium tracking-[0.14em] text-(--text-muted) uppercase"
         >
           Email
         </label>
@@ -54,13 +54,14 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
           value={formData.email}
           onChange={handleChange}
           disabled={isBusy}
+          className="py-2.5 text-base sm:py-3"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="password"
-          className="text-md font-medium text-(--text-secondary)"
+          className="font-interface text-[11px] font-medium tracking-[0.14em] text-(--text-muted) uppercase"
         >
           Password
         </label>
@@ -72,6 +73,7 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
           value={formData.password}
           onChange={handleChange}
           disabled={isBusy}
+          className="py-2.5 text-base sm:py-3"
         />
       </div>
 
@@ -86,13 +88,15 @@ const LoginForm = ({ onSwitch }: LoginFormProps) => {
 
       <GoogleAuthButton disabled={isBusy} text="signin_with" />
 
-      <p
-        onClick={isBusy ? undefined : onSwitch}
-        className="cursor-pointer text-center text-sm text-(--text-secondary) transition-colors duration-200 hover:text-(--accent-color)"
+      <button
+        type="button"
+        onClick={onSwitch}
+        disabled={isBusy}
+        className="mt-1 rounded font-interface text-center text-sm text-(--text-secondary) transition-colors duration-200 hover:text-(--accent-color) focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Don't have an account?{" "}
-        <span className="font-medium text-(--accent-color)">Sign up</span>
-      </p>
+        Don&apos;t have an account?{" "}
+        <span className="font-medium text-(--accent-strong)">Sign up</span>
+      </button>
     </form>
   );
 };
