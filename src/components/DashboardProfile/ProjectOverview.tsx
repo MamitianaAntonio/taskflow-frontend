@@ -1,13 +1,14 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFolderOpen,
-  faFolderPlus,
-  faClipboardList,
-  faListCheck,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+  ClipboardList,
+  FolderOpen,
+  FolderPlus,
+  ListChecks,
+  Plus,
+  type LucideIcon,
+} from "lucide-react";
+import Button from "../ui/Button";
 import { useProjectStore } from "../../stores/projectStore";
 import useTodoStore from "../../stores/todoStore";
 import { loadProjectsIfNeeded } from "../../utils/bootstrap";
@@ -17,7 +18,7 @@ interface OverviewCard {
   label: string;
   value: number;
   context: string;
-  icon: typeof faFolderOpen;
+  icon: LucideIcon;
   link?: boolean;
 }
 
@@ -54,26 +55,26 @@ export default function ProjectOverview() {
       label: "Projects",
       value: stats.total,
       context: `${pctWith}% have tasks`,
-      icon: faFolderOpen,
+      icon: FolderOpen,
       link: true,
     },
     {
       label: "With tasks",
       value: stats.withTasks,
       context: `${pctWith}% of projects`,
-      icon: faListCheck,
+      icon: ListChecks,
     },
     {
       label: "Without tasks",
       value: stats.withoutTasks,
       context: `${pctWithout}% stay idle`,
-      icon: faFolderPlus,
+      icon: FolderPlus,
     },
     {
       label: "Linked tasks",
       value: stats.linkedTasks,
       context: `${pctLinked}% of your todos`,
-      icon: faClipboardList,
+      icon: ClipboardList,
     },
   ];
 
@@ -83,9 +84,10 @@ export default function ProjectOverview() {
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 shadow-sm"
+            className="flex flex-col gap-2.5 rounded-control border border-(--border-color)
+            bg-(--bg-secondary) p-3 shadow-sm"
           >
-            <div className="h-9 w-9 animate-pulse rounded-lg bg-(--border-color)" />
+            <div className="size-9 animate-pulse rounded-lg bg-(--border-color)" />
             <div className="h-6 w-10 animate-pulse rounded-full bg-(--border-color)" />
             <div className="h-2 w-16 animate-pulse rounded-full bg-(--border-color)" />
           </div>
@@ -96,12 +98,9 @@ export default function ProjectOverview() {
 
   if (!isLoading && stats.total === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-lg bg-(--bg-secondary) px-4 py-8 text-center">
-        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-(--accent-soft)">
-          <FontAwesomeIcon
-            icon={faFolderPlus}
-            className="text-(--accent-color)"
-          />
+      <div className="flex flex-col items-center justify-center gap-3 rounded-control border border-(--border-color) bg-(--bg-secondary) px-4 py-8 text-center">
+        <span className="flex size-10 items-center justify-center rounded-lg bg-(--accent-soft) text-(--accent-strong)">
+          <FolderPlus aria-hidden="true" size={20} strokeWidth={1.8} />
         </span>
         <div>
           <p className="font-interface text-sm font-semibold text-(--text-primary)">
@@ -111,14 +110,15 @@ export default function ProjectOverview() {
             Group your tasks into projects to stay organised.
           </p>
         </div>
-        <button
+        <Button
           type="button"
+          variant="primary"
+          size="small"
           onClick={() => navigate(ROUTES.projects)}
-          className="inline-flex items-center gap-2 rounded-lg bg-(--accent-color) px-3.5 py-2 font-interface text-xs font-bold text-white transition-colors hover:bg-(--accent-strong)"
+          icon={<Plus aria-hidden="true" size={15} strokeWidth={2} />}
         >
-          <FontAwesomeIcon icon={faPlus} />
           Create your first project
-        </button>
+        </Button>
       </div>
     );
   }
@@ -126,6 +126,7 @@ export default function ProjectOverview() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {cards.map(({ label, value, context, icon, link }) => {
+        const Icon = icon;
         const open = link ? () => navigate(ROUTES.projects) : undefined;
         return (
           <div
@@ -140,27 +141,25 @@ export default function ProjectOverview() {
                 open();
               }
             }}
-            className={`group flex flex-col gap-2.5 rounded-lg bg-(--bg-secondary) p-3 transition-all duration-200 ${
+            className={`group flex flex-col gap-2.5 rounded-control border border-(--border-color)
+            bg-(--bg-secondary) p-3 transition-all duration-200 hover:shadow-sm ${
               link
                 ? "cursor-pointer hover:-translate-y-0.5 hover:border-(--accent-muted) hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)"
                 : ""
             }`}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-(--accent-soft)">
-              <FontAwesomeIcon
-                icon={icon}
-                className="text-sm text-(--accent-color)"
-              />
+            <span className="flex size-9 items-center justify-center rounded-lg bg-(--accent-soft) text-(--accent-strong)">
+              <Icon aria-hidden="true" size={17} strokeWidth={1.8} />
             </span>
             <p
               className={`font-mono text-2xl leading-none font-bold tabular-nums ${
-                link ? "text-(--accent-color)" : "text-(--text-primary)"
+                link ? "text-(--accent-strong)" : "text-(--text-primary)"
               }`}
             >
               {value}
             </p>
             <div>
-              <p className="font-interface text-[10px] font-bold uppercase tracking-widest text-(--text-secondary)">
+              <p className="font-interface text-[10px] font-semibold uppercase tracking-[0.12em] text-(--text-secondary)">
                 {label}
               </p>
               <p className="mt-0.5 font-interface text-[10px] text-(--text-muted)">

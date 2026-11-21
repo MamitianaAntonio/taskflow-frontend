@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAnglesLeft, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { primaryNav, systemNav } from "../../constants/navigation";
 import useNotificationStore from "../../stores/notificationStore";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -31,63 +30,69 @@ export default function Sidebar() {
 
   const showLabels = isDesktop && !collapsed;
   const iconOnly = !showLabels;
+  const CollapseIcon = collapsed ? PanelLeftOpen : PanelLeftClose;
 
-  const renderLink = (item: NavItem) => (
-    <NavLink
-      key={item.key}
-      to={item.path}
-      end={item.key === "dashboard"}
-      aria-label={iconOnly ? item.label : undefined}
-      className={({ isActive }) =>
-        [
-          ROW,
-          iconOnly ? "justify-center px-0" : "px-3",
-          isActive
-            ? "text-(--accent-strong)"
-            : "text-(--text-muted) hover:text-(--text-primary)",
-        ].join(" ")
-      }
-    >
-      {({ isActive }) => (
-        <>
-          {isActive ? (
-            <motion.span
-              layoutId="sidebar-active-pill"
-              transition={{ type: "spring", stiffness: 500, damping: 38 }}
-              className="absolute inset-0 rounded-control bg-(--accent-soft)"
+  const renderLink = (item: NavItem) => {
+    const Icon = item.icon;
+
+    return (
+      <NavLink
+        key={item.key}
+        to={item.path}
+        end={item.key === "dashboard"}
+        aria-label={iconOnly ? item.label : undefined}
+        className={({ isActive }) =>
+          [
+            ROW,
+            iconOnly ? "justify-center px-0" : "px-3",
+            isActive
+              ? "text-(--accent-strong)"
+              : "text-(--text-muted) hover:text-(--text-primary)",
+          ].join(" ")
+        }
+      >
+        {({ isActive }) => (
+          <>
+            {isActive ? (
+              <motion.span
+                layoutId="sidebar-active-pill"
+                transition={{ type: "spring", stiffness: 500, damping: 38 }}
+                className="absolute inset-0 rounded-control bg-(--accent-soft)"
+              />
+            ) : (
+              <span className="absolute inset-0 rounded-control bg-(--bg-hover) opacity-0 transition-opacity group-hover/item:opacity-100" />
+            )}
+
+            <Icon
+              aria-hidden="true"
+              size={15}
+              strokeWidth={1.8}
+              className="relative shrink-0"
             />
-          ) : (
-            <span className="absolute inset-0 rounded-control bg-(--bg-hover) opacity-0 transition-opacity group-hover/item:opacity-100" />
-          )}
 
-          <FontAwesomeIcon
-            icon={item.icon}
-            fixedWidth
-            className="relative shrink-0 text-[15px]"
-          />
+            {showLabels && <span className="relative truncate">{item.label}</span>}
 
-          {showLabels && <span className="relative truncate">{item.label}</span>}
+            {item.key === "notifications" && unreadCount > 0 && (
+              <span
+                className={`relative flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full
+                bg-(--color-error) px-1.5 font-interface text-[10px] leading-none font-bold text-(--text-white) ${
+                  showLabels ? "ml-auto" : "absolute! top-1 right-2"
+                }`}
+              >
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
 
-          {item.key === "notifications" && unreadCount > 0 && (
-            <span
-              className={`relative flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full
-              bg-(--color-error) px-1.5 font-interface text-[10px] leading-none font-bold text-(--text-white) ${
-                showLabels ? "ml-auto" : "absolute! top-1 right-2"
-              }`}
-            >
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </span>
-          )}
-
-          {iconOnly && (
-            <span role="tooltip" className={TOOLTIP}>
-              {item.label}
-            </span>
-          )}
-        </>
-      )}
-    </NavLink>
-  );
+            {iconOnly && (
+              <span role="tooltip" className={TOOLTIP}>
+                {item.label}
+              </span>
+            )}
+          </>
+        )}
+      </NavLink>
+    );
+  };
 
   return (
     <aside
@@ -98,21 +103,20 @@ export default function Sidebar() {
       }`}
     >
       <div className="flex h-full flex-col px-3 py-4">
-        {/* Links (no clipping in rail mode so tooltips can show) */}
         <div
           className={`flex min-h-0 flex-1 flex-col ${
             showLabels ? "overflow-y-auto" : "overflow-visible"
           }`}
         >
           {showLabels && (
-            <p className="mb-2 px-3 font-interface text-[10px] font-semibold tracking-widest text-(--text-muted) uppercase">
+            <p className="mb-2 px-3 font-interface text-[10px] font-medium tracking-[0.14em] text-(--text-muted) uppercase">
               Workspace
             </p>
           )}
           <div className="flex flex-col gap-1">{primaryNav.map(renderLink)}</div>
 
           {showLabels ? (
-            <p className="mt-6 mb-2 px-3 font-interface text-[10px] font-semibold tracking-widest text-(--text-muted) uppercase">
+            <p className="mt-6 mb-2 px-3 font-interface text-[10px] font-medium tracking-[0.14em] text-(--text-muted) uppercase">
               System
             </p>
           ) : (
@@ -121,7 +125,6 @@ export default function Sidebar() {
           <div className="flex flex-col gap-1">{systemNav.map(renderLink)}</div>
         </div>
 
-        {/* Footer */}
         <div className="mt-2 flex flex-col gap-1 border-t border-(--border-color) pt-3">
           {isDesktop && (
             <button
@@ -133,12 +136,11 @@ export default function Sidebar() {
                 iconOnly ? "justify-center px-0" : "px-3"
               }`}
             >
-              <FontAwesomeIcon
-                icon={faAnglesLeft}
-                fixedWidth
-                className={`shrink-0 text-[15px] transition-transform duration-300 ${
-                  collapsed ? "rotate-180" : ""
-                }`}
+              <CollapseIcon
+                aria-hidden="true"
+                size={15}
+                strokeWidth={1.8}
+                className="shrink-0"
               />
               {showLabels && <span>Collapse</span>}
               {iconOnly && (
@@ -157,7 +159,12 @@ export default function Sidebar() {
               iconOnly ? "justify-center px-0" : "px-3"
             }`}
           >
-            <FontAwesomeIcon icon={faPowerOff} fixedWidth className="shrink-0 text-[15px]" />
+            <LogOut
+              aria-hidden="true"
+              size={15}
+              strokeWidth={1.8}
+              className="shrink-0"
+            />
             {showLabels && <span>Logout</span>}
             {iconOnly && (
               <span role="tooltip" className={TOOLTIP}>

@@ -1,10 +1,8 @@
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ArrowRight, type LucideIcon } from "lucide-react";
 import type { DashboardTask } from "../../types/todo";
 
 interface TaskSectionProps {
-  icon: IconDefinition;
+  icon: LucideIcon;
   label: string;
   color: string;
   chip: string;
@@ -12,7 +10,7 @@ interface TaskSectionProps {
 }
 
 export default function TaskSection({
-  icon,
+  icon: Icon,
   label,
   color,
   chip,
@@ -22,11 +20,15 @@ export default function TaskSection({
   const overdueCount = tasks.filter((t) => t.overdue).length;
 
   return (
-    <div className="group flex items-center gap-3 rounded-lg bg-(--bg-secondary) p-3 transition-colors duration-200 hover:border-(--accent-muted)">
+    <div
+      className="group flex items-center gap-3 rounded-control border border-(--border-color)
+      bg-(--bg-secondary) p-3 transition-all duration-200 hover:border-(--accent-muted)
+      hover:shadow-sm"
+    >
       <div
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${chip}`}
+        className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${chip}`}
       >
-        <FontAwesomeIcon icon={icon} className={`text-sm ${color}`} />
+        <Icon aria-hidden="true" size={16} strokeWidth={1.8} className={color} />
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
@@ -53,9 +55,11 @@ export default function TaskSection({
         </div>
       </div>
       {count > 0 && (
-        <FontAwesomeIcon
-          icon={faArrowRight}
-          className={`shrink-0 text-xs opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 ${color}`}
+        <ArrowRight
+          aria-hidden="true"
+          size={14}
+          strokeWidth={2}
+          className={`shrink-0 opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 ${color}`}
         />
       )}
     </div>

@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Button from "../components/ui/Button";
-import Eyebrow from "../components/marketing/home/Eyebrow";
 import PageMeta from "../components/marketing/PageMeta";
 import { EASE } from "../components/marketing/motion";
 import LoginForm from "../layouts/LoginForm";
 import SignForm from "../layouts/SignForm";
 import { warmUpBackend } from "../services/health";
+import { contactEmail } from "../constants/homeContent";
 import { ROUTES } from "../constants/routes";
 
 function Auth() {
@@ -65,9 +65,13 @@ function Auth() {
               transition={{ duration: 0.32, ease: EASE }}
               className="w-full max-w-md"
             >
-              <Eyebrow>{isLogin ? "Welcome back" : "Get started"}</Eyebrow>
-
-              <h1 className="mt-4 text-[1.9rem] leading-tight font-semibold tracking-[-0.04em] text-(--text-primary) sm:text-[2.15rem]">
+              <h1 className="text-[1.9rem] leading-tight font-semibold tracking-[-0.04em] text-(--text-primary) sm:text-[2.15rem]">
+                <span
+                  aria-hidden="true"
+                  className="mr-2 text-(--accent-color) select-none"
+                >
+                  -
+                </span>
                 {isLogin
                   ? "Sign in to TaskFlow"
                   : "Create your TaskFlow account"}
@@ -88,7 +92,7 @@ function Auth() {
               <p className="mt-6 font-interface text-xs text-(--text-muted) sm:text-sm">
                 Need a hand?{" "}
                 <a
-                  href="mailto:support@taskflow.app"
+                  href={`mailto:${contactEmail}`}
                   className="rounded font-medium text-(--text-secondary) underline decoration-(--accent-muted) underline-offset-4 transition-colors hover:text-(--accent-strong) focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:outline-none"
                 >
                   Write to us

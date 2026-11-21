@@ -2,7 +2,7 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Eyebrow from "./Eyebrow";
 import { EASE, fadeUp, revealLine } from "../motion";
-import { contactDetails } from "../../../constants/homeContent";
+import { contactDetails, contactEmail } from "../../../constants/homeContent";
 
 const listVariants: Variants = {
   hidden: {},
@@ -48,11 +48,11 @@ export default function ContactPanel() {
         </p>
 
         <a
-          href="mailto:hello@taskflow.app"
+          href={`mailto:${contactEmail}`}
           className="group mt-3 inline-flex items-baseline gap-3 rounded-lg focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:ring-offset-4 focus-visible:ring-offset-(--bg-primary) focus-visible:outline-none"
         >
-          <span className="relative inline-block text-[clamp(1.55rem,4.4vw,2.75rem)] leading-none font-semibold tracking-[-0.035em] text-(--text-primary) transition-colors duration-200 group-hover:text-(--accent-strong)">
-            hello@taskflow.app
+          <span className="relative inline-block max-w-full break-all text-[clamp(1.05rem,3.6vw,2.25rem)] leading-tight font-semibold tracking-[-0.035em] text-(--text-primary) transition-colors duration-200 group-hover:text-(--accent-strong)">
+            {contactEmail}
             <span
               aria-hidden="true"
               className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-(--accent-color) transition-transform duration-300 ease-out group-hover:scale-x-100"
@@ -69,7 +69,7 @@ export default function ContactPanel() {
         variants={listVariants}
         initial={reduceMotion ? false : "hidden"}
         animate="show"
-        className="mt-12 grid gap-x-8 gap-y-6 border-t border-(--border-color) pt-6 sm:grid-cols-3"
+        className="mt-12 grid gap-x-8 gap-y-6 border-t border-(--border-color) pt-6 sm:grid-cols-2"
       >
         {contactDetails.map((detail) => (
           <motion.li key={detail.label} variants={itemVariants}>

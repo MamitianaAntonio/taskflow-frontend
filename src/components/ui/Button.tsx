@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { MouseEvent, ReactNode } from "react";
 
 type ButtonVariant = "primary" | "outline" | "text";
-type ButtonSize = "small" | "medium" | "large";
+type ButtonSize = "small" | "medium" | "large" | "icon";
 
 interface ButtonProps {
   text?: string;
@@ -20,6 +20,7 @@ interface ButtonProps {
   iconPosition?: "left" | "right";
   title?: string;
   "aria-label"?: string;
+  "aria-expanded"?: boolean;
 }
 
 const base =
@@ -47,6 +48,7 @@ const sizes: Record<ButtonSize, string> = {
   small: "px-3 py-1.5 text-xs",
   medium: "px-4 py-2.5",
   large: "px-5 py-3 text-base",
+  icon: "h-9 w-9 p-0",
 };
 
 export default function Button({
@@ -64,6 +66,7 @@ export default function Button({
   iconPosition = "left",
   title,
   "aria-label": ariaLabel,
+  "aria-expanded": ariaExpanded,
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
@@ -74,6 +77,7 @@ export default function Button({
       disabled={isDisabled}
       aria-busy={loading}
       aria-label={ariaLabel}
+      aria-expanded={ariaExpanded}
       title={title}
       className={`${base} ${variants[variant]} ${sizes[size]} ${className} ${
         isDisabled ? "opacity-60 cursor-not-allowed" : ""

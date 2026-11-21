@@ -17,7 +17,7 @@ export const homeMeta: Record<
   contact: {
     title: "Contact · TaskFlow",
     description:
-      "Questions, ideas or bug reports: write to TaskFlow by email, phone or post.",
+      "Questions, ideas or bug reports: write to TaskFlow by email or phone.",
   },
 };
 
@@ -28,19 +28,16 @@ export const homeSpecs = [
   "Notifications",
 ];
 
+export const contactEmail = "ratolojanaharyantonio.pro@gmail.com";
+
 export const contactDetails = [
   {
-    label: "Support",
-    value: "support@taskflow.app",
-    href: "mailto:support@taskflow.app",
-  },
-  {
     label: "Phone",
-    value: "+33 1 23 45 67 89",
-    href: "tel:+33123456789",
+    value: "+261 38 10 488 34",
+    href: "tel:+261381048834",
   },
   {
-    label: "Post",
-    value: "12 rue du Flow, 75011 Paris",
+    label: "Location",
+    value: "Antananarivo, Madagascar",
   },
 ] as const;
