@@ -1,5 +1,4 @@
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Moon, Sun } from "lucide-react";
 import "./style/DarkModeToggle.css";
 
 interface DarkModeToggleProps {
@@ -7,7 +6,12 @@ interface DarkModeToggleProps {
   onChange: (value: boolean) => void;
 }
 
-export const DarkModeToggle = ({ isDarkMode, onChange }: DarkModeToggleProps) => {
+export const DarkModeToggle = ({
+  isDarkMode,
+  onChange,
+}: DarkModeToggleProps) => {
+  const Icon = isDarkMode ? Moon : Sun;
+
   return (
     <button
       className="darkmode-toggle-btn"
@@ -16,10 +20,7 @@ export const DarkModeToggle = ({ isDarkMode, onChange }: DarkModeToggleProps) =>
       title={isDarkMode ? "Light mode" : "Dark mode"}
       type="button"
     >
-      <FontAwesomeIcon
-        icon={isDarkMode ? faMoon : faSun}
-        className="toggle-icon"
-      />
+      <Icon aria-hidden="true" className="toggle-icon" size={17} strokeWidth={1.8} />
     </button>
   );
 };
