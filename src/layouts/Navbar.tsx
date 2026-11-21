@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Search, X } from "lucide-react";
+import Button from "../components/ui/Button";
 import { DarkModeToggle } from "../components/ui/DarkModeToggle";
 import NotificationBell from "../components/Notifications/NotificationBell";
 import GlobalSearch from "./GlobalSearch";
@@ -19,55 +19,55 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!mobileSearch) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileSearch(false);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileSearch(false);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [mobileSearch]);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-(--border-color) bg-(--bg-secondary)/80 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 w-full border-b border-(--border-color) bg-(--bg-primary)">
       <div className="grid h-16 grid-cols-[1fr_auto] items-center gap-4 px-3 sm:px-4 md:grid-cols-[1fr_minmax(0,36rem)_1fr] lg:px-6">
-        {/* Left: logo */}
         <a
           href={ROUTES.dashboard}
           aria-label="TaskFlow dashboard"
           className="group flex w-fit items-center gap-2.5 rounded-control outline-none focus-visible:ring-2
           focus-visible:ring-(--accent-color)"
         >
-          <span
-            className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-control bg-(--bg-tertiary)
-            ring-1 ring-(--border-color) transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
-          >
+          <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-control bg-(--bg-tertiary) ring-1 ring-(--border-color) transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
             <img
               src="/Logo.png"
-              alt="TaskFlow logo"
+              alt=""
               className="h-full w-full object-contain"
             />
           </span>
-          <span className="text-base font-bold tracking-tight text-(--text-primary)">
+          <span className="text-sm font-semibold tracking-tight text-(--text-primary)">
             Task<span className="text-(--accent-color)">Flow</span>
           </span>
         </a>
 
-        {/* Center: global search (md and up) */}
         <div className="hidden md:block">
           <GlobalSearch className="w-full" shortcut />
         </div>
 
-        {/* Right: actions */}
         <div className="flex min-w-0 items-center justify-end gap-1">
-          <button
+          <Button
             type="button"
-            onClick={() => setMobileSearch((prev) => !prev)}
+            variant="text"
+            size="icon"
             aria-label={mobileSearch ? "Close search" : "Search"}
             aria-expanded={mobileSearch}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-control text-(--text-muted) transition-colors
-            hover:bg-(--bg-tertiary) hover:text-(--text-primary) md:hidden"
-          >
-            <FontAwesomeIcon icon={mobileSearch ? faXmark : faSearch} />
-          </button>
+            onClick={() => setMobileSearch((prev) => !prev)}
+            icon={
+              mobileSearch ? (
+                <X aria-hidden="true" size={18} strokeWidth={1.8} />
+              ) : (
+                <Search aria-hidden="true" size={18} strokeWidth={1.8} />
+              )
+            }
+            className="text-(--text-muted) md:hidden"
+          />
 
           <NotificationBell />
           <DarkModeToggle isDarkMode={isDarkMode} onChange={setIsDarkMode} />
@@ -89,7 +89,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile search */}
       <AnimatePresence>
         {mobileSearch && (
           <motion.div

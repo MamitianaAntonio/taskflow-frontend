@@ -55,17 +55,17 @@ export default function DashboardGreeting({
 
   return (
     <div className="min-w-0">
-      {/* Eyebrow : icône + date */}
-      <div className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-[0.18em] text-(--text-muted)">
+      {/* Eyebrow: icon and date */}
+      <div className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-[0.14em] text-(--text-muted)">
         <Icon
           aria-hidden="true"
           strokeWidth={1.75}
-          className="h-4 w-4 text-(--accent-strong)"
+          className="size-4 text-(--accent-strong)"
         />
         {date}
       </div>
 
-      {/* Titre */}
+      {/* Title */}
       <h2 className="mt-3 text-balance text-2xl font-bold leading-tight tracking-tight text-(--text-primary) sm:text-3xl lg:text-4xl">
         <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">
           {heading}
@@ -73,7 +73,7 @@ export default function DashboardGreeting({
         {`, ${firstName}`}
       </h2>
 
-      {/* Sous-titre */}
+      {/* Subtitle */}
       <p className="mt-2 font-interface text-sm text-(--text-secondary) sm:text-base">
         {subtitle}
       </p>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { Bell } from "lucide-react";
+import Button from "../ui/Button";
 import useNotificationStore from "../../stores/notificationStore";
 import { useUnreadNotifications } from "../../hooks/useUnreadNotifications";
 import { ROUTES } from "../../constants/routes";
@@ -12,20 +12,20 @@ export default function NotificationBell() {
   useUnreadNotifications();
 
   return (
-    <button
+    <Button
       type="button"
-      onClick={() => navigate(ROUTES.notifications)}
-      className="relative flex h-9 w-9 items-center justify-center rounded-control text-(--text-muted)
-       transition-colors hover:bg-(--bg-tertiary) hover:text-(--text-primary)"
+      variant="text"
+      size="icon"
+      className="text-(--text-muted)"
       aria-label="Notifications"
+      onClick={() => navigate(ROUTES.notifications)}
+      icon={<Bell aria-hidden="true" size={18} strokeWidth={1.8} />}
     >
-      <FontAwesomeIcon icon={faBell} />
       {unreadCount > 0 && (
-        <span className="absolute top-0.5 right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full
-         bg-(--color-error) px-1 font-interface text-[10px] font-bold text-(--text-white)">
+        <span className="absolute top-0.5 right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-(--color-error) px-1 font-interface text-[10px] font-bold text-(--text-white)">
           {unreadCount > 99 ? "99+" : unreadCount}
         </span>
       )}
-    </button>
+    </Button>
   );
 }

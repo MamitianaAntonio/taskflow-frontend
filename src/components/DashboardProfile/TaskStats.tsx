@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTasks } from "@fortawesome/free-solid-svg-icons";
+import { ChartPie } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -20,22 +21,20 @@ interface ChartColors {
 }
 
 const FALLBACK: ChartColors = {
-  success: "#10b981",
-  highlight: "#ec4599",
-  warning: "#f59e0b",
+  success: "#249b75",
+  highlight: "#c65391",
+  warning: "#c68a36",
 };
 
 function readThemeColors(): ChartColors {
-  const s = getComputedStyle(document.documentElement);
+  const styles = getComputedStyle(document.documentElement);
   return {
-    success: s.getPropertyValue("--color-success").trim() || FALLBACK.success,
+    success: styles.getPropertyValue("--color-success").trim() || FALLBACK.success,
     highlight:
-      s.getPropertyValue("--color-highlight").trim() || FALLBACK.highlight,
-    warning: s.getPropertyValue("--color-warning").trim() || FALLBACK.warning,
+      styles.getPropertyValue("--color-highlight").trim() || FALLBACK.highlight,
+    warning: styles.getPropertyValue("--color-warning").trim() || FALLBACK.warning,
   };
 }
-
-const chartColors: ChartColors = readThemeColors();
 
 export default function TaskStats({
   completed = 0,
@@ -44,6 +43,16 @@ export default function TaskStats({
   total = 0,
   isLoading = false,
 }: TaskStatsProps) {
+  const { isDarkMode } = useTheme();
+  const [chartColors, setChartColors] = useState<ChartColors>(readThemeColors);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setChartColors(readThemeColors());
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [isDarkMode]);
+
   const incompleteValue = Math.max(0, incomplete);
   const leftValue = Math.max(0, left);
   const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -90,10 +99,10 @@ export default function TaskStats({
 
   if (isLoading) {
     return (
-      <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary)">
+      <div className="flex w-full flex-col gap-3 rounded-control border border-(--border-color) bg-(--bg-secondary) p-3">
         <div className="h-3 w-28 animate-pulse rounded-full bg-(--border-color)" />
         <div className="flex items-center gap-3">
-          <div className="h-28 w-28 shrink-0 animate-pulse rounded-full bg-(--border-color)" />
+          <div className="size-28 shrink-0 animate-pulse rounded-full bg-(--border-color)" />
           <div className="flex w-full flex-col gap-3">
             {[0, 1, 2].map((i) => (
               <div key={i} className="flex items-center gap-2">
@@ -108,20 +117,25 @@ export default function TaskStats({
   }
 
   return (
-    <div className="flex w-full flex-col gap-3 rounded-lg bg-(--bg-secondary) p-3">
-      <p className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-        <FontAwesomeIcon icon={faTasks} className="text-(--accent-color)" />
+    <div className="flex w-full flex-col gap-3 rounded-control border border-(--border-color) bg-(--bg-secondary) p-3">
+      <p className="flex items-center gap-2 font-interface text-xs font-semibold uppercase tracking-[0.12em] text-(--text-muted)">
+        <ChartPie
+          aria-hidden="true"
+          size={15}
+          strokeWidth={1.8}
+          className="text-(--accent-strong)"
+        />
         Task breakdown
       </p>
 
       <div className="flex flex-col items-center gap-3 sm:flex-row">
-        <div className="relative h-28 w-28 shrink-0">
+        <div className="relative size-28 shrink-0">
           <Doughnut data={data} options={options} />
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <span className="font-mono text-xl leading-none font-bold text-(--text-primary) tabular-nums">
               {pct}%
             </span>
-            <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-(--text-muted)">
+            <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-(--text-muted)">
               done
             </span>
           </div>
@@ -135,7 +149,7 @@ export default function TaskStats({
                 style={{ background: `${color}1f` }}
               >
                 <span
-                  className="h-1.5 w-1.5 shrink-0 rounded-full"
+                  className="size-1.5 shrink-0 rounded-full"
                   style={{ background: color }}
                 />
                 <span
