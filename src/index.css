@@ -192,7 +192,8 @@ html.theme-transition *::after {
 
 /* ─── Inputs ─── */
 
-[data-theme="dark"] input[type="datetime-local"] {
+[data-theme="dark"] input[type="datetime-local"],
+[data-theme="dark"] input[type="date"] {
   color-scheme: dark;
 }
 

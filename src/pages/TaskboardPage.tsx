@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import {
-  faCheckCircle as faCircleCheck,
-  faCircle,
-  faCircleHalfStroke,
-  faClipboardList,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Circle,
+  CircleCheck,
+  CircleDashed,
+  ClipboardList,
+} from "lucide-react";
 import QuickAddTask from "../components/TaskBoard/QuickAddTask";
 import TaskDetail from "../components/TaskBoard/TaskDetail";
 import CustomTask from "../components/TaskBoard/CustomTask";
@@ -109,28 +109,28 @@ export default function TaskboardPage() {
           {
             label: "Total",
             value: tasks.length,
-            icon: faClipboardList,
+            icon: ClipboardList,
             bg: "bg-(--accent-soft)",
             color: "text-(--accent-color)",
           },
           {
             label: "To do",
             value: tasks.filter((t) => t.status === "todo").length,
-            icon: faCircle,
+            icon: Circle,
             bg: "bg-(--color-warning-soft)",
             color: "text-(--color-warning)",
           },
           {
             label: "In progress",
             value: tasks.filter((t) => t.status === "doing").length,
-            icon: faCircleHalfStroke,
+            icon: CircleDashed,
             bg: "bg-(--accent-bg)",
             color: "text-(--accent-strong)",
           },
           {
             label: "Done",
             value: tasks.filter((t) => t.status === "done").length,
-            icon: faCircleCheck,
+            icon: CircleCheck,
             bg: "bg-(--color-success-soft)",
             color: "text-(--color-success)",
           },

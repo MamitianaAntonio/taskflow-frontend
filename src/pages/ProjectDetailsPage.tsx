@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowLeft,
-  faCalendarDays,
-  faCheckCircle,
-  faCircle,
-  faCircleHalfStroke,
-  faClipboardList,
-  faInbox,
-  faPenToSquare,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+  ArrowLeft,
+  Circle,
+  CircleCheck,
+  CircleDashed,
+  ClipboardList,
+  FolderKanban,
+  Pencil,
+  Plus,
+} from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { useProjectStore } from "../stores/projectStore";
 import useTodoStore from "../stores/todoStore";
@@ -23,6 +21,7 @@ import CustomTask from "../components/TaskBoard/CustomTask";
 import TaskDetail from "../components/TaskBoard/TaskDetail";
 import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
+import PageHeader from "../components/ui/PageHeader";
 import Spinner from "../components/ui/Spinner";
 import { formatDate, isOverdue } from "../utils/date";
 import { toBoardTask } from "../utils/task";
@@ -132,7 +131,7 @@ export default function ProjectDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto flex flex-col gap-5 p-4 sm:p-6">
+      <div className="flex w-full flex-col gap-4 p-3 sm:p-4">
         <Spinner className="py-10" />
       </div>
     );
@@ -140,13 +139,15 @@ export default function ProjectDetailsPage() {
 
   if (!currentProject) {
     return (
-      <div className="mx-auto flex flex-col gap-5 p-4 sm:p-6">
+      <div className="flex w-full flex-col gap-4 p-3 sm:p-4">
         <Button
           variant="outline"
           size="small"
-          text="Back to projects"
+          icon={<ArrowLeft aria-hidden="true" size={14} strokeWidth={1.8} />}
           onClick={() => navigate(ROUTES.projects)}
-        />
+        >
+          Back to projects
+        </Button>
         <ErrorState
           title="Project not found"
           message="It may have been deleted, or the link is invalid."
@@ -160,79 +161,85 @@ export default function ProjectDetailsPage() {
     : false;
 
   return (
-    <div className="mx-auto flex flex-col gap-4 p-4 sm:gap-5 sm:p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h1 className="truncate text-xl font-bold uppercase tracking-wide text-(--text-primary) sm:text-2xl">
-            {currentProject.name}
-          </h1>
-          {currentProject.description && (
-            <p className="mt-0.5 line-clamp-1 text-xs text-(--text-muted)">
-              {currentProject.description}
-            </p>
-          )}
-          {currentProject.dueDate && (
-            <span
-              className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 font-interface text-[10px] font-semibold uppercase tracking-wide ${
-                overdue
-                  ? "bg-(--color-error-soft) text-(--color-error)"
-                  : "bg-(--bg-tertiary) text-(--text-secondary)"
-              }`}
+    <div className="flex w-full flex-col gap-4 p-3 sm:gap-5 sm:p-4">
+      <PageHeader
+        title={currentProject.name}
+        icon={
+          <FolderKanban aria-hidden="true" size={18} strokeWidth={1.8} />
+        }
+        description={
+          currentProject.description?.trim() ||
+          "Keep the board moving, one task at a time."
+        }
+        meta={[
+          {
+            label: `${stats.total} task${stats.total === 1 ? "" : "s"}`,
+            tone: "accent",
+          },
+          {
+            label: `${stats.doneCount} done`,
+            tone: stats.doneCount > 0 ? "success" : "neutral",
+          },
+          ...(currentProject.dueDate
+            ? [
+                {
+                  label: `${overdue ? "Overdue" : "Due"} ${formatDate(currentProject.dueDate)}`,
+                  tone: overdue ? ("error" as const) : ("neutral" as const),
+                },
+              ]
+            : []),
+        ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => navigate(ROUTES.projects)}
+              icon={
+                <ArrowLeft aria-hidden="true" size={14} strokeWidth={1.8} />
+              }
             >
-              <FontAwesomeIcon icon={faCalendarDays} className="text-[9px]" />
-              {overdue ? "Overdue · " : "Due "}
-              {formatDate(currentProject.dueDate)}
-            </span>
-          )}
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2">
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => setShowEdit(true)}
-          >
-            <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
-            Edit
-          </Button>
-          <Button
-            variant="outline"
-            size="small"
-            onClick={() => navigate(ROUTES.projects)}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
-            Back
-          </Button>
-        </div>
-      </div>
+              Back
+            </Button>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => setShowEdit(true)}
+              icon={<Pencil aria-hidden="true" size={14} strokeWidth={1.8} />}
+            >
+              Edit
+            </Button>
+          </div>
+        }
+      />
 
       <TaskboardStats
         stats={[
           {
             label: "Total",
             value: stats.total,
-            icon: faClipboardList,
+            icon: ClipboardList,
             bg: "bg-(--accent-soft)",
-            color: "text-(--accent-color)",
+            color: "text-(--accent-strong)",
           },
           {
             label: "To do",
             value: stats.todoCount,
-            icon: faCircle,
+            icon: Circle,
             bg: "bg-(--color-warning-soft)",
             color: "text-(--color-warning)",
           },
           {
             label: "In progress",
             value: stats.doingCount,
-            icon: faCircleHalfStroke,
+            icon: CircleDashed,
             bg: "bg-(--accent-bg)",
             color: "text-(--accent-strong)",
           },
           {
             label: "Done",
             value: stats.doneCount,
-            icon: faCheckCircle,
+            icon: CircleCheck,
             bg: "bg-(--color-success-soft)",
             color: "text-(--color-success)",
           },
@@ -240,9 +247,15 @@ export default function ProjectDetailsPage() {
       />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-interface text-xs font-bold uppercase tracking-widest text-(--text-secondary)">
-          Board
-        </h2>
+        <div className="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            className="size-1.5 rounded-full bg-(--accent-color)"
+          />
+          <h2 className="font-interface text-xs font-semibold uppercase tracking-[0.12em] text-(--text-secondary)">
+            Board
+          </h2>
+        </div>
         <div className="flex items-center gap-3">
           <p className="hidden items-center gap-2 font-interface text-[11px] text-(--text-muted) md:inline-flex">
             Drag tasks between columns to change their status
@@ -251,17 +264,16 @@ export default function ProjectDetailsPage() {
             variant="primary"
             size="small"
             onClick={() => setShowCreate(true)}
+            icon={<Plus aria-hidden="true" size={14} strokeWidth={2} />}
           >
-            <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
             New task
           </Button>
         </div>
       </div>
 
       {projectTodos.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-(--border-color) py-16">
+        <div className="rounded-control border border-dashed border-(--border-color) bg-(--bg-secondary)/40 py-12">
           <EmptyState
-            icon={faInbox}
             title="No tasks in this project yet."
             text="Create your first task to start tracking progress."
             action={
@@ -269,8 +281,8 @@ export default function ProjectDetailsPage() {
                 variant="outline"
                 size="small"
                 onClick={() => setShowCreate(true)}
+                icon={<Plus aria-hidden="true" size={14} strokeWidth={2} />}
               >
-                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
                 Add first task
               </Button>
             }
