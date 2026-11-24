@@ -10,12 +10,12 @@ export const homeMeta: Record<
       "TaskFlow keeps your tasks, projects, calendar and notifications in one place.",
   },
   about: {
-    title: "About · TaskFlow",
+    title: "TaskFlow",
     description:
       "TaskFlow is a task and project manager. Your tasks, projects and deadlines live in one place.",
   },
   contact: {
-    title: "Contact · TaskFlow",
+    title: "TaskFlow",
     description:
       "Questions, ideas or bug reports: write to TaskFlow by email or phone.",
   },

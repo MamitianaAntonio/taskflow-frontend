@@ -1,30 +1,23 @@
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { IconDefinition, SizeProp } from "@fortawesome/fontawesome-svg-core";
+import { X } from "lucide-react";
 import type { MouseEvent } from "react";
 
 interface CloseButtonProps {
   onClose: (event: MouseEvent<HTMLButtonElement>) => void;
-  icon?: IconDefinition;
-  size?: SizeProp;
   className?: string;
 }
 
 export default function CloseButton({
   onClose,
-  icon = faCircle,
-  size = "sm",
   className = "",
 }: CloseButtonProps) {
   return (
     <button
+      type="button"
       onClick={onClose}
-      className={`flex h-7 w-7 items-center justify-center rounded-md
-        text-(--text-muted) hover:text-(--color-error) hover:bg-(--bg-primary)
-        transition-colors ${className}`}
       aria-label="Close"
+      className={`flex size-8 shrink-0 items-center justify-center rounded-control text-(--text-muted) transition-colors hover:bg-(--bg-tertiary) hover:text-(--color-error) focus-visible:ring-2 focus-visible:ring-(--accent-color) focus-visible:outline-none ${className}`}
     >
-      <FontAwesomeIcon icon={icon} size={size} />
+      <X size={16} strokeWidth={2} aria-hidden="true" />
     </button>
   );
 }

@@ -74,7 +74,7 @@ export default function StartPanel() {
 
       <motion.ul
         {...fadeUp(reduceMotion, 0.5)}
-        className="mt-10 flex flex-wrap items-center gap-y-2 border-t border-(--border-color) pt-5 font-mono text-[10.5px] tracking-[0.2em] text-(--text-muted) uppercase"
+        className="mt-10 flex flex-wrap items-center gap-y-2 pt-5 font-mono text-[10.5px] tracking-[0.2em] text-(--text-muted) uppercase"
       >
         {homeSpecs.map((spec, index) => (
           <li key={spec} className="flex items-center gap-x-3 sm:gap-x-4">

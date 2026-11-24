@@ -12,13 +12,6 @@ type NavItem = (typeof primaryNav)[number] | (typeof systemNav)[number];
 const ROW =
   "group/item relative flex w-full items-center gap-3 rounded-control py-2.5 font-interface text-sm font-medium transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-color)";
 
-const TOOLTIP =
-  "pointer-events-none absolute left-full z-50 ml-3 -translate-x-1 whitespace-nowrap rounded-inner border " +
-  "border-(--border-color) bg-(--bg-primary) px-2.5 py-1 font-interface text-xs font-semibold " +
-  "text-(--text-primary) opacity-0 shadow-lg shadow-(--shadow) transition-all duration-150 " +
-  "group-hover/item:translate-x-0 group-hover/item:opacity-100 group-focus-visible/item:translate-x-0 " +
-  "group-focus-visible/item:opacity-100";
-
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const isDesktop = !useIsMobile(1024);
@@ -82,12 +75,6 @@ export default function Sidebar() {
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
-
-            {iconOnly && (
-              <span role="tooltip" className={TOOLTIP}>
-                {item.label}
-              </span>
-            )}
           </>
         )}
       </NavLink>
@@ -143,11 +130,6 @@ export default function Sidebar() {
                 className="shrink-0"
               />
               {showLabels && <span>Collapse</span>}
-              {iconOnly && (
-                <span role="tooltip" className={TOOLTIP}>
-                  Expand
-                </span>
-              )}
             </button>
           )}
 
@@ -166,11 +148,6 @@ export default function Sidebar() {
               className="shrink-0"
             />
             {showLabels && <span>Logout</span>}
-            {iconOnly && (
-              <span role="tooltip" className={TOOLTIP}>
-                Logout
-              </span>
-            )}
           </button>
         </div>
       </div>

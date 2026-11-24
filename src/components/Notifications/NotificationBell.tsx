@@ -18,6 +18,7 @@ export default function NotificationBell() {
       size="icon"
       className="text-(--text-muted)"
       aria-label="Notifications"
+      title="Notifications"
       onClick={() => navigate(ROUTES.notifications)}
       icon={<Bell aria-hidden="true" size={18} strokeWidth={1.8} />}
     >
