@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAlignLeft,
-  faCalendarDays,
-  faFolderOpen,
-  faFloppyDisk,
-  faTag,
-  faTrashCan,
-  faTriangleExclamation,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+  AlignLeft,
+  CalendarDays,
+  FolderOpen,
+  Save,
+  Tag,
+  Trash2,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import Drawer from "../ui/Drawer";
 import Button from "../ui/Button";
+import WaveInput from "../ui/WaveInput";
 import { toLocalDatetime } from "../../utils/date";
 import type { Project, UpdateProjectPayload } from "../../types/project";
 
@@ -89,7 +89,7 @@ export default function ProjectEditPanel({
       open
       onClose={onClose}
       title={project.name}
-      icon={faFolderOpen}
+      icon={<FolderOpen size={18} strokeWidth={1.8} aria-hidden="true" />}
       subtitle={
         <span className="font-interface text-xs text-(--text-muted)">
           Give this goal a name, a note and a deadline.
@@ -102,7 +102,7 @@ export default function ProjectEditPanel({
             size="small"
             className="w-full sm:w-auto"
             onClick={onClose}
-            icon={<FontAwesomeIcon icon={faXmark} />}
+            icon={<X size={14} strokeWidth={2} aria-hidden="true" />}
             text="Cancel"
             disabled={saving}
           />
@@ -113,7 +113,7 @@ export default function ProjectEditPanel({
             onClick={handleSave}
             loading={saving}
             disabled={!dirty || !name.trim()}
-            icon={<FontAwesomeIcon icon={faFloppyDisk} />}
+            icon={<Save size={14} strokeWidth={2} aria-hidden="true" />}
             text="Save changes"
           />
         </div>
@@ -121,28 +121,23 @@ export default function ProjectEditPanel({
     >
       <div className="flex flex-col gap-5 p-4 sm:p-5">
         <div>
-          <label className={fieldLabelClass}>
-            <FontAwesomeIcon icon={faTag} className="text-[10px] text-(--accent-color)" />
-            Project name
-          </label>
-          <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
-              <FontAwesomeIcon icon={faTag} />
-            </span>
-            <input
-              type="text"
-              placeholder="Project name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              disabled={saving}
-              className={inputClass}
-            />
-          </div>
+          <WaveInput
+            label="Project name"
+            icon={Tag}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={saving}
+          />
         </div>
 
         <div>
           <label className={fieldLabelClass}>
-            <FontAwesomeIcon icon={faAlignLeft} className="text-[10px] text-(--accent-color)" />
+            <AlignLeft
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Description
           </label>
           <textarea
@@ -157,12 +152,17 @@ export default function ProjectEditPanel({
 
         <div>
           <label className={fieldLabelClass}>
-            <FontAwesomeIcon icon={faCalendarDays} className="text-[10px] text-(--accent-color)" />
+            <CalendarDays
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Deadline
           </label>
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-xs text-(--text-muted)">
-              <FontAwesomeIcon icon={faCalendarDays} />
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-(--text-muted)">
+              <CalendarDays size={15} strokeWidth={1.8} aria-hidden="true" />
             </span>
             <input
               type="date"
@@ -179,9 +179,11 @@ export default function ProjectEditPanel({
 
         <div className="mt-1 border-t border-(--border-color) pt-5">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon
-              icon={faTriangleExclamation}
-              className="text-xs text-(--color-error)"
+            <TriangleAlert
+              size={14}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--color-error)"
             />
             <h3 className="text-xs font-bold uppercase tracking-wide text-(--color-error)">
               Danger zone
@@ -198,7 +200,7 @@ export default function ProjectEditPanel({
             onClick={handleDelete}
             loading={deleting}
             disabled={saving}
-            icon={<FontAwesomeIcon icon={faTrashCan} />}
+            icon={<Trash2 size={14} strokeWidth={2} aria-hidden="true" />}
             text="Delete project"
           />
         </div>

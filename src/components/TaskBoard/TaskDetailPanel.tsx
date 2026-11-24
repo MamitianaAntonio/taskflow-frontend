@@ -1,10 +1,13 @@
 import {
-  faArrowsRotate,
-  faFloppyDisk,
-  faTrashCan,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  Circle,
+  CircleCheck,
+  CircleDashed,
+  Repeat,
+  Save,
+  Trash2,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import Modal from "../ui/Modal";
 import ProjectBadge from "../ui/ProjectBadge";
 import TaskDetailFields from "./TaskDetailFields";
@@ -13,6 +16,12 @@ import Button from "../ui/Button";
 import { repeatPhrase, statusConfig } from "../../constants/taskConfig";
 import type { Project } from "../../types/project";
 import type { BoardTask, RepeatRule, TodoPriority, TodoStatus } from "../../types/todo";
+
+const statusIcons: Record<TodoStatus, LucideIcon> = {
+  todo: Circle,
+  doing: CircleDashed,
+  done: CircleCheck,
+};
 
 interface TaskDetailPanelProps {
   task: BoardTask;
@@ -73,19 +82,23 @@ export default function TaskDetailPanel({
   onToggleSubtask,
   onDeleteSubtask,
 }: TaskDetailPanelProps) {
+  const StatusIcon = statusIcons[localStatus];
+
   return (
     <Modal
       open
       onClose={onClose}
       widthClass="max-w-3xl"
       title={task.label}
-      icon={statusConfig[localStatus].icon}
+      icon={
+        <StatusIcon size={18} strokeWidth={1.8} aria-hidden="true" />
+      }
       subtitle={
         <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
             className={`inline-flex items-center gap-1.5 font-interface text-xs font-semibold ${statusConfig[localStatus].color}`}
           >
-            <FontAwesomeIcon icon={statusConfig[localStatus].icon} className="text-[10px]" />
+            <StatusIcon size={12} strokeWidth={2} aria-hidden="true" />
             {statusConfig[localStatus].label}
           </span>
           {dueDateStr && (
@@ -98,9 +111,11 @@ export default function TaskDetailPanel({
             <>
               {metaSeparator}
               <span className="inline-flex items-center gap-1.5">
-                <FontAwesomeIcon
-                  icon={faArrowsRotate}
-                  className="text-[10px] text-(--accent-color)"
+                <Repeat
+                  size={12}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                  className="text-(--accent-color)"
                 />
                 {repeatPhrase[localRepeat]}
               </span>
@@ -123,7 +138,7 @@ export default function TaskDetailPanel({
               className="w-full justify-center self-start text-(--color-error) sm:w-auto"
               onClick={onDelete}
               loading={saving}
-              icon={<FontAwesomeIcon icon={faTrashCan} />}
+              icon={<Trash2 size={14} strokeWidth={2} aria-hidden="true" />}
               text="Delete"
             />
           )}
@@ -133,7 +148,7 @@ export default function TaskDetailPanel({
               size="small"
               className="w-full sm:w-auto"
               onClick={onClose}
-              icon={<FontAwesomeIcon icon={faXmark} />}
+              icon={<X size={14} strokeWidth={2} aria-hidden="true" />}
               text="Cancel"
               disabled={saving}
             />
@@ -144,7 +159,7 @@ export default function TaskDetailPanel({
               onClick={onSave}
               loading={saving}
               disabled={!dirty}
-              icon={<FontAwesomeIcon icon={faFloppyDisk} />}
+              icon={<Save size={14} strokeWidth={2} aria-hidden="true" />}
               text="Save changes"
             />
           </div>

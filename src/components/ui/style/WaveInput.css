@@ -1,0 +1,176 @@
+/* From Uiverse.io by AbanoubMagdy1 - https://uiverse.io/AbanoubMagdy1/afraid-yak-99
+   MIT License, Copyright (c) AbanoubMagdy1 (Abanoub Magdy) */
+
+.wave-field {
+  width: 100%;
+}
+
+.wave-field__line {
+  --wave-pad-x: 0rem;
+  position: relative;
+  padding-top: 1.2rem;
+}
+
+.wave-field--with-icon .wave-field__line {
+  --wave-pad-x: 1.7rem;
+}
+
+.wave-field__control {
+  display: block;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 var(--wave-pad-x);
+  border: 0;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  outline: none;
+  appearance: none;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.wave-field__control::placeholder {
+  color: transparent;
+}
+
+.wave-field__control:focus {
+  border-bottom-color: transparent;
+  outline: none;
+}
+
+.wave-field__control:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.wave-field__icon {
+  position: absolute;
+  top: 1.2rem;
+  left: 0.125rem;
+  display: flex;
+  height: 2.25rem;
+  align-items: center;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.wave-field__line:focus-within .wave-field__icon {
+  color: var(--accent-strong);
+}
+
+.wave-field__label {
+  position: absolute;
+  top: 1.2rem;
+  left: var(--wave-pad-x);
+  display: flex;
+  height: 2.25rem;
+  align-items: center;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.wave-field__char {
+  display: inline-block;
+  white-space: pre;
+  transition:
+    transform 0.2s ease,
+    font-size 0.2s ease,
+    font-weight 0.2s ease,
+    letter-spacing 0.2s ease,
+    color 0.2s ease;
+  transition-delay: calc(var(--index, 0) * 0.05s);
+}
+
+.wave-field__control:focus ~ .wave-field__label .wave-field__char,
+.wave-field__control:not(:placeholder-shown) ~ .wave-field__label .wave-field__char {
+  transform: translateY(-1.55rem);
+  color: var(--accent-strong);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.wave-field__bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  pointer-events: none;
+}
+
+.wave-field__bar::before,
+.wave-field__bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transition: width 0.25s ease;
+}
+
+.wave-field__bar::before {
+  left: 50%;
+}
+
+.wave-field__bar::after {
+  right: 50%;
+}
+
+.wave-field__control:focus ~ .wave-field__bar::before,
+.wave-field__control:focus ~ .wave-field__bar::after {
+  width: 50%;
+}
+
+.wave-field__control[aria-invalid="true"] {
+  border-bottom-color: var(--color-error);
+}
+
+.wave-field__control[aria-invalid="true"]:focus {
+  border-bottom-color: transparent;
+}
+
+.wave-field__control[aria-invalid="true"] ~ .wave-field__bar::before,
+.wave-field__control[aria-invalid="true"] ~ .wave-field__bar::after {
+  background: var(--color-error);
+}
+
+.wave-field--invalid .wave-field__char {
+  color: var(--color-error);
+}
+
+.wave-field__control:disabled ~ .wave-field__label .wave-field__char {
+  opacity: 0.5;
+}
+
+.wave-field__message {
+  margin-top: 0.35rem;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.wave-field__message--error {
+  color: var(--color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-field__char,
+  .wave-field__bar::before,
+  .wave-field__bar::after {
+    transition: none;
+  }
+}

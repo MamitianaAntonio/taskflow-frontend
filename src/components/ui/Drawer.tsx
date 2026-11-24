@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  AnimatePresence,
+  motion,
+  useDragControls,
+  useReducedMotion,
+} from "framer-motion";
 import type { ReactNode, UIEvent } from "react";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import CloseButton from "./CloseButton";
 
@@ -11,167 +14,189 @@ interface DrawerProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  icon?: IconDefinition;
+  icon?: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
 }
 
-export default function Drawer({
-  open,
+function DrawerContent({
   onClose,
   title,
   icon,
   subtitle,
   children,
   footer,
-}: DrawerProps) {
+}: Omit<DrawerProps, "open">) {
   const isMobile = useIsMobile(640);
-  const [scrollState, setScrollState] = useState({ atTop: true, atBottom: false });
+  const reduceMotion = useReducedMotion();
+  const titleId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
+  const [atTop, setAtTop] = useState(true);
 
-  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
-    const el = event.currentTarget;
-    setScrollState({
-      atTop: el.scrollTop <= 4,
-      atBottom: el.scrollHeight - el.scrollTop - el.clientHeight <= 4,
-    });
-  };
+  // Mesuré à chaque ouverture (le composant est monté uniquement quand open)
+  const [anchor] = useState(() => {
+    const rect = document.querySelector("main")?.getBoundingClientRect();
+    return { top: rect?.top ?? 0, left: rect?.left ?? 0 };
+  });
 
+  // Escape
   useEffect(() => {
-    if (!open) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+  }, [onClose]);
 
-  const mainTop = useMemo(() => {
-    if (typeof document === "undefined") return 0;
-    const main = document.querySelector("main");
-    return main?.getBoundingClientRect().top ?? 0;
+  // Blocage du scroll de la page + gestion du focus
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      previouslyFocused?.focus?.();
+    };
   }, []);
 
-  const mainLeft = useMemo(() => {
-    if (typeof document === "undefined") return 0;
-    const main = document.querySelector("main");
-    return main?.getBoundingClientRect().left ?? 0;
-  }, []);
+  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
+    setAtTop(event.currentTarget.scrollTop <= 4);
+  };
 
-  if (!open) return null;
+  const fade = { duration: reduceMotion ? 0 : 0.2 };
 
-  const overlay = isMobile ? (
+  const overlay = (
     <motion.div
-      className="fixed inset-0 z-50 bg-(--overlay)"
+      aria-hidden="true"
+      className={`z-50 bg-(--overlay) backdrop-blur-[2px] ${
+        isMobile ? "fixed inset-0" : "fixed right-0 bottom-0"
+      }`}
+      style={isMobile ? undefined : { top: anchor.top, left: anchor.left }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={onClose}
-    />
-  ) : (
-    <motion.div
-      className="fixed right-0 bottom-0 z-50 bg-(--overlay)"
-      style={{ top: mainTop, left: mainLeft }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={fade}
       onClick={onClose}
     />
   );
 
-  const content = (
+  const header = (
+    <div
+      className={`flex shrink-0 items-center gap-2.5 border-b bg-(--bg-secondary) px-4 pt-1 pb-2.5 transition-[border-color,box-shadow] duration-200 sm:px-5 sm:pt-3.5 ${
+        atTop ? "border-transparent" : "border-(--border-color) shadow-sm"
+      }`}
+    >
+      {icon && (
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-control bg-(--accent-soft) text-(--accent-strong)">
+          {icon}
+        </span>
+      )}
+      <div className="min-w-0 flex-1">
+        <h3
+          id={titleId}
+          className="truncate text-[15px] font-semibold leading-tight tracking-tight text-(--text-primary)"
+        >
+          {title}
+        </h3>
+        {subtitle && (
+          <div className="mt-0.5 truncate font-interface text-[11px] text-(--text-muted)">
+            {subtitle}
+          </div>
+        )}
+      </div>
+      <CloseButton onClose={onClose} />
+    </div>
+  );
+
+  const body = (
+    <div
+      className="flex-1 overflow-y-auto overscroll-contain"
+      onScroll={handleScroll}
+    >
+      {children}
+    </div>
+  );
+
+  const footerBar = footer && (
+    <div className="shrink-0 border-t border-(--border-color) bg-(--bg-secondary) px-4 py-2.5 sm:px-5 sm:py-3">
+      {footer}
+    </div>
+  );
+
+  return (
     <>
       {overlay}
 
       {isMobile ? (
         <motion.div
+          ref={panelRef}
+          tabIndex={-1}
           role="dialog"
           aria-modal="true"
-          aria-label={title}
-          className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl bg-(--bg-secondary) shadow-xl"
+          aria-labelledby={titleId}
+          className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl border-t border-(--border-color) bg-(--bg-secondary) shadow-xl outline-none"
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
-          transition={{ type: "spring", damping: 30, stiffness: 300 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { type: "spring", damping: 32, stiffness: 320 }
+          }
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+          drag="y"
+          dragControls={dragControls}
+          dragListener={false}
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{ top: 0, bottom: 0.6 }}
+          onDragEnd={(_, info) => {
+            if (info.offset.y > 100 || info.velocity.y > 500) onClose();
+          }}
         >
-          <div className="flex justify-center pt-3 pb-1">
-            <div className="h-1.5 w-10 rounded-full bg-(--border-color)" />
+          {/* Poignée : seule zone qui déclenche le drag */}
+          <div
+            className="flex shrink-0 cursor-grab touch-none justify-center pt-2.5 pb-1.5 active:cursor-grabbing"
+            onPointerDown={(e) => dragControls.start(e)}
+          >
+            <div className="h-1 w-9 rounded-full bg-(--border-color)" />
           </div>
 
-          <div className={`flex items-center gap-3 px-4 pt-1 pb-3 transition-shadow ${scrollState.atTop ? "" : "shadow-sm"}`}>
-            {icon && (
-              <FontAwesomeIcon
-                icon={icon}
-                className="shrink-0 text-base text-(--accent-color)"
-                aria-hidden
-              />
-            )}
-            <div className="min-w-0 flex-1">
-              <h3 className="truncate text-sm font-bold text-(--text-primary)">
-                {title}
-              </h3>
-              {subtitle && (
-                <div className="truncate text-xs text-(--text-muted)">{subtitle}</div>
-              )}
-            </div>
-            <CloseButton onClose={onClose} />
-          </div>
-
-          <div className="flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll}>
-            {children}
-          </div>
-
-          {footer && (
-            <div className={`border-t p-4 transition-colors ${scrollState.atBottom ? "border-(--border-color)" : "border-transparent"}`}>
-              {footer}
-            </div>
-          )}
+          {header}
+          {body}
+          {footerBar}
         </motion.div>
       ) : (
         <motion.div
-          className="fixed z-50 flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-secondary) shadow-2xl"
-          style={{ top: mainTop + 16, bottom: 16, right: 16 }}
+          ref={panelRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          className="fixed z-50 flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-secondary) shadow-2xl outline-none"
+          style={{ top: anchor.top + 12, bottom: 12, right: 12 }}
           initial={{ opacity: 0, x: 32, scale: 0.98 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: 32, scale: 0.98 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: reduceMotion ? 0 : 0.22, ease: "easeOut" }}
         >
-          <div className="flex items-center gap-3 bg-(--bg-secondary)/90 px-4 pt-3 pb-3 backdrop-blur-md">
-            {icon && (
-              <FontAwesomeIcon
-                icon={icon}
-                className="shrink-0 text-base text-(--accent-color)"
-                aria-hidden
-              />
-            )}
-            <div className="min-w-0 flex-1">
-              <h3 className="truncate text-sm font-bold text-(--text-primary)">
-                {title}
-              </h3>
-              {subtitle && (
-                <div className="truncate text-xs text-(--text-muted)">{subtitle}</div>
-              )}
-            </div>
-            <CloseButton onClose={onClose} />
-          </div>
-
-          <div className="flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll}>
-            {children}
-          </div>
-
-          {footer && (
-            <div className={`bg-(--bg-secondary) p-4 transition-colors ${scrollState.atBottom ? "border-t border-(--border-color)" : "border-t border-transparent"}`}>
-              {footer}
-            </div>
-          )}
+          {header}
+          {body}
+          {footerBar}
         </motion.div>
       )}
     </>
   );
+}
 
-  if (isMobile) return content;
-  return createPortal(content, document.body);
+export default function Drawer({ open, ...rest }: DrawerProps) {
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <AnimatePresence>{open && <DrawerContent {...rest} />}</AnimatePresence>,
+    document.body,
+  );
 }

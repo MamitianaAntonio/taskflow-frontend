@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { CalendarDays, CirclePlus } from "lucide-react";
 import Drawer from "../ui/Drawer";
 import Button from "../ui/Button";
 import CalendarTaskRow from "./CalendarTaskRow";
@@ -29,7 +28,7 @@ export default function DayDrawer({
       open
       onClose={onClose}
       title={formatDate(parseDayKey(day))}
-      icon={faCalendarDays}
+      icon={<CalendarDays size={18} strokeWidth={1.8} aria-hidden="true" />}
       subtitle={
         <span className="font-interface text-xs text-(--text-muted)">
           {tasks.length === 0
@@ -43,7 +42,7 @@ export default function DayDrawer({
           size="small"
           className="w-full sm:w-auto"
           onClick={onAddTask}
-          icon={<FontAwesomeIcon icon={faCirclePlus} />}
+          icon={<CirclePlus size={14} strokeWidth={2} aria-hidden="true" />}
           text="Add task"
         />
       }

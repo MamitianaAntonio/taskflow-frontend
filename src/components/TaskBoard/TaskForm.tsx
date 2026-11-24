@@ -1,17 +1,17 @@
 import { useState } from "react";
 import {
-  faAlignLeft,
-  faArrowsRotate,
-  faCalendarDays,
-  faCircleHalfStroke,
-  faFlag,
-  faPlus,
-  faTag,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  AlignLeft,
+  CalendarDays,
+  CircleDashed,
+  Flag,
+  Plus,
+  Repeat,
+  Tag,
+  X,
+} from "lucide-react";
 import Button from "../ui/Button";
 import ChipTabs from "../ui/ChipTabs";
+import WaveInput from "../ui/WaveInput";
 import { repeatHint } from "../../constants/taskConfig";
 import { priorityChips, repeatChips, statusChips } from "./taskChips";
 import { toLocalDatetime } from "../../utils/date";
@@ -93,30 +93,23 @@ export default function TaskForm({
 
   return (
     <div className="flex flex-col gap-3.5 p-3.5 pb-0 sm:gap-5 sm:p-5 sm:pb-0">
-      <div>
-        <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faTag} className="text-[10px] text-(--accent-color)" />
-          Title
-        </label>
-        <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-xs text-(--text-muted) sm:w-10">
-            <FontAwesomeIcon icon={faTag} />
-          </span>
-          <input
-            type="text"
-            placeholder="What needs to be done?"
-            value={form.title}
-            onChange={(e) => set("title", e.target.value)}
-            autoFocus
-            className={inputClass(errors.title)}
-          />
-        </div>
-        {errors.title && <p className="mt-1 text-xs text-(--color-error)">{errors.title}</p>}
-      </div>
+      <WaveInput
+        label="Title"
+        icon={Tag}
+        value={form.title}
+        onChange={(e) => set("title", e.target.value)}
+        autoFocus
+        error={errors.title}
+      />
 
       <div>
         <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faAlignLeft} className="text-[10px] text-(--accent-color)" />
+          <AlignLeft
+            size={12}
+            strokeWidth={2}
+            aria-hidden="true"
+            className="text-(--accent-color)"
+          />
           Description
         </label>
         <textarea
@@ -132,7 +125,12 @@ export default function TaskForm({
       <ChipTabs
         label={
           <>
-            <FontAwesomeIcon icon={faCircleHalfStroke} className="text-[10px] text-(--accent-color)" />
+            <CircleDashed
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Status
           </>
         }
@@ -146,7 +144,12 @@ export default function TaskForm({
       <ChipTabs
         label={
           <>
-            <FontAwesomeIcon icon={faFlag} className="text-[10px] text-(--accent-color)" />
+            <Flag
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Priority
           </>
         }
@@ -159,12 +162,17 @@ export default function TaskForm({
 
       <div>
         <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faCalendarDays} className="text-[10px] text-(--accent-color)" />
+          <CalendarDays
+            size={12}
+            strokeWidth={2}
+            aria-hidden="true"
+            className="text-(--accent-color)"
+          />
           Due date
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-xs text-(--text-muted) sm:w-10">
-            <FontAwesomeIcon icon={faCalendarDays} />
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-(--text-muted) sm:w-10">
+            <CalendarDays size={15} strokeWidth={1.8} aria-hidden="true" />
           </span>
           <input
             type="datetime-local"
@@ -179,7 +187,12 @@ export default function TaskForm({
       <ChipTabs<RepeatRule>
         label={
           <>
-            <FontAwesomeIcon icon={faArrowsRotate} className="text-[10px] text-(--accent-color)" />
+            <Repeat
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Repeat
           </>
         }
@@ -200,7 +213,7 @@ export default function TaskForm({
           size="small"
           className="w-full sm:w-auto"
           onClick={handleCancel}
-          icon={<FontAwesomeIcon icon={faXmark} />}
+          icon={<X size={14} strokeWidth={2} aria-hidden="true" />}
           text="Cancel"
         />
         <Button
@@ -209,7 +222,7 @@ export default function TaskForm({
           className="w-full sm:w-auto"
           onClick={handleSubmit}
           loading={loading}
-          icon={<FontAwesomeIcon icon={faPlus} />}
+          icon={<Plus size={14} strokeWidth={2} aria-hidden="true" />}
           text="Create task"
         />
       </div>
