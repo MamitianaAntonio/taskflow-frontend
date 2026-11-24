@@ -25,7 +25,7 @@ function Auth() {
   return (
     <>
       <PageMeta
-        title={isLogin ? "Sign in · TaskFlow" : "Sign up · TaskFlow"}
+        title="TaskFlow"
         description={
           isLogin
             ? "Sign in to TaskFlow to pick up your tasks, projects and calendar."
