@@ -34,8 +34,6 @@ export default function Sidebar() {
         to={item.path}
         end={item.key === "dashboard"}
         aria-label={iconOnly ? item.label : undefined}
-        data-tooltip={iconOnly ? item.label : undefined}
-        data-tooltip-side="right"
         className={({ isActive }) =>
           [
             ROW,
@@ -121,8 +119,6 @@ export default function Sidebar() {
               onClick={() => setCollapsed((prev) => !prev)}
               aria-label={collapsed ? "Expand the navigation" : "Collapse the navigation"}
               aria-expanded={!collapsed}
-              data-tooltip={iconOnly ? "Expand" : undefined}
-              data-tooltip-side="right"
               className={`${ROW} text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-primary) ${
                 iconOnly ? "justify-center px-0" : "px-3"
               }`}
@@ -141,8 +137,6 @@ export default function Sidebar() {
             type="button"
             onClick={logout}
             aria-label="Logout"
-            data-tooltip={iconOnly ? "Logout" : undefined}
-            data-tooltip-side="right"
             className={`${ROW} text-(--text-muted) hover:bg-(--color-error)/10 hover:text-(--color-error) ${
               iconOnly ? "justify-center px-0" : "px-3"
             }`}
