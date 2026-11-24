@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import HeaderMeta, { type HeaderMetaTone } from "./HeaderMeta";
 
 export interface PageHeaderMeta {
@@ -8,8 +8,9 @@ export interface PageHeaderMeta {
 
 interface PageHeaderProps {
   title: string;
-  highlight: string;
+  highlight?: string;
   description: string;
+  icon?: ReactNode;
   meta?: PageHeaderMeta[];
   actions?: ReactNode;
   footer?: ReactNode;
@@ -20,6 +21,7 @@ export default function PageHeader({
   title,
   highlight,
   description,
+  icon,
   meta,
   actions,
   footer,
@@ -28,32 +30,39 @@ export default function PageHeader({
   const hasMeta = Boolean(meta?.length);
 
   return (
-    <header className={`flex flex-col gap-4 ${className}`}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+    <header className={`flex flex-col gap-3 ${className}`}>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        {/* Title and description */}
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight text-(--text-primary) sm:text-3xl">
-            {title}{" "}
-            <span className="bg-linear-to-r from-(--gradient-from) to-(--gradient-to) bg-clip-text text-transparent">
-              {highlight}
+          <h1 className="flex items-center gap-3 text-lg font-semibold tracking-tight text-(--text-primary) sm:text-2xl">
+            {icon && (
+              <span className="flex shrink-0 items-center text-(--text-secondary)">
+                {icon}
+              </span>
+            )}
+
+            <span className="min-w-0">
+              {title}
+              {highlight && (
+                <span className="ml-1 text-(--accent-strong)">
+                  {highlight}
+                </span>
+              )}
             </span>
           </h1>
 
-          <p className="mt-1.5 max-w-xl font-interface text-sm text-(--text-muted)">
+          <p className="mt-1 max-w-xl text-xs leading-relaxed text-(--text-muted) sm:text-[13px]">
             {description}
           </p>
         </div>
 
+        {/* Metadata and actions */}
         {(hasMeta || actions) && (
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:justify-end">
-            {meta?.map((item, index) => (
-              <Fragment key={`${item.label}-${index}`}>
-                {index > 0 && (
-                  <span aria-hidden="true" className="text-(--text-muted)/40">
-                    ·
-                  </span>
-                )}
-                <HeaderMeta tone={item.tone}>{item.label}</HeaderMeta>
-              </Fragment>
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+            {meta?.map((item) => (
+              <HeaderMeta key={item.label} tone={item.tone}>
+                {item.label}
+              </HeaderMeta>
             ))}
 
             {actions}
@@ -61,7 +70,11 @@ export default function PageHeader({
         )}
       </div>
 
-      {footer}
+      {footer && (
+        <div className="mt-1">
+          {footer}
+        </div>
+      )}
     </header>
   );
 }
