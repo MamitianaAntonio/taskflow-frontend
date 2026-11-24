@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { faListCheck, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ListChecks, Plus, Trash2 } from "lucide-react";
 import CheckBox from "../ui/CheckBox";
 import type { Todo } from "../../types/todo";
 
@@ -45,9 +44,11 @@ export default function SubtaskList({
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <span className={fieldLabelClass}>
-          <FontAwesomeIcon
-            icon={faListCheck}
-            className="text-[10px] text-(--accent-color)"
+          <ListChecks
+            size={12}
+            strokeWidth={2}
+            aria-hidden="true"
+            className="text-(--accent-color)"
           />
           Subtasks
         </span>
@@ -88,7 +89,7 @@ export default function SubtaskList({
                   onClick={() => onDelete(subtask.id)}
                   className="shrink-0 text-(--text-muted) opacity-0 transition-opacity hover:text-(--color-error) group-hover:opacity-100 focus-visible:opacity-100"
                 >
-                  <FontAwesomeIcon icon={faTrashCan} size="xs" />
+                  <Trash2 size={13} strokeWidth={2} aria-hidden="true" />
                 </button>
               </div>
             );
@@ -98,8 +99,8 @@ export default function SubtaskList({
 
       {adding ? (
         <div className="flex items-center gap-2.5 rounded-lg bg-(--bg-primary) px-2 py-1.5">
-          <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-md border border-(--border-color) text-(--text-muted)">
-            <FontAwesomeIcon icon={faPlus} size="2xs" />
+          <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-md border border-(--border-color) text-(--text-muted)">
+            <Plus size={12} strokeWidth={2} aria-hidden="true" />
           </span>
           <input
             autoFocus
@@ -130,7 +131,7 @@ export default function SubtaskList({
           disabled={disabled}
           className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left font-interface text-xs font-medium text-(--text-muted) transition-colors hover:bg-(--bg-hover) hover:text-(--accent-strong) disabled:opacity-50"
         >
-          <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+          <Plus size={13} strokeWidth={2} aria-hidden="true" />
           Add subtask
         </button>
       )}

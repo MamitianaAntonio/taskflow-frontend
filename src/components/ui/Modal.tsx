@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ReactNode, UIEvent } from "react";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import CloseButton from "./CloseButton";
 
@@ -11,7 +9,7 @@ interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  icon?: IconDefinition;
+  icon?: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
@@ -68,11 +66,12 @@ export default function Modal({
       }`}
     >
       {icon && (
-        <FontAwesomeIcon
-          icon={icon}
-          className="shrink-0 text-base text-(--accent-color)"
-          aria-hidden
-        />
+        <span
+          className="shrink-0 text-(--accent-color)"
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
       )}
       <div className="min-w-0 flex-1">
         <h3 className="truncate text-sm font-bold text-(--text-primary)">{title}</h3>

@@ -1,15 +1,15 @@
 import {
-  faAlignLeft,
-  faArrowsRotate,
-  faCalendarDays,
-  faChevronDown,
-  faCircleHalfStroke,
-  faFlag,
-  faFolderOpen,
-  faTag,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  AlignLeft,
+  CalendarDays,
+  ChevronDown,
+  CircleDashed,
+  Flag,
+  FolderOpen,
+  Repeat,
+  Tag,
+} from "lucide-react";
 import ChipTabs from "../ui/ChipTabs";
+import WaveInput from "../ui/WaveInput";
 import { repeatHint } from "../../constants/taskConfig";
 import { priorityChips, repeatChips, statusChips } from "./taskChips";
 import type { Project } from "../../types/project";
@@ -70,29 +70,22 @@ export default function TaskDetailFields({
 }: TaskDetailFieldsProps) {
   return (
     <div className="flex flex-col gap-5 p-4 sm:p-5">
-      <div>
-        <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faTag} className="text-[10px] text-(--accent-color)" />
-          Task title
-        </label>
-        <div className="relative">
-          <span className={iconSlotClass}>
-            <FontAwesomeIcon icon={faTag} />
-          </span>
-          <input
-            type="text"
-            placeholder="What needs to be done?"
-            value={localTitle}
-            onChange={(e) => setLocalTitle(e.target.value)}
-            disabled={saving}
-            className={inputClass}
-          />
-        </div>
-      </div>
+      <WaveInput
+        label="Task title"
+        icon={Tag}
+        value={localTitle}
+        onChange={(e) => setLocalTitle(e.target.value)}
+        disabled={saving}
+      />
 
       <div>
         <label className={fieldLabelClass}>
-          <FontAwesomeIcon icon={faAlignLeft} className="text-[10px] text-(--accent-color)" />
+          <AlignLeft
+            size={12}
+            strokeWidth={2}
+            aria-hidden="true"
+            className="text-(--accent-color)"
+          />
           Description
         </label>
         <textarea
@@ -108,7 +101,12 @@ export default function TaskDetailFields({
       <ChipTabs
         label={
           <>
-            <FontAwesomeIcon icon={faCircleHalfStroke} className="text-[10px] text-(--accent-color)" />
+            <CircleDashed
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Status
           </>
         }
@@ -123,7 +121,12 @@ export default function TaskDetailFields({
       <ChipTabs
         label={
           <>
-            <FontAwesomeIcon icon={faFlag} className="text-[10px] text-(--accent-color)" />
+            <Flag
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Priority
           </>
         }
@@ -138,12 +141,17 @@ export default function TaskDetailFields({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={fieldLabelClass}>
-            <FontAwesomeIcon icon={faCalendarDays} className="text-[10px] text-(--accent-color)" />
+            <CalendarDays
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Due date
           </label>
           <div className="relative">
             <span className={iconSlotClass}>
-              <FontAwesomeIcon icon={faCalendarDays} />
+              <CalendarDays size={15} strokeWidth={1.8} aria-hidden="true" />
             </span>
             <input
               type="datetime-local"
@@ -158,12 +166,17 @@ export default function TaskDetailFields({
 
         <div>
           <label className={fieldLabelClass}>
-            <FontAwesomeIcon icon={faFolderOpen} className="text-[10px] text-(--accent-color)" />
+            <FolderOpen
+              size={12}
+              strokeWidth={2}
+              aria-hidden="true"
+              className="text-(--accent-color)"
+            />
             Project
           </label>
           <div className="relative">
             <span className={iconSlotClass}>
-              <FontAwesomeIcon icon={faFolderOpen} />
+              <FolderOpen size={15} strokeWidth={1.8} aria-hidden="true" />
             </span>
             <select
               value={localProjectId ?? ""}
@@ -178,8 +191,12 @@ export default function TaskDetailFields({
                 </option>
               ))}
             </select>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex w-9 items-center justify-center text-xs text-(--text-muted)">
-              <FontAwesomeIcon icon={faChevronDown} size="2xs" />
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex w-9 items-center justify-center text-(--text-muted)">
+              <ChevronDown
+                size={14}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
             </span>
           </div>
           <p className={helperClass}>
@@ -196,7 +213,12 @@ export default function TaskDetailFields({
         <ChipTabs
           label={
             <>
-              <FontAwesomeIcon icon={faArrowsRotate} className="text-[10px] text-(--accent-color)" />
+              <Repeat
+                size={12}
+                strokeWidth={2}
+                aria-hidden="true"
+                className="text-(--accent-color)"
+              />
               Repeat
             </>
           }

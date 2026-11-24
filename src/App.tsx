@@ -6,6 +6,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import ProtectedRoute from "./components/ui/ProtectedRoute";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import Spinner from "./components/ui/Spinner";
+import TooltipProvider from "./components/ui/TooltipProvider";
 import WorkspaceBootScreen from "./components/auth/WorkspaceBootScreen";
 import MarketingLayout from "./layouts/MarketingLayout";
 import Dashboard from "./pages/Dashboard";
@@ -49,6 +50,7 @@ function App() {
             }}
           />
           <BrowserRouter>
+            <TooltipProvider />
             <WorkspaceBootScreen />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>

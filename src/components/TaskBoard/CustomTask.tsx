@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { CirclePlus } from "lucide-react";
 import Modal from "../ui/Modal";
 import TaskForm from "./TaskForm";
 import useTodoStore from "../../stores/todoStore";
@@ -34,7 +34,7 @@ export default function CustomTask({ onClose, projectId, initial }: CustomTaskPr
       open
       onClose={onClose}
       title="New task"
-      icon={faCirclePlus}
+      icon={<CirclePlus size={18} strokeWidth={1.8} aria-hidden="true" />}
       subtitle="Create a task from scratch"
     >
       <TaskForm

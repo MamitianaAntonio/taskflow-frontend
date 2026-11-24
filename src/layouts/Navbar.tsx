@@ -58,6 +58,7 @@ const Navbar = () => {
             size="icon"
             aria-label={mobileSearch ? "Close search" : "Search"}
             aria-expanded={mobileSearch}
+            title={mobileSearch ? "Close search" : "Search"}
             onClick={() => setMobileSearch((prev) => !prev)}
             icon={
               mobileSearch ? (
